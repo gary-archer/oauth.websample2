@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <base href='/spa/' />
+        <title>OAuth 2.0 Sample - PGA Tour Golfers</title>
+        <link href='css/app.css'                 rel='stylesheet' type='text/css' />
+        <link href='css/bootstrap-3.3.7.min.css' rel='stylesheet' type='text/css' />
+    </head>
+    <body>
+        <div class='container'>
+            
+            <div class='row'>
+                <div class='col-xs-9'>
+                    <h1>OAuth 2.0 Sample: PGA Tour Golfers</h1>
+                </div>
+                <div class='col-xs-3'>
+                    <br/>
+                    <div id='loginInfoContainer' class='logintext hide'>
+                        Logged in as: <span id='userName'></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class='row'>
+                <div id='col-xs-3' class='col-xs-3'>
+                    <button id='btnHome' class='btn btn-default'>Home</button>
+                </div>
+                <div class='col-xs-3'>
+                    <button id='btnRefreshData' class='btn btn-default'>Refresh Data</button>
+                </div>
+                <div class='col-xs-3'>
+                    <button id='btnExpireAccessToken' class='btn btn-default'>Expire Token</button>
+                </div>
+            </div>
+            
+            <div id='errorContainer' class='row error hide'>
+                <br/>
+                <div class='col-xs-12'>
+                    <ul id='error'></ul>
+                </div>
+            </div>
+            
+            <div class='row trace'>
+                <div class='col-xs-12'>
+                    <ul id='trace' ></ul>
+                </div>
+            </div>
+            
+            <div id='listContainer' class='row data hide'>
+            </div>
+            
+            <div id='detailsContainer' class='row data hide'>
+            </div>
+        </div>
+        
+        <script src='dist/vendor.bundle.min.js'></script>
+        <script src='dist/spa.bundle.min.js'></script>
+    </body>
+</html>

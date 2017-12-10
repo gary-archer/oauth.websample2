@@ -1,0 +1,780 @@
+{
+    "golfers": [
+        {
+            "id":   1,
+			"wins": [
+                {
+                    "eventName" : "Turning Stone Resort Championship",
+                    "year" : 2008
+                },
+                {
+                    "eventName" : "AT&T Pebble Beach National Pro-Am",
+                    "year" : 2009
+                },
+                {
+                    "eventName" : "AT&T Pebble Beach National Pro-Am",
+                    "year" : 2010
+                },
+                {
+                    "eventName" : "BMW Championship",
+                    "year" : 2010
+                },
+                {
+                    "eventName" : "The Barclays",
+                    "year" : 2011
+                },
+                {
+                    "eventName" : "FedEx St Jude Classic",
+                    "year" : 2012
+                },
+                {
+                    "eventName" : "Hyundai Tournament of Champions",
+                    "year" : 2013
+                },
+                {
+                    "eventName" : "WGC-HSBC Champions",
+                    "year" : 2013
+                },
+                {
+                    "eventName" : "WGC-Cadillac Championship",
+                    "year" : 2015
+                },
+                {
+                    "eventName" : "US Open - Oakmont",
+                    "year" : 2016
+                },
+                {
+                    "eventName" : "WGC-Bridgestone Invitational",
+                    "year" : 2016
+                },
+                {
+                    "eventName" : "BMW Championship",
+                    "year" : 2016
+                },
+                {
+                    "eventName" : "Genesis Open",
+                    "year" : 2017
+                },
+                {
+                    "eventName" : "WGC-Mexico Championship",
+                    "year" : 2017
+                },
+                {
+                    "eventName" : "WGC-Dell Technologies Match Play",
+                    "year" : 2017
+                },
+                {
+                    "eventName" : "The Northern Trust",
+                    "year" : 2017
+                }
+			]
+        },
+        {
+            "id":   2,
+			"wins": [
+                {
+                    "eventName" : "Northern Telecom Open",
+                    "year" : 1991
+                },
+                {
+                    "eventName" : "Buick Invitational of California",
+                    "year" : 1993
+                },
+                {
+                    "eventName" : "The International",
+                    "year" : 1993
+                },
+                {
+                    "eventName" : "Mercedes Championships",
+                    "year" : 1994
+                },
+                {
+                    "eventName" : "Northern Telecom Open",
+                    "year" : 1995
+                },
+                {
+                    "eventName" : "Nortel Open",
+                    "year" : 1996
+                },
+                {
+                    "eventName" : "Phoenix Open",
+                    "year" : 1996
+                },
+                {
+                    "eventName" : "GTE Byron Nelson Golf Classic",
+                    "year" : 1996
+                },
+                {
+                    "eventName" : "NEC World Series of Golf",
+                    "year" : 1996
+                },
+                {
+                    "eventName" : "Bay Hill Invitational",
+                    "year" : 1997
+                },
+                {
+                    "eventName" : "Sprint International",
+                    "year" : 1997
+                },
+                {
+                    "eventName" : "Mercedes Championships)",
+                    "year" : 1998
+                },
+                {
+                    "eventName" : "AT&T Pebble Beach National Pro-Am",
+                    "year" : 1998
+                },
+                {
+                    "eventName" : "Buick Invitational",
+                    "year" : 2000
+                },
+                {
+                    "eventName" : "BellSouth Classic",
+                    "year" : 2000
+                },
+                {
+                    "eventName" : "MasterCard Colonial",
+                    "year" : 2000
+                },
+                {
+                    "eventName" : "The Tour Championship",
+                    "year" : 2000
+                },
+                {
+                    "eventName" : "Buick Invitational",
+                    "year" : 2001
+                },
+                {
+                    "eventName" : "Canon Greater Hartford Open",
+                    "year" : 2001
+                },
+                {
+                    "eventName" : "Bob Hope Chrysler Classic",
+                    "year" : 2002
+                },
+                {
+                    "eventName" : "Canon Greater Hartford Open",
+                    "year" : 2002
+                },
+                {
+                    "eventName" : "Bob Hope Chrysler Classic",
+                    "year" : 2004
+                },
+                {
+                    "eventName" : "Masters Tournament - Augusta National",
+                    "year" : 2004
+                },
+                {
+                    "eventName" : "FBR Open",
+                    "year" : 2005
+                },
+                {
+                    "eventName" : "AT&T Pebble Beach National Pro-Am",
+                    "year" : 2005
+                },
+                {
+                    "eventName" : "BellSouth Classic",
+                    "year" : 2005
+                },
+                {
+                    "eventName" : "USPGA Championship - Baltusrol",
+                    "year" : 2005
+                },
+                {
+                    "eventName" : "BellSouth Classic",
+                    "year" : 2006
+                },
+                {
+                    "eventName" : "Masters Tournament - Augusta National",
+                    "year" : 2006
+                },
+                {
+                    "eventName" : "AT&T Pebble Beach National Pro-Am",
+                    "year" : 2006
+                },
+                {
+                    "eventName" : "The Players Championship",
+                    "year" : 2007
+                },
+                {
+                    "eventName" : "Deutsche Bank Championship",
+                    "year" : 2007
+                },
+                {
+                    "eventName" : "Northern Trust Open",
+                    "year" : 2008
+                },
+                {
+                    "eventName" : "Crowne Plaza Invitational at Colonial",
+                    "year" : 2008
+                },
+                {
+                    "eventName" : "Northern Trust Open",
+                    "year" : 2009
+                },
+                {
+                    "eventName" : "WGC-CA Championship",
+                    "year" : 2009
+                },
+                {
+                    "eventName" : "The Tour Championship",
+                    "year" : 2009
+                },
+                {
+                    "eventName" : "Masters Tournament - Augusta National",
+                    "year" : 2010
+                },
+                {
+                    "eventName" : "Shell Houston Open",
+                    "year" : 2011
+                },
+                {
+                    "eventName" : "AT&T Pebble Beach National Pro-Am",
+                    "year" : 2012
+                },
+                {
+                    "eventName" : "Waste Management Phoenix Open",
+                    "year" : 2013
+                },
+                {
+                    "eventName" : "The Open Championship - Muirfield",
+                    "year" : 2013
+                }
+			]
+        },
+        {
+            "id":   3,
+			"wins": [
+                {
+                    "eventName" : "Wells Fargo Championship",
+                    "year" : 2012
+                },
+                {
+                    "eventName" : "The Players Championship",
+                    "year" : 2015
+                },
+                {
+                    "eventName" : "Deutsche Bank Championship",
+                    "year" : 2015
+                },
+                {
+                    "eventName" : "The Honda Classic",
+                    "year" : 2017
+                }
+			]
+        },
+        {
+            "id":   4,
+			"wins": [
+                {
+                    "eventName" : "Travelers Championship",
+                    "year" : 2010
+                },
+                {
+                    "eventName" : "Farmers Insurance Open",
+                    "year" : 2011
+                },
+                {
+                    "eventName" : "Zurich Classic of New Orleans",
+                    "year" : 2011
+                },
+                {
+                    "eventName" : "Masters Tournament - Augusta National",
+                    "year" : 2012
+                },
+                {
+                    "eventName" : "Northern Trust Open",
+                    "year" : 2014
+                },
+                {
+                    "eventName" : "Masters Tournament - Augusta National",
+                    "year" : 2014
+                },
+                {
+                    "eventName" : "WGC-HSBC Champions",
+                    "year" : 2014
+                },
+                {
+                    "eventName" : "Travelers Championship",
+                    "year" : 2015
+                },
+                {
+                    "eventName" : "Northern Trust Open",
+                    "year" : 2016
+                }
+			]
+        },
+        {
+            "id":   5,
+			"wins": [
+                {
+                    "eventName" : "Las Vegas Invitational",
+                    "year" : 1996
+                },
+                {
+                    "eventName" : "Walt Disney World/Oldsmobile Classic",
+                    "year" : 1996
+                },
+                {
+                    "eventName" : "Mercedes Championships",
+                    "year" : 1997
+                },
+                {
+                    "eventName" : "Masters Tournament - Augusta National",
+                    "year" : 1997
+                },
+                {
+                    "eventName" : "GTE Byron Nelson Golf Classic",
+                    "year" : 1997
+                },
+                {
+                    "eventName" : "Motorola Western Open",
+                    "year" : 1997
+                },
+                {
+                    "eventName" : "BellSouth Classic",
+                    "year" : 1998
+                },
+                {
+                    "eventName" : "Buick Invitational",
+                    "year" : 1999
+                },
+                {
+                    "eventName" : "Memorial Tournament",
+                    "year" : 1999
+                },
+                {
+                    "eventName" : "Motorola Western Open",
+                    "year" : 1999
+                },
+                {
+                    "eventName" : "USPGA Championship - Medina",
+                    "year" : 1999
+                },
+                {
+                    "eventName" : "NEC Invitational",
+                    "year" : 1999
+                },
+                {
+                    "eventName" : "National Car Rental Golf Classic Disney",
+                    "year" : 1999
+                },
+                {
+                    "eventName" : "The Tour Championship",
+                    "year" : 1999
+                },
+                {
+                    "eventName" : "American Express Championship",
+                    "year" : 1999
+                },
+                {
+                    "eventName" : "Mercedes Championships",
+                    "year" : 2000
+                },
+                {
+                    "eventName" : "AT&T Pebble Beach National Pro-Am",
+                    "year" : 2000
+                },
+                {
+                    "eventName" : "Bay Hill Invitational",
+                    "year" : 2000
+                },
+                {
+                    "eventName" : "Memorial Tournament",
+                    "year" : 2000
+                },
+                {
+                    "eventName" : "US Open - Pebble Beach",
+                    "year" : 2000
+                },
+                {
+                    "eventName" : "The Open Championship - St Andrews",
+                    "year" : 2000
+                },
+                {
+                    "eventName" : "USPGA Championship - Valhalla",
+                    "year" : 2000
+                },
+                {
+                    "eventName" : "NEC Invitational",
+                    "year" : 2000
+                },
+                {
+                    "eventName" : "Bell Canadian Open",
+                    "year" : 2000
+                },
+                {
+                    "eventName" : "Bay Hill Invitational",
+                    "year" : 2001
+                },
+                {
+                    "eventName" : "The Players Championship",
+                    "year" : 2001
+                },
+                {
+                    "eventName" : "Masters Tournament - Augusta National",
+                    "year" : 2001
+                },
+                {
+                    "eventName" : "Memorial Tournament",
+                    "year" : 2001
+                },
+                {
+                    "eventName" : "NEC Invitational",
+                    "year" : 2001
+                },
+                {
+                    "eventName" : "Bay Hill Invitational",
+                    "year" : 2002
+                },
+                {
+                    "eventName" : "Masters Tournament - Augusta National",
+                    "year" : 2002
+                },
+                {
+                    "eventName" : "US Open - Bethpage Black",
+                    "year" : 2002
+                },
+                {
+                    "eventName" : "Buick Open",
+                    "year" : 2002
+                },
+                {
+                    "eventName" : "American Express Championship",
+                    "year" : 2002
+                },
+                {
+                    "eventName" : "Buick Invitational",
+                    "year" : 2003
+                },
+                {
+                    "eventName" : "Accenture Match Play Championship",
+                    "year" : 2003
+                },
+                {
+                    "eventName" : "Bay Hill Invitational",
+                    "year" : 2003
+                },
+                {
+                    "eventName" : "100th Western Open",
+                    "year" : 2003
+                },
+                {
+                    "eventName" : "American Express Championship",
+                    "year" : 2003
+                },
+                {
+                    "eventName" : "Accenture Match Play Championship",
+                    "year" : 2004
+                },
+                {
+                    "eventName" : "Buick Invitational",
+                    "year" : 2005
+                },
+                {
+                    "eventName" : "Ford Championship at Doral",
+                    "year" : 2005
+                },
+                {
+                    "eventName" : "Masters Tournament - Augusta National",
+                    "year" : 2005
+                },
+                {
+                    "eventName" : "The Open Championship - St Andrews",
+                    "year" : 2005
+                },
+                {
+                    "eventName" : "NEC Invitational",
+                    "year" : 2005
+                },
+                {
+                    "eventName" : "American Express Championship",
+                    "year" : 2005
+                },
+                {
+                    "eventName" : "Buick Invitational",
+                    "year" : 2006
+                },
+                {
+                    "eventName" : "Ford Championship at Doral",
+                    "year" : 2006
+                },
+                {
+                    "eventName" : "The Open Championship - Royal Liverpool",
+                    "year" : 2006
+                },
+                {
+                    "eventName" : "Buick Open",
+                    "year" : 2006
+                },
+                {
+                    "eventName" : "USPGA Championship - Medinah",
+                    "year" : 2006
+                },
+                {
+                    "eventName" : "Bridgestone Invitational",
+                    "year" : 2006
+                },
+                {
+                    "eventName" : "Deutsche Bank Championship",
+                    "year" : 2006
+                },
+                {
+                    "eventName" : "American Express Championship",
+                    "year" : 2006
+                },
+                {
+                    "eventName" : "Buick Invitational",
+                    "year" : 2007
+                },
+                {
+                    "eventName" : "CA Championship",
+                    "year" : 2007
+                },
+                {
+                    "eventName" : "Wachovia Championship",
+                    "year" : 2007
+                },
+                {
+                    "eventName" : "Bridgestone Invitational",
+                    "year" : 2007
+                },
+                {
+                    "eventName" : "USPGA Championship - Southern Hills",
+                    "year" : 2007
+                },
+                {
+                    "eventName" : "BMW Championship",
+                    "year" : 2007
+                },
+                {
+                    "eventName" : "The Tour Championship",
+                    "year" : 2007
+                },
+                {
+                    "eventName" : "Buick Invitational",
+                    "year" : 2008
+                },
+                {
+                    "eventName" : "Accenture Match Play Championship",
+                    "year" : 2008
+                },
+                {
+                    "eventName" : "Arnold Palmer Invitational",
+                    "year" : 2008
+                },
+                {
+                    "eventName" : "US Open - Torrey Pines",
+                    "year" : 2008
+                },
+                {
+                    "eventName" : "Arnold Palmer Invitational",
+                    "year" : 2009
+                },
+                {
+                    "eventName" : "Memorial Tournament",
+                    "year" : 2009
+                },
+                {
+                    "eventName" : "AT&T National",
+                    "year" : 2009
+                },
+                {
+                    "eventName" : "Buick Open",
+                    "year" : 2009
+                },
+                {
+                    "eventName" : "Bridgestone Invitational",
+                    "year" : 2009
+                },
+                {
+                    "eventName" : "BMW Championship",
+                    "year" : 2009
+                },
+                {
+                    "eventName" : "Arnold Palmer Invitational",
+                    "year" : 2012
+                },
+                {
+                    "eventName" : "Memorial Tournament",
+                    "year" : 2012
+                },
+                {
+                    "eventName" : "AT&T National",
+                    "year" : 2012
+                },
+                {
+                    "eventName" : "Farmers Insurance Open",
+                    "year" : 2013
+                },
+                {
+                    "eventName" : "Cadillac Championship",
+                    "year" : 2013
+                },
+                {
+                    "eventName" : "Arnold Palmer Invitational",
+                    "year" : 2013
+                },
+                {
+                    "eventName" : "The Players Championship",
+                    "year" : 2013
+                },
+                {
+                    "eventName" : "Bridgestone Invitational",
+                    "year" : 2013
+                }
+			]
+        },
+        {
+            "id":   6,
+			"wins": [
+                {
+                    "eventName" : "John Deere Classic",
+                    "year" : 2013
+                },
+                {
+                    "eventName" : "Valspar Championship",
+                    "year" : 2015
+                },
+                {
+                    "eventName" : "Masters Tournament - Augusta National",
+                    "year" : 2015
+                },
+                {
+                    "eventName" : "US Open - Chambers Bay",
+                    "year" : 2015
+                },
+                {
+                    "eventName" : "John Deere Classic",
+                    "year" : 2015
+                },
+                {
+                    "eventName" : "The Tour Championship",
+                    "year" : 2015
+                },
+                {
+                    "eventName" : "Hyundai Tournament of Champions",
+                    "year" : 2016
+                },
+                {
+                    "eventName" : "Dean & DeLuca Invitational",
+                    "year" : 2016
+                },
+                {
+                    "eventName" : "AT&T Pebble Beach Pro-Am",
+                    "year" : 2017
+                },
+                {
+                    "eventName" : "Travelers Championship",
+                    "year" : 2017
+                },
+                {
+                    "eventName" : "The Open Championship - Royal Birkdale",
+                    "year" : 2017
+                }
+			]
+        },
+        {
+            "id":   7,
+			"wins": [
+                {
+                    "eventName" : "Compaq Classic of New Orleans",
+                    "year" : 2002
+                },
+                {
+                    "eventName" : "Tampa Bay Classic",
+                    "year" : 2002
+                },
+                {
+                    "eventName" : "Chrysler Classic of Greensboro",
+                    "year" : 2005
+                },
+                {
+                    "eventName" : "Chrysler Championship",
+                    "year" : 2006
+                },
+                {
+                    "eventName" : "Memorial Tournament",
+                    "year" : 2007
+                },
+                {
+                    "eventName" : "AT&T National",
+                    "year" : 2007
+                },
+                {
+                    "eventName" : "Sony Open in Hawaii",
+                    "year" : 2008
+                },
+                {
+                    "eventName" : "The Players Championship",
+                    "year" : 2011
+                }
+			]
+        },
+        {
+            "id":   8,
+			"wins": [
+                {
+                    "eventName" : "Kemper Open",
+                    "year" : 1983
+                },
+                {
+                    "eventName" : "Tournament Players Championship",
+                    "year" : 1984
+                },
+                {
+                    "eventName" : "Byron Nelson Golf Classic",
+                    "year" : 1987
+                },
+                {
+                    "eventName" : "Nissan Los Angeles Open",
+                    "year" : 1990
+                },
+                {
+                    "eventName" : "Federal Express St. Jude Classic",
+                    "year" : 1991
+                },
+                {
+                    "eventName" : "B.C. Open",
+                    "year" : 1991
+                },
+                {
+                    "eventName" : "Nissan Los Angeles Open",
+                    "year" : 1992
+                },
+                {
+                    "eventName" : "Nestle Invitational",
+                    "year" : 1992
+                },
+                {
+                    "eventName" : "Masters Tournament - Augusta National",
+                    "year" : 1992
+                },
+                {
+                    "eventName" : "Honda Classic",
+                    "year" : 1993
+                },
+                {
+                    "eventName" : "Buick Open",
+                    "year" : 1994
+                },
+                {
+                    "eventName" : "The Players Championship",
+                    "year" : 1996
+                },
+                {
+                    "eventName" : "Bob Hope Chrysler Classic",
+                    "year" : 1998
+                },
+                {
+                    "eventName" : "Memorial Tournament",
+                    "year" : 1998
+                },
+                {
+                    "eventName" : "Shell Houston Open",
+                    "year" : 2003
+                }
+			]
+        }
+    ]
+}

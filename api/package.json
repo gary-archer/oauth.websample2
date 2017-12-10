@@ -1,0 +1,26 @@
+{
+  "name": "basicapi",
+  "version": "2.0.0",
+  "description": "A Basic OAuth secured API",
+  "main": "httpserver.js",
+  "scripts": {
+    "start": "nodemon src/server.js",
+    "httpDebug": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 HTTPS_PROXY=http://127.0.0.1:8888 nodemon src/server.js"
+  },
+  "keywords": [],
+  "author": "Gary Archer",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "cross-env": "^5.0.5",
+    "express": "^4.15.4",
+    "https-proxy-agent": "^2.1.1",
+    "js-sha256": "^0.6.0",
+    "memory-cache": "^0.2.0",
+    "openid-client": "1.17.0",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
+}

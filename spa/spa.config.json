@@ -1,0 +1,11 @@
+{
+    "app": {
+        "api_base_url":     "http://api.mycompany.com/api"
+    },
+    "oauth": {
+        "authority":        "https://dev-843469.oktapreview.com/oauth2/default",
+        "client_id":        "0oac5m78icnW3C06L0h7",
+        "redirect_uri":     "http://web.mycompany.com/spa/",
+        "scope":            "openid profile email"
+    }
+}

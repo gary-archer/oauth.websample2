@@ -1,0 +1,24 @@
+{
+  "name": "basicspa",
+  "version": "2.0.0",
+  "description": "A Basic SPA using the OIDC Client security library",
+  "main": "src/logic/app.js",
+  "scripts": {
+    "start": "webpack --watch",
+    "build": "webpack -p"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "webpack": "^3.6.0"
+  },
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "oidc-client": "^1.4.1"
+  }
+}
