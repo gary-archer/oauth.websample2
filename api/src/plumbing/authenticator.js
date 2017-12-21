@@ -1,17 +1,22 @@
 'use strict';
 const OpenIdClient = require('openid-client');
-const HttpsProxyAgent = require('https-proxy-agent');
+const TunnelAgent = require('tunnel-agent');
+const Url = require('url');
 const ApiLogger = require('./apiLogger');
 const ErrorHandler = require('./errorHandler');
 
 /*
- * This handles debugging to Fiddler or Charles so that we can view requests to Okta
+ * This handles debugging to Fiddler or Charles so that we can view the introspection request
  * I am currently having to use the 1.17.0 openid-client due to a got library issue described here
  * https://github.com/sindresorhus/got/issues/427
  */
 if (process.env.HTTPS_PROXY) {
+    
+    let opts = Url.parse(process.env.HTTPS_PROXY);
     OpenIdClient.Issuer.defaultHttpOptions = {
-        agent: new  HttpsProxyAgent(process.env.HTTPS_PROXY)
+        agent: TunnelAgent.httpsOverHttp({
+            proxy: opts
+        })
     };
 }
 

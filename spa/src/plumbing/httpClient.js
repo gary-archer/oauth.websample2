@@ -32,46 +32,56 @@ export default class HttpClient {
      */
     static callApi(url, method, dataToSend, authenticator) {
         
-        // Get a token if required
+        // Get a token
         return authenticator.getAccessToken()
             .then(token => {
-            
+
                 // Call the API
-                return HttpClient._callApiWithToken(url, method, dataToSend, authenticator, token);
-            })
-            .catch(e => {
+                return HttpClient._callApiWithToken(url, method, dataToSend, token)
+                    .then (data => {
+                        
+                        // Return data if successful
+                        return Promise.resolve(data);
+                    })
+                    .catch (xhr1 => {
 
-                // Already handled errors
-                if (e instanceof UIError) {
-                    return Promise.reject(e);
-                }
+                        // Report erors other than 401
+                        if (xhr1.status !== 401) {
+                            let ajaxError = ErrorHandler.getFromAjaxError(xhr1, url);
+                            return Promise.reject(ajaxError);
+                        }
 
-                // Handle Ajax errors
-                if (e.status && e.status === 401) {
-                    
-                    // Clear the access token from storage since it is not working
-                    return authenticator.clearAccessToken()
-                        .then(() => {
-                            
-                            // Get a new access token
-                            return authenticator.getAccessToken()
-                                .then(token => {
+                        // Clear the token that is failing
+                        return authenticator.clearAccessToken()
+                            .then(() => {
 
-                                    // Call the API again
-                                    return HttpClient._callApiWithToken(url, method, dataToSend, authenticator, token);
-                                });
-                        });
-                }
+                                // Get a new token
+                                return authenticator.getAccessToken()
+                                    .then(token => {
 
-                // Report exceptions
-                return Promise.reject(ErrorHandler.getFromException(e));
+                                        // Call the API again
+                                        return HttpClient._callApiWithToken(url, method, dataToSend, token)
+                                            .then(data => {
+                        
+                                                // Return data if successful
+                                                return Promise.resolve(data);
+                                            })
+                                            .catch(xhr2 => {
+
+                                                // Report erors
+                                                let ajaxError = ErrorHandler.getFromAjaxError(xhr2, url);
+                                                return Promise.reject(ajaxError);
+                                            });
+                                    });
+                            });
+                    });
             });
     }
     
     /*
      * Do the work of calling the API
      */
-    static _callApiWithToken(url, method, dataToSend, authenticator, accessToken) {
+    static _callApiWithToken(url, method, dataToSend, accessToken) {
         
         return $.ajax({
                 url: url,
@@ -82,20 +92,6 @@ export default class HttpClient {
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader ('Authorization', 'Bearer ' + accessToken);
                 }
-            })
-            .then(data => {
-                return Promise.resolve(data);
-            })
-            .catch(xhr => {
-
-                // Rethrow 401s to the caller
-                if (xhr.status === 401) {
-                    return Promise.reject(xhr);
-                }
-
-                // Report Ajax errors
-                let ajaxError = ErrorHandler.getFromAjaxError(xhr, url);
-                return Promise.reject(ajaxError);
             });
     }
 }

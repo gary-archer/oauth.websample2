@@ -1,6 +1,7 @@
 'use strict';
 import {UserManager as OidcUserManager} from 'oidc-client';
 import {Log as OidcLog} from 'oidc-client';
+import Crypto from 'crypto';
 import OAuthLogger from 'oauthLogger';
 import ErrorHandler from 'errorHandler';
 
@@ -13,7 +14,7 @@ export default class Authenticator {
      * Class setup
      */
     constructor(config) {
-        
+
         // Create OIDC settings from our application configuration
         let settings = {
             authority: config.authority,
@@ -75,10 +76,9 @@ export default class Authenticator {
                 return this._userManager.createSigninRequest({state: JSON.stringify(data)})
                     .then(request => {
 
-                        // Minor hack since Okta requires a nonce parameter with response_type=token
-                        // So we'll use the same random parameter already generated for the state parameter
-                        // We will get rid of this hack for a later sample
-                        request.url += `&nonce=${request.state}`;
+                        // Okta requires a nonce parameter with response_type=token so generate one before redirecting
+                        let nonce = this._generateNonce();
+                        request.url += `&nonce=${nonce}`;
                         location.replace(request.url);
 
                         // Short circuit page processing
@@ -114,6 +114,17 @@ export default class Authenticator {
                 // Handle OAuth specific errors here
                 return Promise.reject(ErrorHandler.getFromOAuthSignInResponse(e));
             });
+    }
+
+    /*
+     * Generate a nonce since Okta requires one with response type=token but OIDC Client does not supply one
+     */
+    _generateNonce() {
+        return Crypto.randomBytes(16)
+            .toString('base64')
+            .replace(/\+/g, '-')
+            .replace(/\//g, '_')
+            .replace(/=/g, '');
     }
     
     /*
