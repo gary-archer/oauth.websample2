@@ -2,7 +2,7 @@
 const cors = require('cors');
 
 // Import our class definitions
-const GolfRepository = require('./golfRepository');
+const TransactionRepository = require('./transactionRepository');
 const ClaimsHandler = require('../plumbing/claimsHandler');
 const ErrorHandler = require('../plumbing/errorHandler');
 const ApiLogger = require('../plumbing/apiLogger');
@@ -41,8 +41,8 @@ class WebApi {
         
         // Next process API operations
         this._expressApp.get('/api/userclaims/current', this._getUserClaims);
-        this._expressApp.get('/api/golfers', this._getGolfers);
-        this._expressApp.get('/api/golfers/:id([0-9]+)', this._getGolferDetails);
+        this._expressApp.get('/api/transactions', this._getTransactionList);
+        this._expressApp.get('/api/transactions/:tx_hash', this._getTransactionDetails);
         
         // Unhandled exceptions
         this._expressApp.use('/api/*', this._unhandledExceptionMiddleware);
@@ -91,32 +91,31 @@ class WebApi {
     }
 
     /*
-     * Return the list of golfers
+     * Return the list of transactions
      */
-    _getGolfers(request, response, next) {
+    _getTransactionList(request, response, next) {
         
-        let repository = new GolfRepository();
-        ApiLogger.info('API call', 'Request for golfer list');
+        let repository = new TransactionRepository();
+        ApiLogger.info('API call', 'Request for transaction list');
         
-        let golfers = repository.getList();
-        response.end(JSON.stringify(golfers));
+        let transactions = repository.getList();
+        response.end(JSON.stringify(transactions));
     }
 
     /*
-     * Return the details for a golfer
+     * Return the details for a transaction
      */
-    _getGolferDetails(request, response, next) {
+    _getTransactionDetails(request, response, next) {
         
-        let repository = new GolfRepository();
-        let id = parseInt(request.params.id);
-        ApiLogger.info('API call', `Request for golfer details for id: ${id}`);
+        let repository = new TransactionRepository();
+        ApiLogger.info('API call', `Request for transaction details for tx_hash: ${request.params.tx_hash}`);
         
-        let golfer = repository.getDetails(id);
-        if (golfer) {
-            response.end(JSON.stringify(golfer));
+        let transaction = repository.getDetails(request.params.tx_hash);
+        if (transaction) {
+            response.end(JSON.stringify(transaction));
         }
         else {
-            response.status(404).send(`The golfer with id ${id} was not found`);
+            response.status(404).send(`The transaction with tx_hash ${request.params.tx_hash} was not found`);
         }
     }
 
@@ -150,7 +149,7 @@ class WebApi {
      */
     _setupCallbacks() {
         this._claimsMiddleware = this._claimsMiddleware.bind(this);
-        this._getGolferDetails = this._getGolferDetails.bind(this);
+        this._getTransactionDetails = this._getTransactionDetails.bind(this);
         this._unhandledExceptionMiddleware = this._unhandledExceptionMiddleware.bind(this);
         this._writeResponseError = this._writeResponseError.bind(this);
     }

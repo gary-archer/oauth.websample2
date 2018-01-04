@@ -99,12 +99,12 @@ class App {
     _executeView() {
         
         let hashData = UrlHelper.getLocationHashData();
-        if (!hashData.golfer) {
+        if (!hashData.tx_hash) {
             let listView = new ListView(this._authenticator, this._appConfig.app.api_base_url);
             return listView.execute();
         }
         else {
-            let detailsView = new DetailsView(this._authenticator, this._appConfig.app.api_base_url, hashData.golfer);
+            let detailsView = new DetailsView(this._authenticator, this._appConfig.app.api_base_url, hashData.tx_hash);
             return detailsView.execute();
         }
     }

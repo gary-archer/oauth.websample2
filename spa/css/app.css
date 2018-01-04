@@ -2,13 +2,33 @@ button
 {
     width:150px;
 }
+h4
+{
+    display: inline;
+}
+.item
+{
+    margin-top: 20px;
+}
+.account
+{
+    color: blue;
+}
+.footer
+{
+    margin-left: 10px;
+}
+.thumbnail
+{
+    margin-bottom: 20px;
+}
 .logintext
 {
     text-align:right;
 }
-.data
+.hash
 {
-    color:green;
+    word-wrap: break-word;
 }
 .error
 {

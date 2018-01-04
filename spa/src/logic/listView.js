@@ -40,7 +40,7 @@ export default class ListView {
      * Start the Ajax request
      */
     _requestData() {
-        return HttpClient.callApi(`${this._apiBaseUrl}/golfers`, 'GET', null, this._authenticator);
+        return HttpClient.callApi(`${this._apiBaseUrl}/transactions`, 'GET', null, this._authenticator);
     }
     
     /*
@@ -48,35 +48,49 @@ export default class ListView {
      */
     _renderData(data) {
 
-        data.golfers.forEach(golfer => {
+        data.transactions.forEach(transaction => {
 
-            // Set up the image and a click handler
-            let golferLink = $(`<a href='#' class='img-thumbnail'>
-                                  <img class='golferImage' src='images/${golfer.name}_tn.png' class='img-responsive' data-id='${golfer.id}'>
-                                </a>`);
-            
             // Set text properties
-            let golferDiv = $(`<div class='col-xs-3'>
-                                 <div>Name : <b>${golfer.name}</b></div>
-                                 <div>Tour Wins : <b>${golfer.tour_wins}</b></div>
-                               </div>`);
+            let transactionDiv = $(`<div class='item col-xs-6'>
+                                      <div class='thumbnail'>
+                                        <div class='caption row'>
+                                          <div class ='col-xs-2'>TxHash</div>
+                                          <div class ='col-xs-10 hash'><h4>${transaction.tx_hash}</h4></div>  
+                                        </div>
+                                        <div class='caption row'>
+                                          <div class ='col-xs-2'>Accounts</div>
+                                          <div class ='col-xs-10'>
+                                            <span class='account'>${transaction.from}</span> - <span class='account'>${transaction.to}</span>
+                                          </div>
+                                        </div>
+                                        <div class='caption row'>
+                                          <div class ='col-xs-9'>
+                                            <h4>${transaction.amount_eth} ETH / ${transaction.amount_usd} USD</h4>
+                                          </div>
+                                          <div class ='col-xs-3'>
+                                            <a class='btn btn-success pull-right' data-id='${transaction.tx_hash}'>Details</a>
+                                          </div>
+                                        <div>
+                                      </div>
+                                    </div>`);
+
+            // A click handler selects details
+            $('a').on('click', this._selectTransactionDetails);
             
             // Update the DOM
-            golferDiv.append(golferLink);
-            $('#listContainer').append(golferDiv);
+            $('#listContainer').append(transactionDiv);
         });
         
-        // Add event handlers for image clicks
-        $('.golferImage').on('click', this._selectGolferDetails);
         return Promise.resolve();
     }
     
     /*
      * When a thumbnail is clicked we will request details data and then update the view
      */
-    _selectGolferDetails(e) {
-        let golferId = $(e.target).attr('data-id');
-        location.hash = `#golfer=${golferId}`;
+    _selectTransactionDetails(e) {
+        
+        let tx_hash = $(e.target).attr('data-id');
+        location.hash = `#tx_hash=${tx_hash}`;
         e.preventDefault();
     }
     
@@ -85,6 +99,6 @@ export default class ListView {
      */
     _setupCallbacks() {
         this._renderData = this._renderData.bind(this);
-        this._selectGolferDetails = this._selectGolferDetails.bind(this);
+        this._selectTransactionDetails = this._selectTransactionDetails.bind(this);
    }
 }
