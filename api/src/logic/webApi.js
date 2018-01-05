@@ -2,11 +2,10 @@
 const cors = require('cors');
 
 // Import our class definitions
-const TransactionRepository = require('./transactionRepository');
+const IcoRepository = require('./icoRepository');
 const ClaimsHandler = require('../plumbing/claimsHandler');
 const ErrorHandler = require('../plumbing/errorHandler');
 const ApiLogger = require('../plumbing/apiLogger');
-
 
 /*
  * A Web API class to manage routes
@@ -41,8 +40,8 @@ class WebApi {
         
         // Next process API operations
         this._expressApp.get('/api/userclaims/current', this._getUserClaims);
-        this._expressApp.get('/api/transactions', this._getTransactionList);
-        this._expressApp.get('/api/transactions/:tx_hash', this._getTransactionDetails);
+        this._expressApp.get('/api/icos', this._getIcoList);
+        this._expressApp.get('/api/icos/:contract_address', this._getIcoTransactions);
         
         // Unhandled exceptions
         this._expressApp.use('/api/*', this._unhandledExceptionMiddleware);
@@ -91,31 +90,31 @@ class WebApi {
     }
 
     /*
-     * Return the list of transactions
+     * Return the list of ICOs
      */
-    _getTransactionList(request, response, next) {
+    _getIcoList(request, response, next) {
         
-        let repository = new TransactionRepository();
-        ApiLogger.info('API call', 'Request for transaction list');
+        let repository = new IcoRepository();
+        ApiLogger.info('API call', 'Request for ICO list');
         
-        let transactions = repository.getList();
-        response.end(JSON.stringify(transactions));
+        let icos = repository.getList();
+        response.end(JSON.stringify(icos));
     }
 
     /*
      * Return the details for a transaction
      */
-    _getTransactionDetails(request, response, next) {
+    _getIcoTransactions(request, response, next) {
         
-        let repository = new TransactionRepository();
-        ApiLogger.info('API call', `Request for transaction details for tx_hash: ${request.params.tx_hash}`);
+        let repository = new IcoRepository();
+        ApiLogger.info('API call', `Request for transaction details for ICO: ${request.params.contract_address}`);
         
-        let transaction = repository.getDetails(request.params.tx_hash);
+        let transaction = repository.getTransactions(request.params.contract_address);
         if (transaction) {
             response.end(JSON.stringify(transaction));
         }
         else {
-            response.status(404).send(`The transaction with tx_hash ${request.params.tx_hash} was not found`);
+            response.status(404).send(`The ICO with contract address ${request.params.contract_address} was not found`);
         }
     }
 
@@ -149,7 +148,7 @@ class WebApi {
      */
     _setupCallbacks() {
         this._claimsMiddleware = this._claimsMiddleware.bind(this);
-        this._getTransactionDetails = this._getTransactionDetails.bind(this);
+        this._getIcoTransactions = this._getIcoTransactions.bind(this);
         this._unhandledExceptionMiddleware = this._unhandledExceptionMiddleware.bind(this);
         this._writeResponseError = this._writeResponseError.bind(this);
     }

@@ -1,0 +1,44 @@
+{
+    "icos": [
+        {
+            "token_name":       "Virtuo",
+            "description":      "A virtual reality platform for gaming",
+            "contract_address": "0xc55cf4b03948d7ebc8b9e8bad92643703811d162",
+            "price_usd":        10.7421,
+            "price_btc":        0.00072559,
+            "price_eth":        0.010708,
+            "percent_change":   -8.71,
+            "market_cap_usd":   457066890
+        },
+        {
+            "token_name":       "FairLoans",
+            "description":      "A system for connecting borrowers and lenders",
+            "contract_address": "0xc48cf4b03948d7c0pdb9e8bad92643703811d902",
+            "price_usd":        6.3167,
+            "price_btc":        0.00041871,
+            "price_eth":        0.006285,
+            "percent_change":   1.36,
+            "market_cap_usd":   203728635
+        },
+        {
+            "token_name":       "DataPower",
+            "description":      "A cloud provider for distributed data gathering and processing",
+            "contract_address": "0x7a4yf4b03948d7c0pdb9e8bad01922703811dpd0",
+            "price_usd":        7.7031,
+            "price_btc":        0.0005106,
+            "price_eth":        0.007664,
+            "percent_change":   17.21,
+            "market_cap_usd":   426214907
+        },
+        {
+            "token_name":       "FinExec",
+            "description":      "A live financial prediction system for executives",
+            "contract_address": "0xfa4hf4b03948g7c0pdb9e8bad019f2708811dpvv",
+            "price_usd":        353.3190,
+            "price_btc":        0.0234198,
+            "price_eth":        0.351526,
+            "percent_change":   32.63,
+            "market_cap_usd":   590272638
+        }
+    ]
+}

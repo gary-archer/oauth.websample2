@@ -2,7 +2,7 @@
 import Authenticator from 'authenticator';
 import HttpClient from 'httpClient';
 import ListView from 'listView';
-import DetailsView from 'detailsView';
+import TransactionsView from 'transactionsView';
 import UrlHelper from 'urlHelper';
 import ErrorHandler from 'errorHandler';
 import $ from 'jquery';
@@ -33,6 +33,10 @@ class App {
         $('#btnHome').click(this._onHome);
         $('#btnRefreshData').click(this._onRefreshData);
         $('#btnExpireAccessToken').click(this._onExpireToken);
+
+        // Disable buttons until ready
+        $('.initiallydisabled').prop('disabled', true);
+        $('.initiallydisabled').addClass('disabled');
         
         // Download configuration, then handle login, then handle login responses
         this._getAppConfig()
@@ -77,8 +81,8 @@ class App {
         return HttpClient.callApi(`${this._appConfig.app.api_base_url}/userclaims/current`, 'GET', null, this._authenticator)
             .then(claims => {
                 if (claims.given_name && claims.family_name) {
-                    $('#loginInfoContainer').removeClass('hide');
-                    $('#userName').text(`${claims.given_name} ${claims.family_name}`);
+                    $('.logincontainer').removeClass('hide');
+                    $('.logintext').text(`${claims.given_name} ${claims.family_name}`);
                 }
                 return Promise.resolve();
             });
@@ -90,6 +94,10 @@ class App {
     _runPage() {
         return this._executeView().then(() => {
             $(window).on('hashchange', this._onHashChange);
+
+            // Enable buttons
+            $('.initiallydisabled').prop('disabled', false);
+            $('.initiallydisabled').removeClass('disabled');
         });
     }
     
@@ -99,13 +107,13 @@ class App {
     _executeView() {
         
         let hashData = UrlHelper.getLocationHashData();
-        if (!hashData.tx_hash) {
+        if (!hashData.contract_address) {
             let listView = new ListView(this._authenticator, this._appConfig.app.api_base_url);
             return listView.execute();
         }
         else {
-            let detailsView = new DetailsView(this._authenticator, this._appConfig.app.api_base_url, hashData.tx_hash);
-            return detailsView.execute();
+            let transactionsView = new TransactionsView(this._authenticator, this._appConfig.app.api_base_url, hashData.contract_address);
+            return transactionsView.execute();
         }
     }
     

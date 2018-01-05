@@ -1,12 +1,24 @@
-button
+a
 {
+    cursor: pointer;
+}
+.btn
+{
+    margin-top:10px;
     width:150px;
 }
-h4
-{
-    display: inline;
+.panel {
+    border: 0;
 }
-.item
+.listcontainer
+{
+    margin-top: 20px;
+}
+.transactionscontainer
+{
+    margin-top: 20px;
+}
+.transactionslist
 {
     margin-top: 20px;
 }
@@ -14,20 +26,18 @@ h4
 {
     color: blue;
 }
-.footer
+.amount
 {
-    margin-left: 10px;
-}
-.thumbnail
-{
-    margin-bottom: 20px;
+    font-weight: bold;
 }
 .logintext
 {
     text-align:right;
+    font-weight: bold;
 }
 .hash
 {
+    color: green;
     word-wrap: break-word;
 }
 .error

@@ -72,7 +72,7 @@ export default class ErrorHandler {
         });
 
         // Improve this Okta specific error calling the metadata endpoint
-        if (e.message && e.message == 'Network Error') {
+        if (e.message && e.message === 'Network Error') {
             error.area = 'CORS';
             error.message = 'Cross origin request was not allowed';
             error.statusCode = 0;

@@ -1,6 +1,6 @@
 'use strict';
 import HttpClient from 'httpClient';
-import DetailsView from 'detailsView';
+import TransactionsView from 'transactionsView';
 import $ from 'jquery';
 
 /*
@@ -22,17 +22,21 @@ export default class ListView {
      */
     execute() {
         this._showView();
-        return this._requestData().then(this._renderData);
+        return this._requestData()
+            .then(data => {
+                
+                // Render results
+                this._renderData(data);
+                return Promise.resolve();
+            });
     }
     
     /*
      * Update visibility to show empty content while waiting for data
      */
     _showView() {
-        $('#listContainer').removeClass('hide');
-        $('#detailsContainer').addClass('hide');
-
-        $('#listContainer').text('');
+        $('.listcontainer').removeClass('hide');
+        $('.transactionscontainer').addClass('hide');
         $('#error').text('');
     }
     
@@ -40,7 +44,7 @@ export default class ListView {
      * Start the Ajax request
      */
     _requestData() {
-        return HttpClient.callApi(`${this._apiBaseUrl}/transactions`, 'GET', null, this._authenticator);
+        return HttpClient.callApi(`${this._apiBaseUrl}/icos`, 'GET', null, this._authenticator);
     }
     
     /*
@@ -48,49 +52,53 @@ export default class ListView {
      */
     _renderData(data) {
 
-        data.transactions.forEach(transaction => {
+        $('.panel-group').text('');
 
-            // Set text properties
-            let transactionDiv = $(`<div class='item col-xs-6'>
-                                      <div class='thumbnail'>
-                                        <div class='caption row'>
-                                          <div class ='col-xs-2'>TxHash</div>
-                                          <div class ='col-xs-10 hash'><h4>${transaction.tx_hash}</h4></div>  
-                                        </div>
-                                        <div class='caption row'>
-                                          <div class ='col-xs-2'>Accounts</div>
-                                          <div class ='col-xs-10'>
-                                            <span class='account'>${transaction.from}</span> - <span class='account'>${transaction.to}</span>
-                                          </div>
-                                        </div>
-                                        <div class='caption row'>
-                                          <div class ='col-xs-9'>
-                                            <h4>${transaction.amount_eth} ETH / ${transaction.amount_usd} USD</h4>
-                                          </div>
-                                          <div class ='col-xs-3'>
-                                            <a class='btn btn-success pull-right' data-id='${transaction.tx_hash}'>Details</a>
-                                          </div>
-                                        <div>
-                                      </div>
-                                    </div>`);
+        data.icos.forEach(ico => {
 
-            // A click handler selects details
-            $('a').on('click', this._selectTransactionDetails);
+            // Format fields for display
+            let formattedMarketCapUsd = Number(ico.market_cap_usd).toLocaleString();
+            let formattedPriceUsd = ico.price_usd.toFixed(6);
+            let formattedPriceBtc = ico.price_btc.toFixed(6);
+            let formattedPriceEth = ico.price_eth.toFixed(6);
             
+            // Render the ICO details
+            let icoDiv = $(`<div class='panel panel-default'>
+                              <div class='panel-body'>
+                                <div class='row'>
+                                  <div class='col-xs-1'>
+                                    <img src='images/${ico.token_name}.svg' />
+                                  </div>  
+                                  <div class='col-xs-5'>
+                                    <a data-id=${ico.contract_address}>${ico.token_name}</a><br/>
+                                    ${ico.description}
+                                  </div>  
+                                  <div class='col-xs-2 amount'>
+                                    ${formattedPriceUsd} USD<br/>
+                                    ${formattedPriceBtc} BTC<br/>
+                                    ${formattedPriceEth} ETH
+                                  </div>  
+                                  <div class='col-xs-2'>${ico.percent_change}%</div>  
+                                  <div class='col-xs-2'>${formattedMarketCapUsd} USD</div>
+                                </div>
+                              </div>
+                            </div>`);
+
             // Update the DOM
-            $('#listContainer').append(transactionDiv);
+            $('.panel-group').append(icoDiv);
         });
-        
-        return Promise.resolve();
+
+        // A click handler will change the view to look at transaction details
+        $('a').on('click', this._selectIcoTransactions);
     }
     
     /*
-     * When a thumbnail is clicked we will request details data and then update the view
+     * When a thumbnail is clicked we will request transactions data and then update the view
      */
-    _selectTransactionDetails(e) {
+    _selectIcoTransactions(e) {
         
-        let tx_hash = $(e.target).attr('data-id');
-        location.hash = `#tx_hash=${tx_hash}`;
+        let contract_address = $(e.target).attr('data-id');
+        location.hash = `#contract_address=${contract_address}`;
         e.preventDefault();
     }
     
@@ -99,6 +107,6 @@ export default class ListView {
      */
     _setupCallbacks() {
         this._renderData = this._renderData.bind(this);
-        this._selectTransactionDetails = this._selectTransactionDetails.bind(this);
+        this._selectIcoTransactions = this._selectIcoTransactions.bind(this);
    }
 }
