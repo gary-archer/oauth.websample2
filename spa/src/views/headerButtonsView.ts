@@ -31,13 +31,13 @@ export class HeaderButtonsView {
                 <button id='btnHome' type='button' class='btn btn-primary btn-block p-1'>Home</button>
             </div>
             <div class='col-3 my-2 d-flex'>
-                <button id='btnExpireAccessToken' type='button' class='btn btn-primary btn-block p-1 sessionbutton'>Expire Token</button>
+                <button id='btnExpireAccessToken' type='button' disabled class='btn btn-primary btn-block p-1 sessionbutton'>Expire Token</button>
             </div>
             <div class='col-3 my-2 d-flex'>
-                <button id='btnRefreshData' type='button' class='btn btn-primary btn-block p-1 sessionbutton'>Refresh Data</button>
+                <button id='btnRefreshData' type='button' disabled class='btn btn-primary btn-block p-1 sessionbutton'>Refresh Data</button>
             </div>
             <div class='col-3 my-2 d-flex'>
-                <button id='btnLogout' type='button' class='btn btn-primary btn-block p-1 sessionbutton'>Logout</button>
+                <button id='btnLogout' type='button' disabled class='btn btn-primary btn-block p-1 sessionbutton'>Logout</button>
             </div>
         </div>`;
         $('#headerbuttons').html(html);

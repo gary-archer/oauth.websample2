@@ -14,13 +14,9 @@ export class Router {
     private _apiClient: ApiClient;
     private _errorView: ErrorView;
 
-    /*
-     * Disable buttons at startup
-     */
     public constructor(apiClient: ApiClient, errorView: ErrorView) {
         this._apiClient = apiClient;
         this._errorView = errorView;
-        this._disableSessionControls();
     }
 
     /*
