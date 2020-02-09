@@ -6,6 +6,7 @@ import {UserInfoService} from '../../logic/services/userInfoService';
 import {JsonFileReader} from '../../logic/utilities/jsonFileReader';
 import {SampleCustomClaimsProvider} from '../authorization/sampleCustomClaimsProvider';
 import {Configuration} from '../configuration/configuration';
+import {ErrorCodes} from '../errors/errorCodes';
 import {ErrorHandler} from '../errors/errorHandler';
 import {Authenticator} from '../oauth/authenticator';
 import {Authorizer} from '../oauth/authorizer';
@@ -93,7 +94,10 @@ export class Router {
         // Get the supplied id as a number, and return 400 if invalid input was received
         const id = parseInt(request.params.id, 10);
         if (isNaN(id) || id <= 0) {
-            throw new ClientError(400, 'invalid_company_id', 'The company id must be a positive numeric integer');
+            throw new ClientError(
+                400,
+                ErrorCodes.invalidCompanyId,
+                'The company id must be a positive numeric integer');
         }
 
         const result = await service.getCompanyTransactions(id);

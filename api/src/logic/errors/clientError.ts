@@ -1,3 +1,5 @@
+import {ErrorCodes} from '../../host/errors/errorCodes';
+
 /*
  * Manage errors due to invalid client usage
  */
@@ -7,7 +9,12 @@ export class ClientError extends Error {
      * A helper method to return a 401 error
      */
     public static create401(reason: string): ClientError {
-        const error = new ClientError(401, 'unauthorized', 'Missing, invalid or expired access token');
+
+        const error = new ClientError(
+            401,
+            ErrorCodes.unauthorizedRequest,
+            'Missing, invalid or expired access token');
+
         error.logContext = reason;
         return error;
     }

@@ -1,6 +1,7 @@
 import {ApiError} from '../../logic/errors/apiError';
 import {ClientError} from '../../logic/errors/clientError';
 import {ApiLogger} from '../utilities/apiLogger';
+import {ErrorCodes} from './errorCodes';
 
 /*
  * A class to handle composing and reporting errors
@@ -57,7 +58,7 @@ export class ErrorHandler {
 
         // Handle general exceptions
         const apiError = new ApiError(
-            'general_exception',
+            ErrorCodes.serverError,
             'An unexpected exception occurred in the API',
             exception.stack);
 
@@ -71,7 +72,7 @@ export class ErrorHandler {
     public static fromMetadataError(responseError: any, url: string): ApiError {
 
         const apiError = new ApiError(
-            'metadata_lookup_failure',
+            ErrorCodes.metadataLookupFailure,
             'Metadata lookup failed',
             responseError.stack);
 
@@ -93,7 +94,7 @@ export class ErrorHandler {
         }
 
         const apiError = new ApiError(
-            'introspection_failure',
+            ErrorCodes.introspectionFailure,
             'Token validation failed',
             responseError.stack);
 
@@ -117,7 +118,7 @@ export class ErrorHandler {
         }
 
         const apiError = new ApiError(
-            'userinfo_failure',
+            ErrorCodes.userinfoFailure,
             'User info lookup failed',
             responseError.stack);
 
@@ -130,7 +131,7 @@ export class ErrorHandler {
      */
     public static fromMissingClaim(claimName: string): ApiError {
 
-        const apiError = new ApiError('claims_failure', 'Authorization Data Not Found');
+        const apiError = new ApiError(ErrorCodes.claimsFailure, 'Authorization Data Not Found');
         apiError.details = `An empty value was found for the expected claim ${claimName}`;
         return apiError;
     }

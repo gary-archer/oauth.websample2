@@ -1,3 +1,4 @@
+import {ErrorCodes} from '../../host/errors/errorCodes';
 import {ApiClaims} from '../entities/apiClaims';
 import {Company} from '../entities/company';
 import {CompanyTransactions} from '../entities/companyTransactions';
@@ -57,9 +58,10 @@ export class CompanyService {
      * Return a 404 error if a company is requested that is outside an allowed range
      */
     private _unauthorizedError(companyId: number): ClientError {
+
         return new ClientError(
             404,
-            'company_not_found',
+            ErrorCodes.companyNotFound,
             `Company ${companyId} was not found for this user`);
     }
 }
