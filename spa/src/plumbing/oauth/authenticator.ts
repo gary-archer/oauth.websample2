@@ -129,7 +129,7 @@ export class Authenticator {
                 if (e.error !== ErrorCodes.loginRequired) {
 
                     // In this code sample we report any other errors, such as iframe timeouts
-                    // An alternative approach would be to return an empty token instead
+                    // An alternative approach would be to swallow renewal errors instead
                     throw e;
                 }
             }
@@ -139,7 +139,7 @@ export class Authenticator {
     }
 
     /*
-     * If there is no token but the page has previously loaded, we attempt a silent renewal on an iframe
+     * Do the interactive login redirect on the main window
      */
     private async _handleLoginRedirect(): Promise<UIError> {
 
