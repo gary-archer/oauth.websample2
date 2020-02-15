@@ -51,6 +51,14 @@ export class ErrorReporter {
             lines.push(this._createErrorLine('URL', error.url));
         }
 
+        // In debug builds render the stack trace as a long string
+        // We can then look up results at https://sourcemaps.info
+        if (SHOW_STACK_TRACE) {
+            if (error.stack) {
+                lines.push(this._createErrorLine('Stack', error.stack));
+            }
+        }
+
         return lines;
     }
 

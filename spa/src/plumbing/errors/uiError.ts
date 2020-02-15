@@ -89,12 +89,13 @@ export class UIError extends Error {
 
         const frames: string[] = [];
         if (this.stack) {
+
             const items = this.stack.split('\n').map((x: string) => x.trim()) as string[];
             items.forEach((i) => {
                 frames.push(i);
             });
         }
-
+                
         return frames;
     }
 
