@@ -1,14 +1,17 @@
-import {UserManager, UserManagerSettings} from 'oidc-client';
+import {InMemoryWebStorage, UserManager, UserManagerSettings, WebStorageStateStore} from 'oidc-client';
 import urlparse from 'url-parse';
 import {OAuthConfiguration} from '../../configuration/oauthConfiguration';
 import {ErrorCodes} from '../errors/errorCodes';
 import {ErrorHandler} from '../errors/errorHandler';
-import {ErrorReporter} from '../errors/errorReporter';
+import {UIError} from '../errors/uiError';
 
 /*
  * The entry point for initiating login and token requests
  */
 export class Authenticator {
+
+    // A session key used to avoid the user logging in whenever the page is refreshed
+    private readonly pageRefreshKey = 'canSilentlyRenew';
 
     // The OIDC Client class does all of the real security processing
     private readonly _userManager: UserManager;
@@ -31,17 +34,20 @@ export class Authenticator {
             response_type: 'code',
 
             // We will silently renew tokens on a hidden iframe
-            automaticSilentRenew: true,
+            automaticSilentRenew: false,
 
-            // Disable these features which we are not using
+            // We are not using these features and we get extended user info from our API
             loadUserInfo: false,
             monitorSession: false,
+
+            // Tokens are stored only in memory, which generally does best in security reviews and PEN tests
+            // https://auth0.com/docs/tokens/guides/store-tokens
+            userStore: new WebStorageStateStore({ store: new InMemoryWebStorage() }),
 
         } as UserManagerSettings;
 
         // Create the user manager
         this._userManager = new UserManager(settings);
-        this._userManager.events.addSilentRenewError(this._onSilentTokenRenewalError);
         this._setupCallbacks();
     }
 
@@ -50,13 +56,97 @@ export class Authenticator {
      */
     public async getAccessToken(): Promise<string> {
 
-        // On most calls we just return the existing token from HTML5 storage
+        // On most calls we just return the existing token from memory
         const user = await this._userManager.getUser();
         if (user && user.access_token && user.access_token.length > 0) {
             return user.access_token;
         }
 
-        // Store the SPA's client side location
+        // If there is no token but the page has previously loaded, we attempt a silent renewal on an iframe
+        // This is the SPA equivalent of using a refresh token
+        const accessToken = await this._handlePageRefresh();
+        if (accessToken && accessToken.length > 0) {
+            return accessToken;
+        }
+
+        // Otherwise start a login redirect and manage application state
+        const error = await this._handleLoginRedirect();
+        throw error;
+    }
+
+    /*
+     * Handle the response from the authorization server
+     */
+    public async handleLoginResponse(): Promise<void> {
+        return await this._handleLoginResponse();
+    }
+
+    /*
+     * Redirect in order to log out at the authorization server and remove vendor cookies
+     */
+    public async startLogout(): Promise<void> {
+        return await this._startLogout();
+    }
+
+    /*
+     * Clear the current access token from storage to force a login
+     */
+    public async clearAccessToken(): Promise<void> {
+        await this._userManager.removeUser();
+    }
+
+    /*
+     * This method is for testing only, to make the access token in storage act like it has expired
+     */
+    public async expireAccessToken(): Promise<void> {
+
+        const user = await this._userManager.getUser();
+        if (user) {
+
+            user.access_token = 'x' + user.access_token + 'x';
+            this._userManager.storeUser(user);
+        }
+    }
+
+    /*
+     * If the user refreshes the page we prevent the user needing to login again unless required
+     * This is done by manually triggering a silent token renewal on an iframe
+     */
+    private async _handlePageRefresh(): Promise<string> {
+
+        const canRefresh = sessionStorage.getItem(this.pageRefreshKey);
+        if (canRefresh) {
+
+            try {
+
+                // Redirect on an iframe using the Authorization Server session cookie and prompt=none
+                // A different scope could be requested by also supplying an object with a scope property
+                const user = await this._userManager.signinSilent();
+                if (user) {
+                    return user.access_token;
+                }
+            } catch (e) {
+
+                // A login required error means we need to do a full login redirect
+                if (e.error !== ErrorCodes.loginRequired) {
+
+                    // In this code sample we report any other errors, such as iframe timeouts
+                    // An alternative approach would be to return an empty token instead
+                    throw e;
+                }
+            }
+        }
+
+        return '';
+    }
+
+    /*
+     * If there is no token but the page has previously loaded, we attempt a silent renewal on an iframe
+     */
+    private async _handleLoginRedirect(): Promise<UIError> {
+
+        // Otherwise start a login redirect, by first storing the SPA's client side location
+        // Note that some apps might also want to store form fields here
         const data = {
             hash: location.hash.length > 0 ? location.hash : '#',
         };
@@ -66,19 +156,19 @@ export class Authenticator {
             await this._userManager.signinRedirect({state: JSON.stringify(data)});
 
             // Short circuit normal SPA page execution and do not try to render the view
-            throw ErrorHandler.getFromLoginRequired();
+            return ErrorHandler.getFromLoginRequired();
 
         } catch (e) {
 
             // Handle OAuth specific errors, such as those calling the metadata endpoint
-            throw ErrorHandler.getFromOAuthRequest(e, ErrorCodes.loginRequestFailed);
+            return ErrorHandler.getFromOAuthRequest(e, ErrorCodes.loginRequestFailed);
         }
     }
 
     /*
      * Handle the response from the authorization server
      */
-    public async handleLoginResponse(): Promise<void> {
+    private async _handleLoginResponse(): Promise<void> {
 
         // If the page loads with a state query parameter we classify it as an OAuth response
         const urlData = urlparse(location.href, true);
@@ -95,6 +185,9 @@ export class Authenticator {
                 // Replace the browser location, to prevent tokens being available during back navigation
                 history.replaceState({}, document.title, data.hash);
 
+                // Also enable page refresh without logging in
+                sessionStorage.setItem(this.pageRefreshKey, 'true');
+
             } catch (e) {
 
                 // Prevent back navigation problems after errors
@@ -109,64 +202,25 @@ export class Authenticator {
     /*
      * Redirect in order to log out at the authorization server and remove vendor cookies
      */
-    public async startLogout(): Promise<void> {
+    private async _startLogout(): Promise<void> {
 
         try {
+            // Do the redirect
             await this._userManager.signoutRedirect();
+
+            // Remove the logged in session key
+            sessionStorage.removeItem(this.pageRefreshKey);
+
         } catch (e) {
             throw ErrorHandler.getFromOAuthRequest(e, ErrorCodes.logoutRequestFailed);
         }
     }
 
     /*
-     * Clear the current access token from storage to force a login
-     */
-    public async clearAccessToken(): Promise<void> {
-
-        await this._userManager.removeUser();
-    }
-
-    /*
-     * This method is for testing only, to make the access token in storage act like it has expired
-     */
-    public async expireAccessToken(): Promise<void> {
-
-        const user = await this._userManager.getUser();
-        if (user) {
-
-            // Set the stored value to 60 minutes in the future so that OIDC Client does a token renewal shortly
-            // Also corrupt the current token so that there is a 401 if it is sent to the API
-            user.expires_at = Date.now() / 1000 + 60;
-            user.access_token = 'x' + user.access_token + 'x';
-
-            // Update OIDC so that it silently renews the token almost immediately
-            this._userManager.storeUser(user);
-            this._userManager.stopSilentRenew();
-            this._userManager.startSilentRenew();
-        }
-    }
-
-    /*
-     * Report any silent token renewal errors
-     */
-    private _onSilentTokenRenewalError(e: any): void {
-
-        // A redirect with 'prompt=none' may return 'login_required', meaning the session expired
-        if (e.error !== ErrorCodes.loginRequired) {
-
-            // Other errors are real problems and are reported
-            const error = ErrorHandler.getFromOAuthResponse(e, ErrorCodes.tokenRenewalIframeError);
-            const reporter = new ErrorReporter();
-            reporter.outputToConsole(error);
-        }
-    }
-
-            /*
      * Plumbing to ensure that the this parameter is available in async callbacks
      */
     private _setupCallbacks(): void {
         this.clearAccessToken = this.clearAccessToken.bind(this);
         this.getAccessToken = this.getAccessToken.bind(this);
-        this._onSilentTokenRenewalError = this._onSilentTokenRenewalError.bind(this);
    }
 }

@@ -37,7 +37,7 @@ export class TokenRenewalResponseHandler {
         if (urlData.query && urlData.query.state) {
 
             // Start processing of the authorization response on the iframe
-            // Any errors are reported via the main window's onSilentTokenRenewalError callback
+            // Any errors are reported via the authenticator class of the main window
             await this._userManager.signinSilentCallback();
         }
     }
