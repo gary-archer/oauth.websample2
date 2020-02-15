@@ -30,10 +30,10 @@ export class Authenticator {
             post_logout_redirect_uri: `${config.appUri}${config.postLogoutPath}`,
             scope: config.scope,
 
-            // Use the Authorization Code Flow
+            // Use the Authorization Code Flow (PKCE)
             response_type: 'code',
 
-            // We will silently renew tokens on a hidden iframe
+            // We silently renew explicitly rather than in the background
             automaticSilentRenew: false,
 
             // We are not using these features and we get extended user info from our API
