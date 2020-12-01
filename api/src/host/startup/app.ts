@@ -35,6 +35,6 @@ import {HttpServerConfiguration} from './httpServerConfiguration';
 
         // Report startup errors
         const error = ErrorHandler.fromException(e);
-        ApiLogger.error(JSON.stringify(error.toLogFormat()));
+        ApiLogger.error(JSON.stringify(error.toLogFormat(), null, 2));
     }
 })();
