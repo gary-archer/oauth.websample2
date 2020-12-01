@@ -1,15 +1,22 @@
 #!/bin/bash
-set -e
 
 #**************************************************************************************
 # A script to use OpenSSL to create self signed certificates in a cross platform manner
-# Use chmod makeCerts.sh to make it executable if required
+# Run in a MacOS terminal or in Git Bash on Windows
 #**************************************************************************************
 
 #
-# Point to SSL configuration
+# Fail on first error
 #
-export OPENSSL_CONF='/mingw64/ssl/openssl.cnf'
+set -e
+
+#
+# Point to the OpenSsl configuration file for the platform
+#
+case "$(uname -s)" in
+ Darwin) export OPENSSL_CONF='/System/Library/OpenSSL/openssl.cnf' ;;
+      *) export OPENSSL_CONF='/mingw64/ssl/openssl.cnf' ;;
+esac
 
 #
 # Root certificate parameters
@@ -28,7 +35,6 @@ WILDCARD_DOMAIN_NAME='*.mycompany.com'
 #
 # Create the root certificate public + private key protected by a passphrase
 #
-echo 'START'
 openssl genrsa -out $ROOT_CERT_FILE_PREFIX.key 2048 -passout pass:$ROOT_CERT_PASSWORD
 echo '*** Successfully created Root CA key'
 
