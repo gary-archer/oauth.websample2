@@ -14,8 +14,17 @@ set -e
 # Point to the OpenSsl configuration file for the platform
 #
 case "$(uname -s)" in
- Darwin) export OPENSSL_CONF='/System/Library/OpenSSL/openssl.cnf' ;;
-      *) export OPENSSL_CONF='/mingw64/ssl/openssl.cnf' ;;
+
+  # Mac OS
+  Darwin)
+    export OPENSSL_CONF='/System/Library/OpenSSL/openssl.cnf'
+ 	;;
+
+  # Windows with Git Bash
+  MINGW64*)
+    export OPENSSL_CONF='C:/Program Files/Git/usr/ssl/openssl.cnf';
+    export MSYS_NO_PATHCONV=1;
+	;;
 esac
 
 #
