@@ -23,7 +23,6 @@ esac
 #
 ROOT_CERT_FILE_PREFIX='mycompany.ca'
 ROOT_CERT_DESCRIPTION='My Company Root Certification Authority'
-ROOT_CERT_PASSWORD=RootPassword1
 
 #
 # SSL certificate parameters
@@ -35,7 +34,7 @@ WILDCARD_DOMAIN_NAME='*.mycompany.com'
 #
 # Create the root certificate public + private key protected by a passphrase
 #
-openssl genrsa -out $ROOT_CERT_FILE_PREFIX.key 2048 -passout pass:$ROOT_CERT_PASSWORD
+openssl genrsa -out $ROOT_CERT_FILE_PREFIX.key 2048
 echo '*** Successfully created Root CA key'
 
 #
@@ -56,7 +55,7 @@ echo '*** Successfully created Root CA'
 #
 # Create the SSL key
 #
-openssl genrsa -out $SSL_CERT_FILE_PREFIX.key 2048 -passout pass:$SSL_CERT_PASSWORD
+openssl genrsa -out $SSL_CERT_FILE_PREFIX.key 2048
 echo '*** Successfully created SSL key'
 
 #
