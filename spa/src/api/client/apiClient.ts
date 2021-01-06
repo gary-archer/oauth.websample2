@@ -91,7 +91,7 @@ export class ApiClient {
      */
     private async _callApiWithToken(url: string, method: string, dataToSend: any, accessToken: string): Promise<any> {
 
-        const options: any = {
+        const options: JQuery.AjaxSettings = {
             url,
             dataType: 'json',
             contentType: 'application/json',
@@ -106,6 +106,11 @@ export class ApiClient {
 
         if (dataToSend) {
             options.data = dataToSend;
+        }
+
+        // Force IE11 to bypass the browser cache by changing the request URL every time
+        if (navigator.userAgent.toLowerCase().indexOf('trident') !== -1) {
+            options.cache = false;
         }
 
         return $.ajax(options);
