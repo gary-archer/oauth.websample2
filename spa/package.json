@@ -1,0 +1,36 @@
+{
+  "name": "basicspa",
+  "version": "2.0.0",
+  "description": "A Basic SPA using the OIDC Client security library",
+  "main": "index.ts",
+  "scripts": {
+    "lint": "npx eslint . --ext .ts",
+    "start": "rimraf dist && webpack --config webpack/webpack.config.dev.js --watch",
+    "build": "rimraf dist && webpack --config webpack/webpack.config.prod.js"
+  },
+  "keywords": [],
+  "author": "Gary Archer",
+  "license": "MIT",
+  "dependencies": {
+    "core-js": "^3.8.0",
+    "jquery": "^3.5.0",
+    "moment": "^2.24.0",
+    "mustache": "^4.0.1",
+    "oidc-client": "^1.10.1",
+    "url-parse": "^1.4.7"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.4",
+    "@types/mustache": "^4.0.1",
+    "@types/url-parse": "^1.4.3",
+    "@typescript-eslint/eslint-plugin": "^4.10.0",
+    "@typescript-eslint/parser": "^4.10.0",
+    "eslint": "^7.15.0",
+    "rimraf": "^3.0.2",
+    "ts-loader": "^8.0.11",
+    "typescript": "^4.1.2",
+    "webpack": "^5.8.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-merge": "^5.4.0"
+  }
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='x-ua-compatible' content='IE=edge'>
+
+        <base href='/spa/' />
+        <title>OAuth 2.x Sample - Demo App</title>
+
+        <link rel='stylesheet' href='css/bootstrap.min.css'>
+        <link rel='stylesheet' href='css/app.css'>
+    </head>
+    <body>
+        <div class='container'>
+
+            <!-- The header area displays the title and the logged in user -->
+            <div id='title'></div>
+
+            <!-- The button area for testing session related operations -->
+            <div id='headerbuttons'></div>
+            
+            <!-- Error details when applicable -->
+            <div id='errorcontainer'></div>
+
+            <!-- OIDC trace details when visible -->
+            <div id='tracecontainer'></div>
+
+            <!-- The SPA's main view which is swapped out as the user navigates -->
+            <div id='main'></div>
+        </div>
+
+        <script src='dist/vendor.bundle.js'></script>
+        <script src='dist/app.bundle.js'></script>
+    </body>
+</html>
