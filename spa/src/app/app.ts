@@ -15,7 +15,6 @@ import {TitleView} from '../views/titleView';
  */
 export class App {
 
-    // Global objects
     private _configuration?: Configuration;
     private _authenticator?: Authenticator;
     private _apiClient?: ApiClient;
