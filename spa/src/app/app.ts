@@ -4,12 +4,11 @@ import {Configuration} from '../configuration/configuration';
 import {ConfigurationLoader} from '../configuration/configurationLoader';
 import {ErrorConsoleReporter} from '../plumbing/errors/errorConsoleReporter';
 import {Authenticator} from '../plumbing/oauth/authenticator';
-import {TraceListener} from '../plumbing/oauth/trace/traceListener';
+import {OidcLogger} from '../plumbing/oauth/utils/oidcLogger';
 import {ErrorView} from '../views/errorView';
 import {HeaderButtonsView} from '../views/headerButtonsView';
 import {Router} from '../views/router';
 import {TitleView} from '../views/titleView';
-import {TraceView} from '../views/traceView';
 
 /*
  * The application class
@@ -20,25 +19,18 @@ export class App {
     private _configuration?: Configuration;
     private _authenticator?: Authenticator;
     private _apiClient?: ApiClient;
+    private _oidcLogger: OidcLogger;
     private _router?: Router;
-    private _traceListener?: TraceListener;
-
-    // Child views
     private _titleView?: TitleView;
     private _headerButtonsView?: HeaderButtonsView;
     private _errorView?: ErrorView;
-    private _traceView?: TraceView;
-
-    // State flags
     private _isInitialised: boolean;
 
     public constructor() {
 
-        // Configure the JQuery namespace
         (window as any).$ = $;
-
-        // Initialise state flags
         this._isInitialised = false;
+        this._oidcLogger = new OidcLogger();
         this._setupCallbacks();
     }
 
@@ -93,9 +85,6 @@ export class App {
 
         this._errorView = new ErrorView();
         this._errorView.load();
-
-        this._traceView = new TraceView();
-        this._traceView.load();
     }
 
     /*
@@ -111,7 +100,6 @@ export class App {
             this._configuration.app.webBaseUrl,
             this._configuration.oauth,
             this._onExternalTabLogout);
-        this._traceListener = new TraceListener();
 
         // Create a client to reliably call the API
         this._apiClient = new ApiClient(this._configuration.app.apiBaseUrl, this._authenticator);
@@ -166,7 +154,7 @@ export class App {
     private async _onHashChange(): Promise<void> {
 
         // Handle updates to log levels when the URL log setting is changed
-        this._traceListener!.updateLogLevelIfRequired();
+        this._oidcLogger.updateLogLevelIfRequired();
 
         try {
 
