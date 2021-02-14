@@ -1,6 +1,6 @@
 import {Log} from 'oidc-client';
 import urlparse from 'url-parse';
-import {HtmlStorageHelper} from '../../utilities/htmlStorageHelper';
+import {HtmlStorageHelper} from './htmlStorageHelper';
 
 /*
  * A helper class to deal with calculating and storing the log level
