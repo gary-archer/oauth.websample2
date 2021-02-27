@@ -17,7 +17,7 @@
     "moment": "^2.24.0",
     "mustache": "^4.0.1",
     "oidc-client": "^1.11.4",
-    "url-parse": "^1.4.7"
+    "url-parse": "^1.5.1"
   },
   "devDependencies": {
     "@types/jquery": "^3.5.4",

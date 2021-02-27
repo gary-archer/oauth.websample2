@@ -16,6 +16,7 @@ export class ApiClaims {
 
     // Custom claims that originate from the API's own database
     private _userDatabaseId: string;
+    public _isAdmin: boolean;
     private _regionsCovered: string[];
 
     /*
@@ -30,6 +31,7 @@ export class ApiClaims {
         this._familyName = '';
         this._email = '';
         this._userDatabaseId = '';
+        this._isAdmin = false;
         this._regionsCovered = [];
     }
 
@@ -67,6 +69,14 @@ export class ApiClaims {
 
     public set userDatabaseId(value: string) {
         this._userDatabaseId = value;
+    }
+
+    public get isAdmin(): boolean {
+        return this._isAdmin;
+    }
+
+    public set isAdmin(value: boolean) {
+        this._isAdmin = value;
     }
 
     public get regionsCovered(): string[] {

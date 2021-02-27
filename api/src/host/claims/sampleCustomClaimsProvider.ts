@@ -28,11 +28,15 @@ export class SampleCustomClaimsProvider implements CustomClaimsProvider {
 
     /*
      * A real implementation would look up authorization data from the API's own data
-     * This could include user roles and any data used for enforcing authorization rules
      */
     private _lookupAuthorizationData(claims: ApiClaims): void {
 
-        // We use a coverage based authorization rule where the user can only use data for these regions
-        claims.regionsCovered = ['USA'];
+        // Our blog's code samples have two fixed users and use the below mock implementation:
+        // - guestadmin@mycompany.com is an admin and sees all data
+        // - guestuser@mycompany.com is not an admin and only sees data for their own region
+        claims.isAdmin = claims.email.toLowerCase().indexOf('admin') !== -1;
+        if (!claims.isAdmin) {
+            claims.regionsCovered = ['USA'];
+        }
     }
 }
