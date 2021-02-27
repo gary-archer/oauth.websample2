@@ -40,6 +40,7 @@ export class CompaniesView {
             return {
                 id: company.id,
                 name: company.name,
+                region: company.region,
                 formattedTargetUsd: Number(company.targetUsd).toLocaleString(),
                 formattedInvestmentUsd: Number(company.investmentUsd).toLocaleString(),
                 noInvestors: company.noInvestors,
@@ -50,9 +51,9 @@ export class CompaniesView {
         const htmlTemplate =
             `<div class='card border-0'>
                 <div class='card-header row'>
-                    <div class ='col-1'></div>
-                    <div class ='col-2 font-weight-bold text-center'>Account</div>
-                    <div class ='col-3'></div>
+                <div class ='col-2 font-weight-bold text-center'>Account</div>
+                    <div class ='col-2 font-weight-bold text-center'>Region</div>
+                    <div class ='col-2'></div>
                     <div class ='col-2 font-weight-bold text-right'>Target USD</div>
                     <div class ='col-2 font-weight-bold text-right'>Investment USD</div>
                     <div class ='col-2 font-weight-bold text-right'># Investors</div>
@@ -60,13 +61,13 @@ export class CompaniesView {
                 <div class='card-body'>
                     {{#companies}}
                         <div class='row imageRow'>
-                            <div class='col-1 my-auto'>
-                                <img src='images/{{id}}.svg' />
-                            </div>
                             <div class='col-2 my-auto text-center'>
                                 {{name}}
                             </div>
-                            <div class='col-3 my-auto text-center'>
+                            <div class='col-2 my-auto text-center'>
+                                {{region}}
+                            </div>
+                            <div class='col-2 my-auto text-center'>
                                 <a href='#company={{id}}'>View Transactions</a>
                             </div>
                             <div class='col-2 my-auto moneycolor font-weight-bold text-right'>

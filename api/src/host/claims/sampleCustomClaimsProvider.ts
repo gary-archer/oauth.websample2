@@ -33,6 +33,6 @@ export class SampleCustomClaimsProvider implements CustomClaimsProvider {
     private _lookupAuthorizationData(claims: ApiClaims): void {
 
         // We use a coverage based authorization rule where the user can only use data for these regions
-        claims.regionsCovered = ['Europe', 'USA'];
+        claims.regionsCovered = ['USA'];
     }
 }
