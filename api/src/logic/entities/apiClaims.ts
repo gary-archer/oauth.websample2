@@ -16,7 +16,7 @@ export class ApiClaims {
 
     // Custom claims that originate from the API's own database
     private _userDatabaseId: string;
-    public _isAdmin: boolean;
+    private _isAdmin: boolean;
     private _regionsCovered: string[];
 
     /*
