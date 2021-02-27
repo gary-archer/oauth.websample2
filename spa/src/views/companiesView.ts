@@ -60,7 +60,7 @@ export class CompaniesView {
                 </div>
                 <div class='card-body'>
                     {{#companies}}
-                        <div class='row imageRow'>
+                        <div class='row listRow'>
                             <div class='col-2 my-auto text-center'>
                                 {{name}}
                             </div>
