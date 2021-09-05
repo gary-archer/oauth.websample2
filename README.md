@@ -27,7 +27,3 @@
 * The [Oidc-Client Library](https://github.com/IdentityModel/oidc-client-js) is used to implement SPA logins and token handling
 * The [OpenId-Client Library](https://github.com/panva/node-openid-client) is used to handle calls from the API to the Authorization Server
 * The [Node Cache](https://github.com/mpneuried/nodecache) is used to cache API claims keyed against tokens
-
-### SSL Certificates
-
-* Certificates in the certs folder originate from the [OAuth Development Certificates](https://github.com/gary-archer/oauth.developmentcertificates) repository

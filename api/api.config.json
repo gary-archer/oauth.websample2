@@ -1,7 +1,7 @@
 {
     "api": {
         "port": 443,
-        "sslCertificateFileName": "./certs/mycompany.com.ssl.p12",
+        "sslCertificateFileName": "./.certs/localhost/mycompany.com.ssl.p12",
         "sslCertificatePassword": "Password1",
         "trustedOrigins": [
             "https://web.mycompany.com"
