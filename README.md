@@ -8,8 +8,9 @@
 
 ### Overview
 
-An updated SPA and API sample using OAuth and Open Id Connect, referenced in my blog at https://authguidance.com.\
-This sample completes [SPA Session Management](https://authguidance.com/2017/10/24/user-sessions-and-token-renewal/) and implements our [API Authorization Design](https://authguidance.com/2017/10/03/api-tokens-claims/).
+An updated SPA and API code sample using OAuth and OpenID Connect.
+This sample completes the SPA session management operations and uses extensible claims for API authorization.
+This is a fairly simple setup and is useful when first learning OAuth and understanding how endpoints work.
 
 ## 2021 Security Update
 
@@ -24,21 +25,21 @@ Ensure that Node.js is installed, then run the following script from a macOS ter
 ./build.sh
 ```
 
-Custom domains are used so you must add these entries to your hosts file:
+Custom development domains are used so you must add these entries to your hosts file:
 
 ```
 127.0.0.1 web.mycompany.com
 127.0.0.1 api.mycompany.com
 ```
 
-You must also trust the root certificate that the build step downloads on your computer.\
+Next trust the root certificate that the build step downloads on your computer, in order for SSL to work in the browser.\
 Add this file to the system keychain on macOS or the Windows certificate trust store for the local computer account:
 
 ```
 ./api/certs/localhost/mycompany.com.ca.pem
 ```
 
-Then run the following script to run the code for both SPA and API:
+Then run the following script to execute the code for both SPA and API:
 
 ```bash
 ./deploy.sh
@@ -53,7 +54,7 @@ You can then test all lifecycle operations, including token refresh and logout.
 
 ### Details
 
-* See the [Updated SPA and API Code Sample](https://authguidance.com/2017/10/13/improved-spa-code-sample-overview/) write up for an overview and instructions on how to run the code
+* See the [Updated SPA and API Code Sample](https://authguidance.com/2017/10/13/improved-spa-code-sample-overview/) blog post for an overview and instructions on how to run the code
 
 ### Programming Languages
 
@@ -64,6 +65,6 @@ You can then test all lifecycle operations, including token refresh and logout.
 
 * Express is used to host both the API and the SPA content
 * AWS Cognito is used as the default Authorization Server
-* The [Oidc-Client Library](https://github.com/IdentityModel/oidc-client-js) is used by the SPA to implement OpenID Connect
-* The [JOSE Library](https://github.com/panva/jose) is used by the API to validate JWT access tokens
-* The [Node Cache](https://github.com/mpneuried/nodecache) is used to cache API custom claims against received tokens
+* The [oidc-client library](https://github.com/IdentityModel/oidc-client-js) is used by the SPA to implement OpenID Connect
+* The [JOSE library](https://github.com/panva/jose) is used by the API to validate JWT access tokens
+* The [Node cache](https://github.com/mpneuried/nodecache) is used to cache API custom claims against received tokens
