@@ -24,9 +24,6 @@ export class TransactionsView {
 
         try {
 
-            // Clear existing content
-            DomUtils.text('#main', '');
-
             // Try to get data
             const data = await this._apiClient.getCompanyTransactions(this._companyId);
 
@@ -48,7 +45,8 @@ export class TransactionsView {
 
             } else {
 
-                // Rethrow otherwise
+                // Clear previous content on error
+                DomUtils.text('#main', '');
                 throw uiError;
             }
         }
