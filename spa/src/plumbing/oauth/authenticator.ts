@@ -231,7 +231,7 @@ export class Authenticator {
             // If the request fails there should be a login_required error returned from the Authorization Server
             await this._userManager.signinSilent();
 
-        } catch (e) {
+        } catch (e: any) {
 
             if (e.error === ErrorCodes.loginRequired) {
 

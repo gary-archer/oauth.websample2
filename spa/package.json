@@ -1,7 +1,7 @@
 {
   "name": "basicspa",
   "version": "2.0.0",
-  "description": "A Basic SPA using the OIDC Client security library",
+  "description": "An SPA using the OIDC Client security library and full session features",
   "main": "index.ts",
   "scripts": {
     "lint": "npx eslint . --ext .ts",

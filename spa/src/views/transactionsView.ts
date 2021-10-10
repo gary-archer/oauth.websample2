@@ -33,7 +33,7 @@ export class TransactionsView {
             // Render new content
             this._renderData(data);
 
-        } catch (uiError) {
+        } catch (uiError: any) {
 
             // Handle invalid input due to typing an id into the browser address bar
             if (uiError.statusCode === 404 && uiError.errorCode === ErrorCodes.companyNotFound) {

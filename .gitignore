@@ -1,5 +1,6 @@
 .gitignore
 node_modules
+/api/certs
 /spa/dist/*
 !/spa/dist/unsupported.js
 .DS_Store

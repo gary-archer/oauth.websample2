@@ -4,10 +4,10 @@
         "apiBaseUrl":             "https://api.mycompany.com/api"
     },
     "oauth": {
-        "authority":              "https://dev-843469.oktapreview.com/oauth2/default",
-        "clientId":               "0oac5m78icnW3C06L0h7",
+        "authority":              "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_qqJgVeuTn",
+        "clientId":               "6tg0qglddpvqh74k3jbf1mmj64",
         "redirectUri":            "/spa",
-        "postLogoutRedirectUri":  "/spa#loggedout",
-        "scope":                  "openid profile email transactions_read"
+        "postLogoutRedirectUri":  "/spa/loggedout.html",
+        "scope":                  "openid profile email https://api.authsamples.com/api/transactions_read"
     }
 }
