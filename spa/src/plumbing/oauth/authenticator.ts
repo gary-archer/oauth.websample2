@@ -11,6 +11,7 @@ import {UrlHelper} from '../utilities/urlHelper';
  */
 export class Authenticator {
 
+    private readonly _configuration: OAuthConfiguration;
     private readonly _userManager: UserManager;
 
     public constructor(
@@ -19,6 +20,7 @@ export class Authenticator {
         onExternalTabLogout: () => void) {
 
         // Create OIDC settings from our application configuration
+        this._configuration = configuration;
         const settings = {
 
             // The Open Id Connect base URL
@@ -78,7 +80,7 @@ export class Authenticator {
         }
 
         // If a new token is needed or the page is refreshed, try to refresh the access token
-        return await this.refreshAccessToken();
+        return this.refreshAccessToken();
     }
 
     /*
@@ -86,17 +88,21 @@ export class Authenticator {
      */
     public async refreshAccessToken(): Promise<string> {
 
-        // If not logged in on any browser tab, do not try an iframe redirect, to avoid slowness
-        if (HtmlStorageHelper.isLoggedIn) {
+        // Cognito does not support silent renewal on iframes and tries to render the login page
+        if (this._configuration.silentRenewEnabled) {
 
-            // Try to refresh the access token via an iframe redirect
-            // The UI has no way of determining if there is a valid Authorization Server session cookie
-            await this._performTokenRefresh();
+            // If not logged in on any browser tab, abvoid the unnecessary iframe redirect
+            if (HtmlStorageHelper.isLoggedIn) {
 
-            // Return the renewed access token if found
-            const user = await this._userManager.getUser();
-            if (user && user.access_token) {
-                return user.access_token;
+                // Try to refresh the access token via an iframe redirect
+                // The UI has no way of determining if there is a valid Authorization Server session cookie
+                await this._performTokenRefresh();
+
+                // Return the renewed access token if found
+                const user = await this._userManager.getUser();
+                if (user && user.access_token) {
+                    return user.access_token;
+                }
             }
         }
 

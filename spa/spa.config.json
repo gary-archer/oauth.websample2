@@ -5,9 +5,10 @@
     },
     "oauth": {
         "authority":              "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_qqJgVeuTn",
-        "clientId":               "6tg0qglddpvqh74k3jbf1mmj64",
+        "clientId":               "1942b2l2068euci25g5k2mrg2s",
         "redirectUri":            "/spa",
         "postLogoutRedirectUri":  "/spa/loggedout.html",
-        "scope":                  "openid profile email https://api.authsamples.com/api/transactions_read"
+        "scope":                  "openid profile email https://api.authsamples.com/api/transactions_read",
+        "silentRenewEnabled":     false
     }
 }

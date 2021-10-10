@@ -24,13 +24,13 @@ esac
 #
 if [ "$PLATFORM" == 'MACOS' ]; then
     open -a Terminal ./spa/deploy.sh
-    #open -a Terminal ./api/deploy.sh
+    open -a Terminal ./api/deploy.sh
 else
     GIT_BASH="C:\Program Files\Git\git-bash.exe"
     "$GIT_BASH" -c ./spa/deploy.sh &
     "$GIT_BASH" -c ./api/deploy.sh &
 fi
-exit
+
 #
 # Get URLs to wait for
 #

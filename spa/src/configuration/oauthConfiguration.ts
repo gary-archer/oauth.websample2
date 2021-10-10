@@ -7,4 +7,5 @@ export interface OAuthConfiguration {
     redirectUri: string;
     postLogoutRedirectUri: string;
     scope: string;
+    silentRenewEnabled: boolean;
 }
