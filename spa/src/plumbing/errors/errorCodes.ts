@@ -3,8 +3,7 @@
  */
 export class ErrorCodes {
 
-    // Used to indicate that the API cannot be called until the user logs in
-    // Also returned by OAuth error responses when token renewal via prompt=none fails
+    // An error code meaning APIs cannot be called until the user re-authenticates
     public static readonly loginRequired = 'login_required';
 
     // A technical error starting a login request, such as contacting the metadata endpoint
@@ -12,6 +11,9 @@ export class ErrorCodes {
 
     // A technical error processing the login response containing the authorization code
     public static readonly loginResponseFailed = 'login_response_failed';
+
+    // Used when a refresh token can no longer renew the access token
+    public static readonly sessionExpired = 'invalid_grant';
 
     // A technical problem during silent token renewal
     public static readonly tokenRenewalError = 'token_renewal_error';

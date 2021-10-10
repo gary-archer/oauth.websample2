@@ -3,6 +3,7 @@ import {Configuration} from '../configuration/configuration';
 import {ConfigurationLoader} from '../configuration/configurationLoader';
 import {ErrorConsoleReporter} from '../plumbing/errors/errorConsoleReporter';
 import {Authenticator} from '../plumbing/oauth/authenticator';
+import {HtmlStorageHelper} from '../plumbing/utilities/htmlStorageHelper';
 import {OidcLogger} from '../plumbing/utilities/oidcLogger';
 import {ErrorView} from '../views/errorView';
 import {HeaderButtonsView} from '../views/headerButtonsView';
@@ -39,6 +40,7 @@ export class App {
 
             // Start listening for hash changes
             window.onhashchange = this._onHashChange;
+            window.onstorage = this._onStorageChange;
 
             // Do the initial render
             this._initialRender();
@@ -92,10 +94,7 @@ export class App {
         this._configuration = await ConfigurationLoader.download('spa.config.json');
 
         // Initialise our OIDC Client wrapper
-        this._authenticator = new Authenticator(
-            this._configuration.app.webBaseUrl,
-            this._configuration.oauth,
-            this._onExternalTabLogout);
+        this._authenticator = new Authenticator(this._configuration.oauth);
 
         // Create a client to reliably call the API
         this._apiClient = new ApiClient(this._configuration.app.apiBaseUrl, this._authenticator);
@@ -233,11 +232,16 @@ export class App {
     }
 
     /*
-     * Handle logout notifications from other browser tabs
-     * This will only work for Authorization Servers with check session iframe support
+     * Handle logout notifications from other browser tabs, by listening to local storage events
      */
-    private _onExternalTabLogout(): void {
-        location.hash = '#loggedout';
+    private _onStorageChange(event: StorageEvent): void {
+
+        console.log('*** Storage change');
+        if (HtmlStorageHelper.isMultiTabLogoutEvent(event)) {
+
+            this._authenticator!.onExternalLogout();
+            location.hash = '#loggedout';
+        }
     }
 
     /*
@@ -255,7 +259,7 @@ export class App {
         this._onHome = this._onHome.bind(this);
         this._onReloadData = this._onReloadData.bind(this);
         this._onLogout = this._onLogout.bind(this);
-        this._onExternalTabLogout = this._onExternalTabLogout.bind(this);
+        this._onStorageChange = this._onStorageChange.bind(this);
         this._onExpireToken = this._onExpireToken.bind(this);
     }
 }

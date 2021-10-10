@@ -4,7 +4,6 @@ import {OAuthConfiguration} from '../../configuration/oauthConfiguration';
 import {ErrorCodes} from '../errors/errorCodes';
 import {ErrorHandler} from '../errors/errorHandler';
 import {HtmlStorageHelper} from '../utilities/htmlStorageHelper';
-import {UrlHelper} from '../utilities/urlHelper';
 
 /*
  * The entry point for initiating login and token requests
@@ -14,21 +13,18 @@ export class Authenticator {
     private readonly _configuration: OAuthConfiguration;
     private readonly _userManager: UserManager;
 
-    public constructor(
-        webBaseUrl: string,
-        configuration: OAuthConfiguration,
-        onExternalTabLogout: () => void) {
+    public constructor(configuration: OAuthConfiguration) {
 
         // Create OIDC settings from our application configuration
         this._configuration = configuration;
         const settings = {
 
-            // The Open Id Connect base URL
+            // The OpenID Connect base URL
             authority: configuration.authority,
 
             // Core OAuth settings for our app
             client_id: configuration.clientId,
-            redirect_uri: UrlHelper.append(webBaseUrl, configuration.redirectUri),
+            redirect_uri: configuration.redirectUri,
             scope: configuration.scope,
 
             // Use the Authorization Code Flow (PKCE)
@@ -40,27 +36,19 @@ export class Authenticator {
             // Store redirect state such as PKCE verifiers in session storage, for more reliable cleanup
             stateStore: new WebStorageStateStore({ store: sessionStorage }),
 
-            // Renew on the app's main URL and do so explicitly rather than via a background timer
-            silent_redirect_uri: UrlHelper.append(webBaseUrl, configuration.redirectUri),
+            // Renew on the SPA's main URL and do so on demand
+            silent_redirect_uri: configuration.redirectUri,
             automaticSilentRenew: false,
 
-            // Our Web UI gets user info from its API, so that it is not limited to only OAuth user info
+            // Our Web UI gets user info from its API, for best extensibility
             loadUserInfo: false,
 
             // Indicate the logout return path and listen for logout events from other browser tabs
-            post_logout_redirect_uri: UrlHelper.append(webBaseUrl, configuration.postLogoutRedirectUri),
-            monitorSession: true,
+            post_logout_redirect_uri: configuration.postLogoutRedirectUri,
         };
 
         // Create the user manager
         this._userManager = new UserManager(settings);
-
-        // When the user signs out from another browser tab, also remove tokens from this browser tab
-        // This will only work if the Authorization Server has a check_session_iframe endpoint
-        this._userManager.events.addUserSignedOut(async () => {
-            this._userManager.removeUser();
-            onExternalTabLogout();
-        });
     }
 
     /*
@@ -68,15 +56,10 @@ export class Authenticator {
      */
     public async getAccessToken(): Promise<string> {
 
-        // If not logged in on any browser tab, do not return a token
-        // This ensures that Tab B does not continue working after a logout on Tab A
-        if (HtmlStorageHelper.isLoggedIn) {
-
-            // On most calls we just return the existing token from memory
-            const user = await this._userManager.getUser();
-            if (user && user.access_token) {
-                return user.access_token;
-            }
+        // On most calls we just return the existing token from memory
+        const user = await this._userManager.getUser();
+        if (user && user.access_token) {
+            return user.access_token;
         }
 
         // If a new token is needed or the page is refreshed, try to refresh the access token
@@ -88,21 +71,25 @@ export class Authenticator {
      */
     public async refreshAccessToken(): Promise<string> {
 
-        // Cognito does not support silent renewal on iframes and tries to render the login page
-        if (this._configuration.silentRenewEnabled) {
+        // Avoid an unnecessary refresh attempt when the app first loads
+        if (HtmlStorageHelper.isLoggedIn) {
+        
+            let user = await this._userManager.getUser();
+            if (user && user.refresh_token && user.refresh_token.length > 0) {
 
-            // If not logged in on any browser tab, abvoid the unnecessary iframe redirect
-            if (HtmlStorageHelper.isLoggedIn) {
+                // Refresh the access token using a refresh token
+                await this._performAccessTokenRenewalViaRefreshToken();
 
-                // Try to refresh the access token via an iframe redirect
-                // The UI has no way of determining if there is a valid Authorization Server session cookie
-                await this._performTokenRefresh();
+            } else if (this._configuration.provider !== 'cognito') {
 
-                // Return the renewed access token if found
-                const user = await this._userManager.getUser();
-                if (user && user.access_token) {
-                    return user.access_token;
-                }
+                // Use the traditional SPA solution, but it does not work in Cognito
+                await this._performAccessTokenRenewalViaIframeRedirect();
+            }
+
+            // Return a renewed access token if found
+            user = await this._userManager.getUser();
+            if (user && user.access_token) {
+                return user.access_token;
             }
         }
 
@@ -125,6 +112,15 @@ export class Authenticator {
      */
     public async startLogout(): Promise<void> {
         return this._startLogout();
+    }
+
+    /*
+     * Handler logout notifications from other browser tabs
+     */
+    public async onExternalLogout(): Promise<void> {
+
+        await this._userManager.removeUser();
+        HtmlStorageHelper.isLoggedIn = false;
     }
 
     /*
@@ -186,8 +182,9 @@ export class Authenticator {
                     // We will return to the app location before the login redirect
                     redirectLocation = user.state.hash;
 
-                    // Set the logged in flag, which prevents unnecessary iframe redirects
+                    // Set the logged in flag
                     HtmlStorageHelper.isLoggedIn = true;
+                    HtmlStorageHelper.multiTabLogout = false;
 
                 } catch (e) {
 
@@ -209,11 +206,22 @@ export class Authenticator {
     private async _startLogout(): Promise<void> {
 
         try {
-            // Do the redirect
-            await this._userManager.signoutRedirect();
 
-            // Remove the logged in flag, and other browser tabs will then act logged out
-            HtmlStorageHelper.removeLoggedIn();
+            if (this._configuration.provider === 'cognito') {
+
+                // Cognito requires a vendor specific message
+                await this._userManager.removeUser();
+                location.replace(this._getCognitoEndSessionRequestUrl());
+
+            } else {
+            
+                // Otherwise use a standard end session request message
+                await this._userManager.signoutRedirect();
+            }
+
+            // Update the state for this app and notify other tabs
+            HtmlStorageHelper.isLoggedIn = false;
+            HtmlStorageHelper.multiTabLogout = true;
 
         } catch (e) {
 
@@ -225,10 +233,10 @@ export class Authenticator {
     /*
      * Try to refresh the access token by manually triggering a silent token renewal on an iframe
      * This will fail if there is no authorization server session cookie yet
-     * It will also fail in Safari if there is a session cookie but it is not persistent
+     * It will also fail in the Safari browser
      * It may also fail if there has been no top level redirect yet for the current browser session
      */
-    private async _performTokenRefresh(): Promise<void> {
+    private async _performAccessTokenRenewalViaIframeRedirect(): Promise<void> {
 
         try {
 
@@ -250,5 +258,43 @@ export class Authenticator {
                 throw ErrorHandler.getFromTokenError(e, ErrorCodes.tokenRenewalError);
             }
         }
+    }
+
+    /*
+     * It is not recommended to use a refresh token in the browser, even when stored only in memory, as in this sample
+     * The browser cannot store a long lived token securely and malicious code could potentially access it 
+     * Cognito provides no option to disable refresh tokens for SPAs
+     */
+    private async _performAccessTokenRenewalViaRefreshToken(): Promise<void> {
+
+        try {
+
+            // The library will use the refresh token grant to get a new access token
+            await this._userManager.signinSilent();
+
+        } catch (e: any) {
+
+            // When the session expires this will fail with an 'invalid_grant' response
+            if (e.error === ErrorCodes.sessionExpired) {
+
+                // Clear token data and our code will then trigger a new login redirect
+                await this._userManager.removeUser();
+
+            } else {
+
+                // Rethrow any technical errors
+                throw ErrorHandler.getFromTokenError(e, ErrorCodes.tokenRenewalError);
+            }
+        }
+    }
+
+    /*
+     * Cognito uses a vendor specific logout solution do we must build the request URL manually
+     */
+    private _getCognitoEndSessionRequestUrl(): string {
+
+        let url = `${this._configuration.customLogoutEndpoint}`;
+        url += `?client_id=${this._configuration.clientId}&logout_uri=${this._configuration.postLogoutRedirectUri}`;
+        return url;
     }
 }

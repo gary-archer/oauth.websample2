@@ -4,35 +4,52 @@
 export class HtmlStorageHelper {
 
     private static _prefix = 'basicspa.'
-    private static _isLoggedInField = 'loggedin';
+    private static _loggedInKey = 'loggedin';
+    private static _externalLogoutKey = 'external-logout';
     private static _oidcLogLevelKeyName = 'oidc-log-level';
 
     /*
-     * Return true if the user logged in on any tab
+     * Return true if the user is logged in
      */
     public static get isLoggedIn(): boolean {
 
-        const key = `${HtmlStorageHelper._prefix}${HtmlStorageHelper._isLoggedInField}`;
+        const key = `${HtmlStorageHelper._prefix}${HtmlStorageHelper._loggedInKey}`;
         const value = localStorage.getItem(key);
         return !!value;
     }
 
     /*
-     * Record that the user logged in on a tab
+     * Set whether logged in
      */
     public static set isLoggedIn(value: boolean) {
 
-        const key = `${HtmlStorageHelper._prefix}${HtmlStorageHelper._isLoggedInField}`;
+        const key = `${HtmlStorageHelper._prefix}${HtmlStorageHelper._loggedInKey}`;
         localStorage.setItem(key, String(value));
     }
 
     /*
-     * Remove the logged in field
+     * Notify other tabs when we logout
      */
-    public static removeLoggedIn(): void {
+    public static set multiTabLogout(value: boolean) {
 
-        const key = `${HtmlStorageHelper._prefix}${HtmlStorageHelper._isLoggedInField}`;
-        localStorage.removeItem(key);
+        const key = `${HtmlStorageHelper._prefix}${HtmlStorageHelper._externalLogoutKey}`;
+        localStorage.setItem(key, String(value));
+    }
+
+    /*
+     * Receive a notification when another tab logs out
+     */
+    public static isMultiTabLogoutEvent(event: StorageEvent) {
+
+        if (event.storageArea == localStorage) {
+
+            const key = `${HtmlStorageHelper._prefix}${HtmlStorageHelper._externalLogoutKey}`;
+            if (event.key === key && event.newValue === 'true') {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /*
