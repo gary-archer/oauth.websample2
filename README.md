@@ -9,7 +9,7 @@
 ### Overview
 
 An updated SPA and API code sample using OAuth and OpenID Connect.
-This sample completes the SPA session management operations and uses extensible claims for API authorization.
+This sample completes the SPA session management operations and uses extensible claims for API authorization.\
 This is a fairly simple setup and is useful when first learning OAuth and understanding how endpoints work.
 
 ## 2021 Security Update
