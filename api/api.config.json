@@ -10,9 +10,11 @@
         "proxyUrl": "http://127.0.0.1:8888"
     },
     "oauth": {
-        "authority":             "https://dev-843469.oktapreview.com/oauth2/default",
-        "clientId":              "0oac5s69rjXE0HcZO0h7",
-        "clientSecret":          "VEEe9m9WDneeUSUJUOMKZiso_X6xwKvAqRInT2kg",
-        "maxClaimsCacheMinutes": 60
+        "jwksEndpoint":                  "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_qqJgVeuTn/.well-known/jwks.json",
+        "userInfoEndpoint":              "https://login.authsamples.com/oauth2/userInfo",
+        "algorithm":                     "RS256",
+        "issuer":                        "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_qqJgVeuTn",
+        "audience":                      "",
+        "claimsCacheTimeToLiveMinutes":  30
     }
 }

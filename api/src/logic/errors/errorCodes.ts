@@ -12,11 +12,8 @@ export class ErrorCodes {
     // A generic server error with no error translation
     public static readonly serverError = 'server_error';
 
-    // A problem downloading Open Id Connect metadata
-    public static readonly metadataLookupFailure = 'metadata_lookup_failure';
-
-    // A problem validating a token via introspection
-    public static readonly introspectionFailure = 'introspection_failure';
+    // An error connecting downloading token signing public keys
+    public static readonly jwksDownloadError = 'jwks_download_failure'
 
     // A problem due to an invalid scope
     public static readonly insufficientScope = 'insufficient_scope';

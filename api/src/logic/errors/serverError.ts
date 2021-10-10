@@ -9,7 +9,7 @@ const MAX_ERROR_ID = 99999;
 /*
  * An error entity that the API will log
  */
-export class ApiError extends Error {
+export class ServerError extends Error {
 
     private readonly _statusCode: number;
     private readonly _apiName: string;

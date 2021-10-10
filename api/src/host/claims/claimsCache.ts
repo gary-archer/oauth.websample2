@@ -1,7 +1,6 @@
 import NodeCache from 'node-cache';
 import {SampleClaims} from '../../logic/entities/claims/sampleClaims';
 import {OAuthConfiguration} from '../configuration/oauthConfiguration';
-import {ApiLogger} from '../utilities/apiLogger';
 
 /*
  * A simple in memory claims cache for our API
@@ -17,14 +16,14 @@ export class ClaimsCache {
     public constructor(configuration: OAuthConfiguration) {
 
         // Create the cache and set a default time to live in seconds
-        const defaultExpirySeconds = configuration.maxClaimsCacheMinutes * 60;
+        const defaultExpirySeconds = configuration.claimsCacheTimeToLiveMinutes * 60;
         this._cache = new NodeCache({
             stdTTL: defaultExpirySeconds,
         });
 
         // If required add debug output here to verify expiry occurs when expected
         this._cache.on('expired', (key: string, value: any) => {
-            ApiLogger.info(`Expired token has been removed from the cache (hash: ${key})`);
+            console.log(`Expired token has been removed from the cache (hash: ${key})`);
         });
     }
 
@@ -38,12 +37,12 @@ export class ClaimsCache {
         if (!claims) {
 
             // If this is a new token and we need to do claims processing
-            ApiLogger.info(`New token will be added to claims cache (hash: ${accessTokenHash})`);
+            console.debug(`New token will be added to claims cache (hash: ${accessTokenHash})`);
             return null;
         }
 
         // Otherwise return cached claims
-        ApiLogger.info(`Found existing token in claims cache (hash: ${accessTokenHash})`);
+        console.debug(`Found existing token in claims cache (hash: ${accessTokenHash})`);
         return claims;
     }
 
@@ -58,7 +57,7 @@ export class ClaimsCache {
         if (secondsToCache > 0) {
 
             // Get the hash and output debug info
-            ApiLogger.info(`Token to be cached will expire in ${secondsToCache} seconds (hash: ${accessTokenHash})`);
+            console.debug(`Token to be cached will expire in ${secondsToCache} seconds (hash: ${accessTokenHash})`);
 
             // Do not exceed the maximum time we configured
             if (secondsToCache > this._cache.options.stdTTL!) {
@@ -66,7 +65,7 @@ export class ClaimsCache {
             }
 
             // Cache the token until the above time
-            ApiLogger.info(`Adding token to claims cache for ${secondsToCache} seconds (hash: ${accessTokenHash})`);
+            console.debug(`Adding token to claims cache for ${secondsToCache} seconds (hash: ${accessTokenHash})`);
             await this._cache.set(accessTokenHash, claims, secondsToCache);
         }
     }

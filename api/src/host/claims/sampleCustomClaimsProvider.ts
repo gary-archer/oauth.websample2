@@ -13,7 +13,7 @@ export class SampleCustomClaimsProvider implements CustomClaimsProvider {
      */
     public async getCustomClaims(token: TokenClaims, userInfo: UserInfoClaims): Promise<CustomClaims> {
 
-        // A real implementation would look up the database user id from the subject and / or email claim
+        // A real implementation would look up the domain specific user id from a database or service
         const email = userInfo.email;
         const userDatabaseId = '10345';
 

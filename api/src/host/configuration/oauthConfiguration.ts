@@ -2,8 +2,10 @@
  * A holder for OAuth settings
  */
 export interface OAuthConfiguration {
-    authority: string;
-    clientId: string;
-    clientSecret: string;
-    maxClaimsCacheMinutes: number;
+    jwksEndpoint: string;
+    userInfoEndpoint: string;
+    algorithm: string;
+    issuer: string;
+    audience: string;
+    claimsCacheTimeToLiveMinutes: number;
 }

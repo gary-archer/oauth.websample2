@@ -1,37 +1,28 @@
-import {HttpOptions} from 'openid-client';
-import TunnelAgent from 'tunnel-agent';
-import url from 'url';
+
+import ProxyAgent from 'proxy-agent';
+import {Configuration} from '../configuration/configuration';
 
 /*
- * Manage supplying the HTTP proxy on calls from the API to the Authorization Server
+ * Manage routing outbound calls from the API via an HTTP proxy
  */
 export class HttpProxy {
 
-    /*
-     * Create the HTTP agent at application startup
-     */
-    public static initialize(useProxy: boolean, proxyUrl: string): void {
+    private readonly _agent: any;
 
-        if (useProxy) {
-            const opts = url.parse(proxyUrl);
-            HttpProxy._agent = TunnelAgent.httpsOverHttp({
-                proxy: opts,
-            });
+    /*
+     * Create an HTTP agent to route requests to
+     */
+    public constructor(configuration: Configuration) {
+
+        if (configuration.api.useProxy) {
+            this._agent = new ProxyAgent(configuration.api.proxyUrl);
         }
     }
 
     /*
-     * Configure Open Id Client HTTP options, including the proxy
+     * Return the agent to other parts of the app
      */
-    public static getOptions(options: HttpOptions): HttpOptions {
-
-        options.agent = {
-            https: HttpProxy._agent,
-        };
-
-        return options;
+    public get agent(): any {
+        return this._agent;
     }
-
-    // The global proxy agent
-    private static _agent: any = null;
 }

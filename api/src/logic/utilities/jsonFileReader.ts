@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import {ApiError} from '../errors/apiError';
+import {ServerError} from '../errors/serverError';
 import {ErrorCodes} from '../errors/errorCodes';
 
 /*
@@ -18,10 +18,10 @@ export class JsonFileReader {
             const buffer = await fs.readFile(filePath);
             return JSON.parse(buffer.toString()) as T;
 
-        } catch (e) {
+        } catch (e: any) {
 
             // Do error translation of file read errors
-            throw new ApiError(ErrorCodes.fileReadError, 'Problem encountered accessing data', e.stack);
+            throw new ServerError(ErrorCodes.fileReadError, 'Problem encountered accessing data', e.stack);
         }
     }
 }

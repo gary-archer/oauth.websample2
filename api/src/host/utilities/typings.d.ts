@@ -3,4 +3,3 @@
  */
 declare module 'js-sha256';
 declare module 'on-headers';
-declare module 'tunnel-agent';
