@@ -1,4 +1,4 @@
-# oauth.websample2
+# Updated OAuth SPA and API Code Sample
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a36801b67eae4a78ba3d6cd1f55a023f)](https://www.codacy.com/gh/gary-archer/oauth.websample2/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gary-archer/oauth.websample2&amp;utm_campaign=Badge_Grade)
 
@@ -8,8 +8,48 @@
 
 ### Overview
 
-* The updated SPA and API sample using OAuth and Open Id Connect, referenced in my blog at https://authguidance.com
-* This sample completes [SPA Session Management](https://authguidance.com/2017/10/24/user-sessions-and-token-renewal/) and implements our [API Authorization Design](https://authguidance.com/2017/10/03/api-tokens-claims/)
+An updated SPA and API sample using OAuth and Open Id Connect, referenced in my blog at https://authguidance.com.\
+This sample completes [SPA Session Management](https://authguidance.com/2017/10/24/user-sessions-and-token-renewal/) and implements our [API Authorization Design](https://authguidance.com/2017/10/03/api-tokens-claims/).
+
+## 2021 Security Update
+
+In 2021 it is instead recommended to use a [Back End for Front End](/2019/09/09/spa-back-end-for-front-end/) approach for SPA security.\
+This requires more moving parts - see the [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) for an example implementation.
+
+## Quick Start
+
+Ensure that Node.js is installed, then run the following script from a macOS terminal or from Git Bash on Windows:
+
+```bash
+./build.sh
+```
+
+Custom domains are used so you must add these entries to your hosts file:
+
+```
+127.0.0.1 web.mycompany.com
+127.0.0.1 api.mycompany.com
+```
+
+You must also trust the root certificate that the build step downloads on your computer.\
+Add this file to the system keychain on macOS or the Windows certificate trust store for the local computer account:
+
+```
+./api/certs/localhost/mycompany.com.ca.pem
+```
+
+Then run the following script to run the code for both SPA and API:
+
+```bash
+./deploy.sh
+```
+
+The browser is invoked and you can sign in with my AWS test credentials:
+
+- User: `guestuser@mycompany.com`
+- Password: `GuestPassword1`
+
+You can then test all lifecycle operations, including token refresh and logout.
 
 ### Details
 
@@ -17,13 +57,13 @@
 
 ### Programming Languages
 
-* TypeScript is used for the SPA
-* NodeJS with TypeScript is used for the API
+* The SPA is coded in plain TypeScript, so that it can be adapted into your technology of choice
+* Node.js and TypeScript are used to implement the API
 
 ### Middleware Used
 
 * Express is used to host both the API and the SPA content
-* Okta is used as the default Authorization Server
-* The [Oidc-Client Library](https://github.com/IdentityModel/oidc-client-js) is used to implement SPA logins and token handling
-* The [OpenId-Client Library](https://github.com/panva/node-openid-client) is used to handle calls from the API to the Authorization Server
-* The [Node Cache](https://github.com/mpneuried/nodecache) is used to cache API claims keyed against tokens
+* AWS Cognito is used as the default Authorization Server
+* The [Oidc-Client Library](https://github.com/IdentityModel/oidc-client-js) is used by the SPA to implement OpenID Connect
+* The [JOSE Library](https://github.com/panva/jose) is used by the API to validate JWT access tokens
+* The [Node Cache](https://github.com/mpneuried/nodecache) is used to cache API custom claims against received tokens
