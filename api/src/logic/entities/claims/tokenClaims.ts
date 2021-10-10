@@ -1,6 +1,3 @@
-import {ClientError} from '../../errors/clientError';
-import {ErrorCodes} from '../../errors/errorCodes';
-
 /*
  * Claims included in the JWT
  */
@@ -26,19 +23,5 @@ export class TokenClaims {
 
     public get expiry(): number {
         return this._expiry;
-    }
-
-    /*
-     * Verify that we are allowed to access this type of data, via the scopes from the token
-     */
-    public verifyScope(requiredScope: string): void {
-
-        if (!this.scopes.some((s) => s.indexOf(requiredScope) !== -1)) {
-
-            throw new ClientError(
-                403,
-                ErrorCodes.insufficientScope,
-                'Access token does not have a valid scope for this API endpoint');
-        }
     }
 }

@@ -1,27 +1,27 @@
 /*
- * Custom claims that originate from the API's own database
+ * Domain specific claims that are stored outside the Authorization Server
  */
 export class CustomClaims {
 
-    private _userDatabaseId: string;
-    private _isAdmin: boolean;
-    private _regionsCovered: string[];
+    private _userId: string;
+    private _userRole: string;
+    private _userRegions: string[];
 
-    public constructor(userDatabaseId: string, isAdmin: boolean, regionsCovered: string[]) {
-        this._userDatabaseId = userDatabaseId;
-        this._isAdmin = isAdmin;
-        this._regionsCovered = regionsCovered;
+    public constructor(userId: string, userRole: string, userRegions: string[]) {
+        this._userId = userId;
+        this._userRole = userRole;
+        this._userRegions = userRegions;
     }
 
     public get userDatabaseId(): string {
-        return this._userDatabaseId;
+        return this._userId;
     }
 
-    public get isAdmin(): boolean {
-        return this._isAdmin;
+    public get userRole(): string {
+        return this._userRole;
     }
 
-    public get regionsCovered(): string[] {
-        return this._regionsCovered;
+    public get userRegions(): string[] {
+        return this._userRegions;
     }
 }

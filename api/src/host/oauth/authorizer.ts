@@ -2,6 +2,7 @@ import {Request} from 'express';
 import hasher from 'js-sha256';
 import {SampleClaims} from '../../logic/entities/claims/sampleClaims';
 import {ClientError} from '../../logic/errors/clientError';
+import {CachedClaims} from '../claims/cachedClaims';
 import {ClaimsCache} from '../claims/claimsCache';
 import {CustomClaimsProvider} from '../claims/customClaimsProvider';
 import {Authenticator} from './authenticator';
@@ -37,26 +38,24 @@ export class Authorizer {
             throw ClientError.create401('No access token was supplied in the bearer header');
         }
 
+        // On every API request we validate the JWT, in a zero trust manner
+        const tokenClaims = await this._authenticator.validateToken(accessToken);
+
         // Return cached claims immediately if found
         const accessTokenHash = hasher.sha256(accessToken);
         const cachedClaims = await this._cache.getClaimsForToken(accessTokenHash);
         if (cachedClaims) {
-            return cachedClaims;
+            return new SampleClaims(tokenClaims, cachedClaims.userInfo, cachedClaims.custom);
         }
 
-        // Otherwise start by validating the token
-        const tokenClaims = await this._authenticator.validateToken(accessToken);
+        // With Cognito the API looks up extra claims when the access token is first received
+        const userInfo = await this._authenticator.getUserInfo(accessToken);
+        const customClaims = await this._customClaimsProvider.getCustomClaims(tokenClaims, userInfo);
+        const claimsToCache = new CachedClaims(userInfo, customClaims);
 
-        // Do the work for user info lookup
-        const userInfoClaims = await this._authenticator.getUserInfo(accessToken);
-
-        // Look up any product specific custom claims if required
-        const customClaims = await this._customClaimsProvider.getCustomClaims(tokenClaims, userInfoClaims);
-
-        // Cache the claims and then return them
-        const claims = new SampleClaims(tokenClaims, userInfoClaims, customClaims);
-        this._cache.addClaimsForToken(accessTokenHash, claims);
-        return claims;
+        // Cache the extra claims for subsequent requests with the same access token
+        await this._cache.addClaimsForToken(accessTokenHash, claimsToCache, tokenClaims.expiry);
+        return new SampleClaims(tokenClaims, claimsToCache.userInfo, claimsToCache.custom);
     }
 
     /*
@@ -67,7 +66,7 @@ export class Authorizer {
         const authorizationHeader = request.header('authorization');
         if (authorizationHeader) {
             const parts = authorizationHeader.split(' ');
-            if (parts.length === 2 && parts[0] === 'Bearer') {
+            if (parts.length === 2 && parts[0].toLowerCase() === 'bearer') {
                 return parts[1];
             }
         }

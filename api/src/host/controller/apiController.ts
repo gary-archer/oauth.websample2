@@ -14,6 +14,7 @@ import {ErrorFactory} from '../errors/errorFactory';
 import {ExceptionHandler} from '../errors/exceptionHandler';
 import {Authenticator} from '../oauth/authenticator';
 import {Authorizer} from '../oauth/authorizer';
+import {ScopeVerifier} from '../oauth/scopeVerifier';
 import {HttpProxy} from '../utilities/httpProxy';
 import {ResponseWriter} from '../utilities/responseWriter';
 
@@ -59,7 +60,9 @@ export class ApiController {
 
         // Check that the access token allows access to this type of data
         const claims = this._getClaims(response);
-        claims.token.verifyScope('profile');
+
+        // First check scopes
+        ScopeVerifier.enforce(claims.token.scopes, 'profile');
 
         // Create a user service and ask it for the user info
         const service = new UserInfoService(claims.userInfo);
@@ -73,7 +76,7 @@ export class ApiController {
 
         // Check that the access token allows access to this type of data
         const claims = this._getClaims(response);
-        claims.token.verifyScope('transactions_read');
+        ScopeVerifier.enforce(claims.token.scopes, 'transactions_read');
 
         // Create the service instance and its dependencies on every API request
         const reader = new JsonFileReader();
@@ -92,7 +95,7 @@ export class ApiController {
 
         // Check that the access token allows access to this type of data
         const claims = this._getClaims(response);
-        claims.token.verifyScope('transactions_read');
+        ScopeVerifier.enforce(claims.token.scopes, 'transactions_read');
 
         // Create the service instance and its dependencies on every API request
         const reader = new JsonFileReader();

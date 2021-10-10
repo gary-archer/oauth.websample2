@@ -9,20 +9,22 @@ import {CustomClaimsProvider} from './customClaimsProvider';
 export class SampleCustomClaimsProvider implements CustomClaimsProvider {
 
     /*
-     * Add claims from the API's own database
+     * Add domain specific claims from the API's own database
      */
     public async getCustomClaims(token: TokenClaims, userInfo: UserInfoClaims): Promise<CustomClaims> {
 
-        // A real implementation would look up the domain specific user id from a database or service
-        const email = userInfo.email;
-        const userDatabaseId = '10345';
+        const isAdmin = userInfo.email.toLowerCase().indexOf('admin') !== -1;
+        if (isAdmin) {
 
-        // Our blog's code samples have two fixed users and we use the below mock implementation:
-        // - guestadmin@mycompany.com is an admin and sees all data
-        // - guestuser@mycompany.com is not an admin and only sees data for the USA region
-        const isAdmin = email.toLowerCase().indexOf('admin') !== -1;
-        const regionsCovered = isAdmin? [] : ['USA'];
+            // For admin users we hard code this user id, assign a role of 'admin' and grant access to all regions
+            // The CompanyService class will use these claims to return all transaction data
+            return new CustomClaims('20116', 'admin', []);
 
-        return new CustomClaims(userDatabaseId, isAdmin, regionsCovered);
+        } else {
+
+            // For other users we hard code this user id, assign a role of 'user' and grant access to only one region
+            // The CompanyService class will use these claims to return only transactions for the US region
+            return new CustomClaims('10345', 'user', ['USA']);
+        }
     }
 }
