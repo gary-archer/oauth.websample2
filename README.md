@@ -54,7 +54,7 @@ You can then test all lifecycle operations, including token refresh and logout.
 
 ### Details
 
-* See the [Updated SPA and API Code Sample](https://authguidance.com/2017/10/13/improved-spa-code-sample-overview/) blog post for an overview and instructions on how to run the code
+* See the [Updated SPA and API Code Sample](https://authguidance.com/2017/10/13/improved-spa-code-sample-overview/) blog post a walkthrough and the key technical points
 
 ### Programming Languages
 
