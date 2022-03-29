@@ -72,8 +72,8 @@ export class TransactionsView {
 
         const htmlTemplate =
             `<div class='card border-0'>
-                <div class='card-header row font-weight-bold'>
-                    <div class='col-12 text-center mx-auto font-weight-bold'>
+                <div class='card-header row fw-bold'>
+                    <div class='col-12 text-center mx-auto fw-bold'>
                         {{title}}
                     </div>
                 </div>
@@ -84,15 +84,15 @@ export class TransactionsView {
                                 <div class='card-body'>
                                     <div class='row'>
                                         <div class='col-6'>Transaction ID</div>
-                                        <div class='col-6 text-right valuecolor font-weight-bold'>{{id}}</div>
+                                        <div class='col-6 text-end valuecolor fw-bold'>{{id}}</div>
                                     </div>
                                     <div class='row'>
                                         <div class='col-6'>Investor ID</div>
-                                        <div class='col-6 text-right valuecolor font-weight-bold'>{{investorId}}</div>
+                                        <div class='col-6 text-end valuecolor fw-bold'>{{investorId}}</div>
                                     </div>
                                     <div class='row'>
                                         <div class='col-6'>Amount USD</div>
-                                        <div class='col-6 text-right moneycolor font-weight-bold'>{{formattedAmountUsd}}</div>
+                                        <div class='col-6 text-end moneycolor fw-bold'>{{formattedAmountUsd}}</div>
                                     </div>
                                 </div>
                             </div>

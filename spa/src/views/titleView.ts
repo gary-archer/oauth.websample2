@@ -24,8 +24,8 @@ export class TitleView {
                     <h2>OAuth Demo App</h2>
                 </div>
                 <div class='col-4 my-auto'>
-                    <div class='text-right mx-auto'>
-                        <p id='username' class='font-weight-bold'></p>
+                    <div class='text-end mx-auto'>
+                        <p id='username' class='fw-bold'></p>
                     </div>
                 </div>
             </div>`;
