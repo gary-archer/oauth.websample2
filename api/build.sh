@@ -15,5 +15,9 @@ npm install
 # Download SSL certificates from a central repo if needed
 #
 if [ ! -d 'certs' ]; then
-    git clone https://github.com/gary-archer/oauth.developmentcertificates ./certs
+    rm -rf ./resources
+    git clone https://github.com/gary-archer/oauth.developmentcertificates ./resources
+    rm -rf certs
+    mv ./resources/mycompany ./certs
+    rm -rf ./resources
 fi
