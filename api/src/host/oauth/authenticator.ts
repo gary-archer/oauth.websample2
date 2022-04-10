@@ -1,6 +1,5 @@
 import axios, {AxiosRequestConfig} from 'axios';
-import {createRemoteJWKSet} from 'jose/jwks/remote';
-import {jwtVerify} from 'jose/jwt/verify';
+import {createRemoteJWKSet, jwtVerify} from 'jose';
 import {URL} from 'url';
 import {TokenClaims} from '../../logic/entities/claims/tokenClaims';
 import {UserInfoClaims} from '../../logic/entities/claims/userInfoClaims';

@@ -14,7 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.23.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "mustache": "^4.2.0",
     "oidc-client": "^1.11.5",
     "url-parse": "^1.5.9"
