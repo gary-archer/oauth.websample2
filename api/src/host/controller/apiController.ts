@@ -14,6 +14,7 @@ import {ErrorFactory} from '../errors/errorFactory';
 import {ExceptionHandler} from '../errors/exceptionHandler';
 import {Authenticator} from '../oauth/authenticator';
 import {Authorizer} from '../oauth/authorizer';
+import {JwksRetriever} from '../oauth/jwksRetriever';
 import {ScopeVerifier} from '../oauth/scopeVerifier';
 import {HttpProxy} from '../utilities/httpProxy';
 import {ResponseWriter} from '../utilities/responseWriter';
@@ -24,13 +25,15 @@ import {ResponseWriter} from '../utilities/responseWriter';
 export class ApiController {
 
     private readonly _configuration: Configuration;
+    private readonly _jwksRetriever: JwksRetriever;
     private readonly _claimsCache: ClaimsCache;
     private readonly _httpProxy: HttpProxy;
 
     public constructor(configuration: Configuration) {
 
-        this._httpProxy = new HttpProxy(configuration);
         this._configuration = configuration;
+        this._httpProxy = new HttpProxy(this._configuration);
+        this._jwksRetriever = new JwksRetriever(this._configuration.oauth, this._httpProxy);
         this._claimsCache = new ClaimsCache(this._configuration.oauth);
         this._setupCallbacks();
     }
@@ -41,7 +44,7 @@ export class ApiController {
     public async authorizationHandler(request: Request, response: Response, next: NextFunction): Promise<void> {
 
         // Create authorization related classes on every API request
-        const authenticator = new Authenticator(this._configuration.oauth, this._httpProxy);
+        const authenticator = new Authenticator(this._configuration.oauth, this._jwksRetriever, this._httpProxy);
         const customClaimsProvider = new SampleCustomClaimsProvider();
         const authorizer = new Authorizer(this._claimsCache, authenticator, customClaimsProvider);
 
@@ -65,7 +68,7 @@ export class ApiController {
         ScopeVerifier.enforce(claims.token.scopes, 'profile');
 
         // Create a user service and ask it for the user info
-        const service = new UserInfoService(claims.userInfo);
+        const service = new UserInfoService(claims.userInfo, claims.custom);
         ResponseWriter.writeObjectResponse(response, 200, service.getUserInfo());
     }
 

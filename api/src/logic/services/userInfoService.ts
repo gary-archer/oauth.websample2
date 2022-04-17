@@ -1,3 +1,4 @@
+import {CustomClaims} from '../entities/claims/customClaims';
 import {UserInfoClaims} from '../entities/claims/userInfoClaims';
 
 /*
@@ -5,17 +6,20 @@ import {UserInfoClaims} from '../entities/claims/userInfoClaims';
  */
 export class UserInfoService {
 
-    private readonly _claims: UserInfoClaims;
+    private readonly _userInfoClaims: UserInfoClaims;
+    private readonly _customClaims: CustomClaims;
 
-    public constructor(claims: UserInfoClaims) {
-        this._claims = claims;
+    public constructor(userInfoClaims: UserInfoClaims, customClaims: CustomClaims) {
+        this._userInfoClaims = userInfoClaims;
+        this._customClaims = customClaims;
     }
 
     public getUserInfo(): any {
 
         return {
-            givenName: this._claims.givenName,
-            familyName: this._claims.familyName,
+            givenName: this._userInfoClaims.givenName,
+            familyName: this._userInfoClaims.familyName,
+            regions: this._customClaims.userRegions,
         };
     }
 }
