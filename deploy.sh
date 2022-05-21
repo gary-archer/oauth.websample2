@@ -1,9 +1,10 @@
 #/bin/bash
 
-#########################################################################################################
-# A script to spin up the code sample, to be run from a macOS terminal or a Windows Git bash shell
-# Open source libraries are sued by the SPA and API, with AWS Cognito as the default Authorization Server
-#########################################################################################################
+################################################################
+# A script to spin up the code sample, to be run from a terminal
+# Open source libraries are used by the SPA and API
+# AWS Cognito is used as the default Authorization Server
+################################################################
 
 #
 # Get the platform
@@ -17,18 +18,30 @@ case "$(uname -s)" in
   MINGW64*)
     PLATFORM="WINDOWS"
 	;;
+
+  Linux)
+    PLATFORM="LINUX"
+	;;
 esac
 
 #
 # Run the SPA and API
 #
 if [ "$PLATFORM" == 'MACOS' ]; then
+
     open -a Terminal ./spa/deploy.sh
     open -a Terminal ./api/deploy.sh
-else
+
+elif [ "$PLATFORM" == 'WINDOWS' ]; then
+
     GIT_BASH="C:\Program Files\Git\git-bash.exe"
     "$GIT_BASH" -c ./spa/deploy.sh &
     "$GIT_BASH" -c ./api/deploy.sh &
+
+elif [ "$PLATFORM" == 'LINUX' ]; then
+
+    gnome-terminal -- ./spa/deploy.sh
+    gnome-terminal -- ./api/deploy.sh
 fi
 
 #
@@ -64,4 +77,7 @@ if [ "$PLATFORM" == 'MACOS' ]; then
 fi
 if [ "$PLATFORM" == 'WINDOWS' ]; then
     start $SPA_URL
+fi
+if [ "$PLATFORM" == 'LINUX' ]; then
+    xdg-open $SPA_URL
 fi

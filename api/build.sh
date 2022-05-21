@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 ######################################
 # A script to get the API ready to run
