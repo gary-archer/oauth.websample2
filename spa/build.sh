@@ -5,4 +5,10 @@
 ########################################
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
-npm install
+
+#
+# Download the first time
+#
+if [ ! -d 'node_modules' ]; then
+  npm install
+fi

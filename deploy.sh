@@ -29,19 +29,19 @@ esac
 #
 if [ "$PLATFORM" == 'MACOS' ]; then
 
-    open -a Terminal ./spa/deploy.sh
-    open -a Terminal ./api/deploy.sh
+  open -a Terminal ./spa/deploy.sh
+  open -a Terminal ./api/deploy.sh
 
 elif [ "$PLATFORM" == 'WINDOWS' ]; then
 
-    GIT_BASH="C:\Program Files\Git\git-bash.exe"
-    "$GIT_BASH" -c ./spa/deploy.sh &
-    "$GIT_BASH" -c ./api/deploy.sh &
+  GIT_BASH="C:\Program Files\Git\git-bash.exe"
+  "$GIT_BASH" -c ./spa/deploy.sh &
+  "$GIT_BASH" -c ./api/deploy.sh &
 
 elif [ "$PLATFORM" == 'LINUX' ]; then
 
-    gnome-terminal -- ./spa/deploy.sh
-    gnome-terminal -- ./api/deploy.sh
+  gnome-terminal -- ./spa/deploy.sh
+  gnome-terminal -- ./api/deploy.sh
 fi
 
 #
@@ -55,7 +55,7 @@ API_URL='https://api.mycompany.com/api'
 #
 echo "Waiting for API to become available ..."
 while [ "$(curl -k -s -o /dev/null -w ''%{http_code}'' "$API_URL/companies")" != "401" ]; do
-    sleep 2s
+  sleep 2s
 done
 
 #
@@ -64,7 +64,7 @@ done
 echo "Waiting for SPA to become available ..."
 SPA_BUNDLE='./spa/dist/app.bundle.js'
 while [ ! -f "$SPA_BUNDLE" ]; do
-    sleep 2s
+  sleep 2s
 done
 
 #
@@ -73,11 +73,11 @@ done
 #  Password1
 #
 if [ "$PLATFORM" == 'MACOS' ]; then
-    open $SPA_URL
+  open $SPA_URL
 fi
 if [ "$PLATFORM" == 'WINDOWS' ]; then
-    start $SPA_URL
+  start $SPA_URL
 fi
 if [ "$PLATFORM" == 'LINUX' ]; then
-    xdg-open $SPA_URL
+  xdg-open $SPA_URL
 fi
