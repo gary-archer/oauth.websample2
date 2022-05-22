@@ -69,15 +69,13 @@ done
 
 #
 # Run the SPA in the default browser, then sign in with these credentials:
-#  standarduser@mycompany.com
-#  Password1
+# - guestuser@mycompany.com
+# - Password1
 #
 if [ "$PLATFORM" == 'MACOS' ]; then
   open $SPA_URL
-fi
-if [ "$PLATFORM" == 'WINDOWS' ]; then
+elif [ "$PLATFORM" == 'WINDOWS' ]; then
   start $SPA_URL
-fi
-if [ "$PLATFORM" == 'LINUX' ]; then
+elif [ "$PLATFORM" == 'LINUX' ]; then
   xdg-open $SPA_URL
 fi
