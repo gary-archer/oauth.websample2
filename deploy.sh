@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 ################################################################
 # A script to spin up the code sample, to be run from a terminal
