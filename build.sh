@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 #########################################################################################################
 # A script to spin up the code sample, to be run from a macOS terminal or a Windows Git bash shell
