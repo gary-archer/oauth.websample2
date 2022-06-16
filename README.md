@@ -61,7 +61,7 @@ You can also sign in as a different user, whose domain specific claims grant dif
 
 * See the [Updated SPA and API Code Sample](https://authguidance.com/2017/10/13/improved-spa-code-sample-overview/) blog post a walkthrough and the key technical points
 
-## ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) 2021 Security Update
+## ![Red icon](https://via.placeholder.com/15/f03c15/f03c15.png) 2021 Security Update
 
 - In 2021 it is instead recommended to keep tokens out of the browser, using a Back End for Front End approach
 - See the [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) for an API driven implementation
