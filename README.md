@@ -6,7 +6,7 @@
 
 [![Known Vulnerabilities](https://snyk.io/test/github/gary-archer/oauth.websample2/badge.svg?targetFile=api/package.json)](https://snyk.io/test/github/gary-archer/oauth.websample2?targetFile=api/package.json)
 
-### Overview
+## Overview
 
 A sample focused on tricky OAuth areas for SPAs and APIs:
 
@@ -18,7 +18,7 @@ A sample focused on tricky OAuth areas for SPAs and APIs:
 The SPA is a simple UI with some basic navigation between views, to render fictional resources.\
 The data is returned from an API that authorizes using domain specific claims.
 
-# Local Development Quick Start
+## Local Development Quick Start
 
 Ensure that Node.js is installed, then run the build script:
 
