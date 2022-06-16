@@ -8,7 +8,7 @@
 
 ## Overview
 
-A sample focused on tricky OAuth areas for SPAs and APIs:
+A sample focused on the following OAuth areas for SPAs and APIs:
 
 - The SPA uses the traditional OpenID connect flow, with session management features
 - The API uses extensible claims for authorization
@@ -64,7 +64,7 @@ You can then test all lifecycle operations, including token refresh, multi tab b
 
 ## Programming Languages
 
-* Typescripts is used to build the SPA in the simplest way
+* Typescript is used, to develop the SPA in the simplest way
 * Node.js and TypeScript are used to implement the API
 
 ## Infrastructure
