@@ -57,7 +57,7 @@ You can also sign in as a different user, whose domain specific claims grant dif
 - User: `guestadmin@mycompany.com`
 - Password: `GuestPassword1`
 
-## Details
+## Further Information
 
 * See the [Updated SPA and API Code Sample](https://authguidance.com/2017/10/13/improved-spa-code-sample-overview/) blog post a walkthrough and the key technical points
 
