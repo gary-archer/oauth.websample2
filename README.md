@@ -18,6 +18,8 @@ A sample focused on the following OAuth areas for SPAs and APIs:
 The SPA is a simple UI with some basic navigation between views, to render fictional resources.\
 The data is returned from an API that authorizes using domain specific claims.
 
+![SPA Views](./doc/views.png)
+
 ## Local Development Quick Start
 
 Ensure that Node.js is installed, then run the build script:
