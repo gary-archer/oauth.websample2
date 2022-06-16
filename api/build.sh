@@ -23,3 +23,8 @@ if [ ! -d 'certs' ]; then
   mv ./resources/mycompany ./certs
   rm -rf ./resources
 fi
+
+#
+# Run code quality checks
+#
+npm run lint

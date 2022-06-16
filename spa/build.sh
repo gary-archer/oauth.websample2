@@ -12,3 +12,8 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 if [ ! -d 'node_modules' ]; then
   npm install
 fi
+
+#
+# Run code quality checks
+#
+npm run lint
