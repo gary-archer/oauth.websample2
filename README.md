@@ -10,12 +10,17 @@
 
 A sample focused on tricky OAuth areas for SPAs and APIs:
 
-- The SPA uses the traditional OpenID connect flow, with all session management features completed.
-- The API uses extensible claims for authorization, including domain specific values.
+- The SPA uses the traditional OpenID connect flow, with session management features
+- The API uses extensible claims for authorization
 
-## Quick Start
+## Views
 
-Ensure that Node.js is installed, then run the following script from a macOS terminal or from Git Bash on Windows:
+The SPA is a simple UI with some basic navigation between views, to render fictional resources.\
+The data is returned from an API that authorizes using domain specific claims.
+
+# Local Development Quick Start
+
+Ensure that Node.js is installed, then run the build script:
 
 ```bash
 ./build.sh
@@ -52,28 +57,21 @@ You can also sign in as a different user, whose domain specific claims grant dif
 - User: `guestadmin@mycompany.com`
 - Password: `GuestPassword1`
 
-## Use your own Authorization Server
-
-If preferred, update the settings in these files to point to your own Authorization Server and users:
-
-- spa/spa.config.json
-- api/api.config.json
-
-### Details
+## Details
 
 * See the [Updated SPA and API Code Sample](https://authguidance.com/2017/10/13/improved-spa-code-sample-overview/) blog post a walkthrough and the key technical points
 
 ## ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) 2021 Security Update
 
-- In 2021 it is instead recommended to use a [Back End for Front End](https://authguidance.com/2019/09/09/spa-back-end-for-front-end/) approach for SPA security.
-- This requires more moving parts - see the [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) for an example implementation.
+- In 2021 it is instead recommended to keep tokens out of the browser, using a Back End for Front End approach
+- See the [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) for an API driven implementation
 
-### Programming Languages
+## Programming Languages
 
-* The SPA is coded in plain TypeScript, so that it can be adapted into your technology of choice
+* Typescripts is used to build the SPA in the simplest way
 * Node.js and TypeScript are used to implement the API
 
-### Middleware Used
+## Infrastructure
 
 * Express is used to host both the API and the SPA content
 * AWS Cognito is used as the default Authorization Server
