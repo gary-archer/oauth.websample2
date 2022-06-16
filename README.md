@@ -51,11 +51,7 @@ The browser is invoked and you can sign in with my AWS test credentials:
 - User: `guestuser@mycompany.com`
 - Password: `GuestPassword1`
 
-You can then test all lifecycle operations, including token refresh, multi tab browsing and logout.\
-You can also sign in as a different user, whose domain specific claims grant different access to data:
-
-- User: `guestadmin@mycompany.com`
-- Password: `GuestPassword1`
+You can then test all lifecycle operations, including token refresh, multi tab browsing and logout.
 
 ## Further Information
 
