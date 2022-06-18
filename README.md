@@ -59,12 +59,12 @@ You can then test all lifecycle operations, including token refresh, multi tab b
 
 ## ![Red icon](https://via.placeholder.com/15/f03c15/f03c15.png) 2021 Security Update
 
-- In 2021 it is instead recommended to keep tokens out of the browser, using a Back End for Front End approach
+- In 2021 it is instead recommended to keep tokens out of the browser, using a Backend for Frontend
 - See the [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) for an API driven implementation
 
 ## Programming Languages
 
-* Typescript is used, to develop the SPA in the simplest way
+* * Plain Typescript is used, to build the SPA in the simplest way
 * Node.js and TypeScript are used to implement the API
 
 ## Infrastructure
