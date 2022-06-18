@@ -34,8 +34,7 @@ Custom development domains are used so you must add these entries to your hosts 
 127.0.0.1 localhost web.mycompany.com api.mycompany.com
 ```
 
-Trust the root certificate that the build step downloads to your computer, in order for SSL to work in the browser.\
-Add this file to the system keychain on macOS or the Windows certificate trust store for the local computer:
+Next configure [Browser SSL Trust](https://authguidance.com/2017/11/11/developer-ssl-setup#browser) for the SSL root certificate:
 
 ```
 ./api/certs/localhost/mycompany.com.ca.pem
