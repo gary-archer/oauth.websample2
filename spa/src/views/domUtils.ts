@@ -4,6 +4,24 @@
 export class DomUtils {
 
     /*
+     * Create a div element if required
+     */
+    public static createDiv(parentSelector: string, elementName: string): void {
+
+        const parent = document.querySelector(parentSelector);
+        if (parent) {
+
+            const element = document.querySelector(`#${elementName}`);
+            if (!element) {
+
+                const child = document.createElement('div');
+                child.id = elementName;
+                parent.appendChild(child);
+            }
+        }
+    }
+
+    /*
      * Set HTML
      */
     public static html(selector: string, html: string): void {

@@ -18,6 +18,7 @@ export class TitleView {
      */
     public load(): void {
 
+        DomUtils.createDiv('#root', 'title');
         const html =
             `<div class='row'>
                 <div class='col-8 my-auto'>

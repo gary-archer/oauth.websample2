@@ -28,6 +28,7 @@ export class HeaderButtonsView {
     /* eslint-disable max-len */
     public load(): void {
 
+        DomUtils.createDiv('#root', 'headerbuttons');
         const html =
             `<div class='row'>
                 <div class='col-3 my-2 d-flex'>

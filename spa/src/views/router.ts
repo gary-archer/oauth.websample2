@@ -1,6 +1,7 @@
 import urlparse from 'url-parse';
 import {ApiClient} from '../api/client/apiClient';
 import {CompaniesView} from './companiesView';
+import {DomUtils} from './domUtils';
 import {ErrorView} from './errorView';
 import {LoginRequiredView} from './loginRequiredView';
 import {TransactionsView} from './transactionsView';
@@ -23,7 +24,8 @@ export class Router {
      */
     public async loadView(): Promise<void> {
 
-        // Clear errors from the previous view
+        // Initialise
+        DomUtils.createDiv('#root', 'main');
         this._errorView.clear();
 
         // Our simple router works out which main view to show from a couple of known hash fragments

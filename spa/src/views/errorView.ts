@@ -11,11 +11,16 @@ import {DomUtils} from './domUtils';
  */
 export class ErrorView {
 
+    public constructor() {
+        this._setupCallbacks();
+    }
+
     /*
      * Do the initial render to create the HTML, which remains hidden until there is an error
      */
     public load(): void {
 
+        DomUtils.createDiv('#root', 'errorcontainer');
         const html =
             `<div class='card border-0'>
                 <div class='row'>
@@ -129,5 +134,12 @@ export class ErrorView {
              </div>`;
 
         return mustache.render(htmlTemplate, stackLine);
+    }
+
+    /*
+     * Plumbing to make the this parameter available in callbacks
+     */
+    private _setupCallbacks(): void {
+        this.clear = this.clear.bind(this);
     }
 }
