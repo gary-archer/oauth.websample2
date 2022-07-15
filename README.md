@@ -43,7 +43,7 @@ Next configure [Browser SSL Trust](https://authguidance.com/2017/11/11/developer
 Then run the following script to run the code for both SPA and API:
 
 ```bash
-./deploy.sh
+./run.sh
 ```
 
 The browser is invoked and you can sign in with my AWS test credentials:

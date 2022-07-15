@@ -29,19 +29,19 @@ esac
 #
 if [ "$PLATFORM" == 'MACOS' ]; then
 
-  open -a Terminal ./spa/deploy.sh
-  open -a Terminal ./api/deploy.sh
+  open -a Terminal ./spa/run.sh
+  open -a Terminal ./api/run.sh
 
 elif [ "$PLATFORM" == 'WINDOWS' ]; then
 
   GIT_BASH="C:\Program Files\Git\git-bash.exe"
-  "$GIT_BASH" -c ./spa/deploy.sh &
-  "$GIT_BASH" -c ./api/deploy.sh &
+  "$GIT_BASH" -c ./spa/run.sh &
+  "$GIT_BASH" -c ./api/run.sh &
 
 elif [ "$PLATFORM" == 'LINUX' ]; then
 
-  gnome-terminal -- ./spa/deploy.sh
-  gnome-terminal -- ./api/deploy.sh
+  gnome-terminal -- ./spa/run.sh
+  gnome-terminal -- ./api/run.sh
 fi
 
 #
