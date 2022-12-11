@@ -1,0 +1,34 @@
+import express from 'express';
+import fs from 'fs-extra';
+import {Configuration} from '../configuration/configuration';
+import {ErrorFactory} from '../errors/errorFactory';
+import {ApiLogger} from '../logging/apiLogger';
+import {HttpServerConfiguration} from './httpServerConfiguration';
+
+(async () => {
+
+    const logger = new ApiLogger();
+    try {
+
+        // First load configuration
+        const apiConfigBuffer = await fs.readFile('api.config.json');
+        const apiConfig = JSON.parse(apiConfigBuffer.toString()) as Configuration;
+
+        // Next configure web server behaviour
+        const expressApp = express();
+        const httpServer = new HttpServerConfiguration(expressApp, apiConfig, logger);
+        await httpServer.initializeApi();
+
+        // We will also host web static content
+        httpServer.initializeWebStaticContentHosting();
+
+        // Start receiving requests
+        await httpServer.startListening();
+
+    } catch (e) {
+
+        // Report startup errors
+        const error = ErrorFactory.fromServerError(e);
+        logger.startupError(error);
+    }
+})();
