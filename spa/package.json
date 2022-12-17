@@ -1,7 +1,7 @@
 {
   "name": "basicspa",
   "version": "2.0.0",
-  "description": "An SPA using the OIDC Client security library and full session features",
+  "description": "An SPA using the OIDC Client security library and a full OAuth lifecycle",
   "main": "index.ts",
   "scripts": {
     "lint": "npx eslint . --ext .ts",
@@ -13,23 +13,23 @@
   "author": "Gary Archer",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.27.2",
-    "moment": "^2.29.2",
+    "axios": "^1.2.1",
+    "moment": "^2.29.4",
     "mustache": "^4.2.0",
     "oidc-client": "^1.11.5",
-    "url-parse": "^1.5.9"
+    "url-parse": "^1.5.10"
   },
   "devDependencies": {
-    "@types/mustache": "^4.1.2",
-    "@types/url-parse": "^1.4.4",
-    "@typescript-eslint/eslint-plugin": "^5.17.0",
-    "@typescript-eslint/parser": "^5.17.0",
-    "eslint": "^8.16.0",
+    "@types/mustache": "^4.2.2",
+    "@types/url-parse": "^1.4.8",
+    "@typescript-eslint/eslint-plugin": "^5.46.1",
+    "@typescript-eslint/parser": "^5.46.1",
+    "eslint": "^8.30.0",
     "rimraf": "^3.0.2",
-    "ts-loader": "^9.2.6",
-    "typescript": "^4.7.2",
-    "webpack": "^5.72.1",
-    "webpack-cli": "^4.9.2",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^4.10.0",
     "webpack-merge": "^5.8.0"
   }
 }
