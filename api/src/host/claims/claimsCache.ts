@@ -1,6 +1,6 @@
 import NodeCache from 'node-cache';
-import {OAuthConfiguration} from '../configuration/oauthConfiguration';
-import {CachedClaims} from './cachedClaims';
+import {OAuthConfiguration} from '../configuration/oauthConfiguration.js';
+import {CachedClaims} from './cachedClaims.js';
 
 /*
  * A simple in memory claims cache for our API

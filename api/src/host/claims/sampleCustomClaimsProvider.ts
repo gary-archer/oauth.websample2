@@ -1,7 +1,7 @@
-import {CustomClaims} from '../../logic/entities/claims/customClaims';
-import {TokenClaims} from '../../logic/entities/claims/tokenClaims';
-import {UserInfoClaims} from '../../logic/entities/claims/userInfoClaims';
-import {CustomClaimsProvider} from './customClaimsProvider';
+import {CustomClaims} from '../../logic/entities/claims/customClaims.js';
+import {TokenClaims} from '../../logic/entities/claims/tokenClaims.js';
+import {UserInfoClaims} from '../../logic/entities/claims/userInfoClaims.js';
+import {CustomClaimsProvider} from './customClaimsProvider.js';
 
 /*
  * An example of including domain specific details in cached claims

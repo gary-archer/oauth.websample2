@@ -1,5 +1,5 @@
-import {CustomClaims} from '../entities/claims/customClaims';
-import {UserInfoClaims} from '../entities/claims/userInfoClaims';
+import {CustomClaims} from '../entities/claims/customClaims.js';
+import {UserInfoClaims} from '../entities/claims/userInfoClaims.js';
 
 /*
  * We can return any user data to our UI clients here, including both OAuth and non OAuth data

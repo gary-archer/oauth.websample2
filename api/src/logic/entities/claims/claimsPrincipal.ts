@@ -1,6 +1,6 @@
-import {CustomClaims} from './customClaims';
-import {TokenClaims} from './tokenClaims';
-import {UserInfoClaims} from './userInfoClaims';
+import {CustomClaims} from './customClaims.js';
+import {TokenClaims} from './tokenClaims.js';
+import {UserInfoClaims} from './userInfoClaims.js';
 
 /*
  * Our claims principal contains claims from the token and other sources

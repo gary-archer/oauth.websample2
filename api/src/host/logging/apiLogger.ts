@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from 'express';
 import winston from 'winston';
-import {ServerError} from '../../logic/errors/serverError';
-import {LogEntry} from './logEntry';
+import {ServerError} from '../../logic/errors/serverError.js';
+import {LogEntry} from './logEntry.js';
 
 /*
  * A simple Winston logger that writes JSON logs

@@ -1,12 +1,12 @@
 import axios, {AxiosRequestConfig} from 'axios';
 import {jwtVerify} from 'jose';
-import {TokenClaims} from '../../logic/entities/claims/tokenClaims';
-import {UserInfoClaims} from '../../logic/entities/claims/userInfoClaims';
-import {ClientError} from '../../logic/errors/clientError';
-import {OAuthConfiguration} from '../configuration/oauthConfiguration';
-import {ErrorFactory} from '../errors/errorFactory';
-import {HttpProxy} from '../utilities/httpProxy';
-import {JwksRetriever} from './jwksRetriever';
+import {TokenClaims} from '../../logic/entities/claims/tokenClaims.js';
+import {UserInfoClaims} from '../../logic/entities/claims/userInfoClaims.js';
+import {ClientError} from '../../logic/errors/clientError.js';
+import {OAuthConfiguration} from '../configuration/oauthConfiguration.js';
+import {ErrorFactory} from '../errors/errorFactory.js';
+import {HttpProxy} from '../utilities/httpProxy.js';
+import {JwksRetriever} from './jwksRetriever.js';
 
 /*
  * The entry point for OAuth related operations

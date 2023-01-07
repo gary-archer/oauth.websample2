@@ -2,10 +2,10 @@ import cors from 'cors';
 import {Application, NextFunction, Request, Response} from 'express';
 import fs from 'fs-extra';
 import https from 'https';
-import {Configuration} from '../configuration/configuration';
-import {ApiController} from '../controller/apiController';
-import {ApiLogger} from '../logging/apiLogger';
-import {WebStaticContent} from './webStaticContent';
+import {Configuration} from '../configuration/configuration.js';
+import {ApiController} from '../controller/apiController.js';
+import {ApiLogger} from '../logging/apiLogger.js';
+import {WebStaticContent} from './webStaticContent.js';
 
 /*
  * Configure HTTP behaviour at application startup

@@ -1,8 +1,8 @@
 import {Response} from 'express';
-import {ClientError} from '../../logic/errors/clientError';
-import {ServerError} from '../../logic/errors/serverError';
-import {LogEntry} from '../logging/logEntry';
-import {ErrorFactory} from './errorFactory';
+import {ClientError} from '../../logic/errors/clientError.js';
+import {ServerError} from '../../logic/errors/serverError.js';
+import {LogEntry} from '../logging/logEntry.js';
+import {ErrorFactory} from './errorFactory.js';
 
 /*
  * A class to handle composing and reporting errors

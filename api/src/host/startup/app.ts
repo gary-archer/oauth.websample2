@@ -1,9 +1,9 @@
 import express from 'express';
 import fs from 'fs-extra';
-import {Configuration} from '../configuration/configuration';
-import {ErrorFactory} from '../errors/errorFactory';
-import {ApiLogger} from '../logging/apiLogger';
-import {HttpServerConfiguration} from './httpServerConfiguration';
+import {Configuration} from '../configuration/configuration.js';
+import {ErrorFactory} from '../errors/errorFactory.js';
+import {ApiLogger} from '../logging/apiLogger.js';
+import {HttpServerConfiguration} from './httpServerConfiguration.js';
 
 (async () => {
 

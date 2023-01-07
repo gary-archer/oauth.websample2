@@ -1,11 +1,11 @@
 import {Request} from 'express';
 import hasher from 'js-sha256';
-import {ClaimsPrincipal} from '../../logic/entities/claims/claimsPrincipal';
-import {ClientError} from '../../logic/errors/clientError';
-import {CachedClaims} from '../claims/cachedClaims';
-import {ClaimsCache} from '../claims/claimsCache';
-import {CustomClaimsProvider} from '../claims/customClaimsProvider';
-import {Authenticator} from './authenticator';
+import {ClaimsPrincipal} from '../../logic/entities/claims/claimsPrincipal.js';
+import {ClientError} from '../../logic/errors/clientError.js';
+import {CachedClaims} from '../claims/cachedClaims.js';
+import {ClaimsCache} from '../claims/claimsCache.js';
+import {CustomClaimsProvider} from '../claims/customClaimsProvider.js';
+import {Authenticator} from './authenticator.js';
 
 /*
  * The entry point for the processing to validate tokens and lookup claims

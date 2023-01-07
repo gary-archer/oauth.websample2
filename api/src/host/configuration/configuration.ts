@@ -1,5 +1,5 @@
-import {ApiConfiguration} from './apiConfiguration';
-import {OAuthConfiguration} from './oauthConfiguration';
+import {ApiConfiguration} from './apiConfiguration.js';
+import {OAuthConfiguration} from './oauthConfiguration.js';
 
 /*
  * A holder for configuration settings

@@ -1,6 +1,6 @@
 
 import ProxyAgent from 'proxy-agent';
-import {Configuration} from '../configuration/configuration';
+import {Configuration} from '../configuration/configuration.js';
 
 /*
  * Manage routing outbound calls from the API via an HTTP proxy

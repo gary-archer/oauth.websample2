@@ -6,10 +6,13 @@ import path from 'path';
  */
 export class WebStaticContent {
 
+    private readonly _dirname: string;
     private readonly _webFilesRoot: string;
 
     public constructor() {
-        this._webFilesRoot = '../../../../spa';
+
+        this._dirname = process.cwd();
+        this._webFilesRoot = '../spa';
         this._setupCallbacks();
     }
 
@@ -23,7 +26,7 @@ export class WebStaticContent {
             resourcePath = 'index.html';
         }
 
-        const webFilePath = path.join(`${__dirname}/${this._webFilesRoot}/${resourcePath}`);
+        const webFilePath = path.join(`${this._dirname}/${this._webFilesRoot}/${resourcePath}`);
         response.sendFile(webFilePath);
     }
 
@@ -32,7 +35,7 @@ export class WebStaticContent {
      */
     public getWebDefaultResource(request: Request, response: Response): void {
 
-        const webFilePath = path.join(`${__dirname}/${this._webFilesRoot}/index.html`);
+        const webFilePath = path.join(`${this._dirname}/${this._webFilesRoot}/index.html`);
         response.sendFile(webFilePath);
     }
 
@@ -41,7 +44,7 @@ export class WebStaticContent {
      */
     public getFavicon(request: Request, response: Response): void {
 
-        const webFilePath = path.join(`${__dirname}/${this._webFilesRoot}/favicon.ico`);
+        const webFilePath = path.join(`${this._dirname}/${this._webFilesRoot}/favicon.ico`);
         response.sendFile(webFilePath);
     }
 

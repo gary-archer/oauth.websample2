@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
-import {ServerError} from '../errors/serverError';
-import {ErrorCodes} from '../errors/errorCodes';
+import {ServerError} from '../errors/serverError.js';
+import {ErrorCodes} from '../errors/errorCodes.js';
 
 /*
  * A simple utility to deal with the infrastructure of reading JSON files

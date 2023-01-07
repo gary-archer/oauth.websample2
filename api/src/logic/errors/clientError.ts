@@ -1,4 +1,4 @@
-import {ErrorCodes} from './errorCodes';
+import {ErrorCodes} from './errorCodes.js';
 
 /*
  * Manage errors due to invalid client usage

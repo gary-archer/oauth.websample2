@@ -1,23 +1,23 @@
 import {NextFunction, Request, Response} from 'express';
 import onHeaders from 'on-headers';
-import {ClaimsPrincipal} from '../../logic/entities/claims/claimsPrincipal';
-import {ClientError} from '../../logic/errors/clientError';
-import {ErrorCodes} from '../../logic/errors/errorCodes';
-import {CompanyRepository} from '../../logic/repositories/companyRepository';
-import {CompanyService} from '../../logic/services/companyService';
-import {UserInfoService} from '../../logic/services/userInfoService';
-import {JsonFileReader} from '../../logic/utilities/jsonFileReader';
-import {ClaimsCache} from '../claims/claimsCache';
-import {SampleCustomClaimsProvider} from '../claims/sampleCustomClaimsProvider';
-import {Configuration} from '../configuration/configuration';
-import {ErrorFactory} from '../errors/errorFactory';
-import {ExceptionHandler} from '../errors/exceptionHandler';
-import {Authenticator} from '../oauth/authenticator';
-import {Authorizer} from '../oauth/authorizer';
-import {JwksRetriever} from '../oauth/jwksRetriever';
-import {ScopeVerifier} from '../oauth/scopeVerifier';
-import {HttpProxy} from '../utilities/httpProxy';
-import {ResponseWriter} from '../utilities/responseWriter';
+import {ClaimsPrincipal} from '../../logic/entities/claims/claimsPrincipal.js';
+import {ClientError} from '../../logic/errors/clientError.js';
+import {ErrorCodes} from '../../logic/errors/errorCodes.js';
+import {CompanyRepository} from '../../logic/repositories/companyRepository.js';
+import {CompanyService} from '../../logic/services/companyService.js';
+import {UserInfoService} from '../../logic/services/userInfoService.js';
+import {JsonFileReader} from '../../logic/utilities/jsonFileReader.js';
+import {ClaimsCache} from '../claims/claimsCache.js';
+import {SampleCustomClaimsProvider} from '../claims/sampleCustomClaimsProvider.js';
+import {Configuration} from '../configuration/configuration.js';
+import {ErrorFactory} from '../errors/errorFactory.js';
+import {ExceptionHandler} from '../errors/exceptionHandler.js';
+import {Authenticator} from '../oauth/authenticator.js';
+import {Authorizer} from '../oauth/authorizer.js';
+import {JwksRetriever} from '../oauth/jwksRetriever.js';
+import {ScopeVerifier} from '../oauth/scopeVerifier.js';
+import {HttpProxy} from '../utilities/httpProxy.js';
+import {ResponseWriter} from '../utilities/responseWriter.js';
 
 /*
  * A class to route API requests to business logic classes

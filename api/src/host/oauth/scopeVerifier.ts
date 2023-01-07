@@ -1,5 +1,5 @@
-import {ClientError} from '../../logic/errors/clientError';
-import {ErrorCodes} from '../../logic/errors/errorCodes';
+import {ClientError} from '../../logic/errors/clientError.js';
+import {ErrorCodes} from '../../logic/errors/errorCodes.js';
 
 /*
  * A utility method to enforce scopes at the entry point

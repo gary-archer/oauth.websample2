@@ -1,9 +1,9 @@
-import {CustomClaims} from '../entities/claims/customClaims';
-import {Company} from '../entities/company';
-import {CompanyTransactions} from '../entities/companyTransactions';
-import {ClientError} from '../errors/clientError';
-import {ErrorCodes} from '../errors/errorCodes';
-import {CompanyRepository} from '../repositories/companyRepository';
+import {CustomClaims} from '../entities/claims/customClaims.js';
+import {Company} from '../entities/company.js';
+import {CompanyTransactions} from '../entities/companyTransactions.js';
+import {ClientError} from '../errors/clientError.js';
+import {ErrorCodes} from '../errors/errorCodes.js';
+import {CompanyRepository} from '../repositories/companyRepository.js';
 
 /*
  * Our service layer class applies logic before returning data

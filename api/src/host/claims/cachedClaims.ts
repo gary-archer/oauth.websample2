@@ -1,5 +1,5 @@
-import {CustomClaims} from '../../logic/entities/claims/customClaims';
-import {UserInfoClaims} from '../../logic/entities/claims/userInfoClaims';
+import {CustomClaims} from '../../logic/entities/claims/customClaims.js';
+import {UserInfoClaims} from '../../logic/entities/claims/userInfoClaims.js';
 
 /*
  * Claims that are cached between requests to the lambda

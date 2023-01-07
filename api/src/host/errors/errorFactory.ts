@@ -1,6 +1,6 @@
-import {ServerError} from '../../logic/errors/serverError';
-import {ClientError} from '../../logic/errors/clientError';
-import {ErrorCodes} from '../../logic/errors/errorCodes';
+import {ServerError} from '../../logic/errors/serverError.js';
+import {ClientError} from '../../logic/errors/clientError.js';
+import {ErrorCodes} from '../../logic/errors/errorCodes.js';
 
 /*
  * A class to handle trapping errors
