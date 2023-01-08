@@ -7,6 +7,9 @@ export default {
   context: path.resolve(dirname, './src'),
   target: ['web'],
 
+  // Always output source maps for SPAs
+  devtool: 'source-map',
+
   entry: {
 
     // Specify the application entry point
