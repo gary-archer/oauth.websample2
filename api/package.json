@@ -13,6 +13,7 @@
   "scripts": {
     "lint": "npx eslint . --ext .ts",
     "build": "node --loader ts-node/esm --no-warnings src/host/startup/app.ts",
+    "buildRelease": "tsc --sourceMap false",
     "start": "nodemon -e ts --exec \"npm run build\""
   },
   "dependencies": {
