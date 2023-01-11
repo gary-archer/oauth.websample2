@@ -1,29 +1,28 @@
 import cors from 'cors';
+import express from 'express';
 import {Application, NextFunction, Request, Response} from 'express';
 import fs from 'fs-extra';
 import https from 'https';
 import {Configuration} from '../configuration/configuration.js';
 import {ApiController} from '../controller/apiController.js';
 import {ApiLogger} from '../logging/apiLogger.js';
-import {WebStaticContent} from './webStaticContent.js';
 
 /*
  * Configure HTTP behaviour at application startup
  */
 export class HttpServerConfiguration {
 
-    private readonly _expressApp: Application;
+    private readonly _express: Application;
     private readonly _configuration: Configuration;
     private readonly _apiLogger: ApiLogger;
     private readonly _apiController: ApiController;
-    private readonly _webStaticContent: WebStaticContent;
 
     public constructor(expressApp: Application, configuration: Configuration, logger: ApiLogger) {
-        this._expressApp = expressApp;
+
+        this._express = expressApp;
         this._configuration = configuration;
         this._apiLogger = logger;
         this._apiController = new ApiController(this._configuration);
-        this._webStaticContent = new WebStaticContent();
     }
 
     /*
@@ -36,33 +35,32 @@ export class HttpServerConfiguration {
             origin: this._configuration.api.trustedOrigins,
             maxAge: 86400,
         };
-        this._expressApp.use('/api/*', cors(corsOptions) as any);
-        this._expressApp.use('/api/*', this._apiController.onWriteHeaders);
+        this._express.use('/api/*', cors(corsOptions) as any);
+        this._express.use('/api/*', this._apiController.onWriteHeaders);
 
         // All API requests are authorized first
-        this._expressApp.use('/api/*', this._catch(this._apiLogger.logRequest));
-        this._expressApp.use('/api/*', this._catch(this._apiController.authorizationHandler));
+        this._express.use('/api/*', this._catch(this._apiLogger.logRequest));
+        this._express.use('/api/*', this._catch(this._apiController.authorizationHandler));
 
         // API routes containing business logic
-        this._expressApp.get('/api/userinfo', this._catch(this._apiController.getUserInfo));
-        this._expressApp.get('/api/companies', this._catch(this._apiController.getCompanyList));
-        this._expressApp.get(
+        this._express.get('/api/userinfo', this._catch(this._apiController.getUserInfo));
+        this._express.get('/api/companies', this._catch(this._apiController.getCompanyList));
+        this._express.get(
             '/api/companies/:id/transactions',
             this._catch(this._apiController.getCompanyTransactions));
 
         // Handle failure scenarios
-        this._expressApp.use('/api/*', this._apiController.onRequestNotFound);
-        this._expressApp.use('/api/*', this._apiController.onException);
+        this._express.use('/api/*', this._apiController.onRequestNotFound);
+        this._express.use('/api/*', this._apiController.onException);
     }
 
     /*
-     * The sample also provides some simple hosting of web static content, for convenience
+     * For code sample simplicity, the API serves web content, though a real API would not do this
      */
     public initializeWebStaticContentHosting(): void {
 
-        this._expressApp.get('/spa/*', this._webStaticContent.getWebResource);
-        this._expressApp.get('/spa', this._webStaticContent.getWebDefaultResource);
-        this._expressApp.get('/favicon.ico', this._webStaticContent.getFavicon);
+        this._express.use('/spa', express.static('../spa'));
+        this._express.use('/favicon.ico', express.static('../spa/favicon.ico'));
     }
 
     /*
@@ -81,7 +79,7 @@ export class HttpServerConfiguration {
             };
 
             // Start listening on HTTPS
-            const httpsServer = https.createServer(sslOptions, this._expressApp);
+            const httpsServer = https.createServer(sslOptions, this._express);
             httpsServer.listen(port, () => {
                 console.log(`API is listening on HTTPS port ${port}`);
             });
@@ -89,7 +87,7 @@ export class HttpServerConfiguration {
         } else {
 
             // Otherwise listen over HTTP
-            this._expressApp.listen(port, () => {
+            this._express.listen(port, () => {
                 console.log(`API is listening on HTTP port ${port}`);
             });
         }
