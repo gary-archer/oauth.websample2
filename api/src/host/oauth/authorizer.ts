@@ -1,5 +1,5 @@
+import {createHash} from 'crypto';
 import {Request} from 'express';
-import hasher from 'js-sha256';
 import {ClaimsPrincipal} from '../../logic/entities/claims/claimsPrincipal.js';
 import {ClientError} from '../../logic/errors/clientError.js';
 import {CachedClaims} from '../claims/cachedClaims.js';
@@ -42,7 +42,7 @@ export class Authorizer {
         const tokenClaims = await this._authenticator.validateToken(accessToken);
 
         // Return cached claims immediately if found
-        const accessTokenHash = hasher.sha256(accessToken);
+        const accessTokenHash = createHash('sha256').update(accessToken).digest('hex');
         const cachedClaims = await this._cache.getClaimsForToken(accessTokenHash);
         if (cachedClaims) {
             return new ClaimsPrincipal(tokenClaims, cachedClaims.userInfo, cachedClaims.custom);
