@@ -1,5 +1,4 @@
 /*
- * We would like Congito to return us to a hash location after logout but this is not supported
- * Therefore do a redirect upon return in code instead
+ * Update to a hash location after logout when not supported by the authorization server
  */
 location.href = '#loggedout';
