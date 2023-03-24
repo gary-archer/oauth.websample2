@@ -79,7 +79,7 @@ export class ApiController {
 
         // Check that the access token allows access to this type of data
         const claims = this._getClaims(response);
-        ScopeVerifier.enforce(claims.token.scopes, 'transactions_read');
+        ScopeVerifier.enforce(claims.token.scopes, 'investments');
 
         // Create the service instance and its dependencies on every API request
         const reader = new JsonFileReader();
@@ -98,7 +98,7 @@ export class ApiController {
 
         // Check that the access token allows access to this type of data
         const claims = this._getClaims(response);
-        ScopeVerifier.enforce(claims.token.scopes, 'transactions_read');
+        ScopeVerifier.enforce(claims.token.scopes, 'investments');
 
         // Create the service instance and its dependencies on every API request
         const reader = new JsonFileReader();
