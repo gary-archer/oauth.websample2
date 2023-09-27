@@ -15,7 +15,7 @@ A sample focused on the following OAuth areas for SPAs and APIs:
 ## Views
 
 The SPA is a simple UI with some basic navigation between views, to render fictional resources.\
-The data is returned from an API that authorizes using claims from multiple data sources.
+The data is returned from an API that authorizes using claims from multiple sources.
 
 ![SPA Views](./doc/views.png)
 
