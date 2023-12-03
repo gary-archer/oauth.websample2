@@ -8,7 +8,7 @@
         "clientId":               "1942b2l2068euci25g5k2mrg2s",
         "redirectUri":            "https://web.mycompany.com/spa",
         "postLogoutRedirectUri":  "https://web.mycompany.com/spa/loggedout.html",
-        "scope":                  "openid profile email https://api.authsamples.com/investments",
+        "scope":                  "openid profile https://api.authsamples.com/investments",
         "customLogoutEndpoint":   "https://login.authsamples.com/logout"
     }
 }

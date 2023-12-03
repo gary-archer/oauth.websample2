@@ -83,7 +83,7 @@ export class Authenticator {
 
             } else if (this._configuration.provider !== 'cognito') {
 
-                // Use the traditional SPA solution, but it does not work in Cognito
+                // Use the traditional SPA solution, when prompt=none is supported
                 await this._performAccessTokenRenewalViaIframeRedirect();
             }
 
