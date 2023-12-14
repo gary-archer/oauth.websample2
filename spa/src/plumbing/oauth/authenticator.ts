@@ -253,9 +253,10 @@ export class Authenticator {
 
     /*
      * Try to refresh the access token by manually triggering a silent token renewal on an iframe
-     * This will fail if there is no authorization server session cookie yet
-     * It will also fail in the Safari browser
+     * This will fail if there is no authorization server SSO cookie yet
+     * It will fail in some browsers, which will not send the 3rd party SSO cookie due to RFC6265bis restrictions
      * It may also fail if there has been no top level redirect yet for the current browser session
+     * The top level redirect may serve as a user gesture after which the browser also sends the SSO cookie silently
      */
     private async _performAccessTokenRenewalViaIframeRedirect(): Promise<void> {
 
