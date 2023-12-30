@@ -5,7 +5,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch API",
-            "runtimeArgs": ["--loader", "ts-node/esm", "--no-warnings"],
+            "runtimeArgs": ["--import", "tsx", "--no-warnings"],
             "args": ["src/host/startup/app.ts"],
             "outputCapture": "std",
             "skipFiles": [
