@@ -12,7 +12,7 @@
   },
   "scripts": {
     "lint": "npx eslint . --ext .ts",
-    "start": "tsx src/host/startup/app.ts",
+    "start": "tsx watch src/host/startup/app.ts",
     "buildRelease": "tsc --sourceMap false"
   },
   "dependencies": {
