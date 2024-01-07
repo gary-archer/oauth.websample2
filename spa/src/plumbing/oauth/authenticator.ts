@@ -66,7 +66,7 @@ export class Authenticator {
             return user.access_token;
         }
 
-        // A new token is needed when the page is reloaded, so see if we can refresh the access token
+        // Otherwise try to refresh the access token
         return this.refreshAccessToken(null);
     }
 
@@ -78,7 +78,7 @@ export class Authenticator {
         // This flag avoids an unnecessary refresh attempt when the app first loads
         if (HtmlStorageHelper.isLoggedIn) {
 
-            // 
+            // Protect against redirect loops if APIs are misconfigured
             if (error != null) {
                 await this._preventRedirectLoop(error);
             }
@@ -87,13 +87,13 @@ export class Authenticator {
 
                 // For Cognito, refresh the access token using a refresh token stored in JavaScript memory
                 const user = await this._userManager.getUser();
-                if (user && user.refresh_token && user.refresh_token.length > 0) {
+                if (user && user.refresh_token) {
                     await this._performAccessTokenRenewalViaRefreshToken();
                 }
 
             } else {
 
-                // For other providers, that prompt=none is supported and use the traditional SPA renewal solution
+                // For other providers, assume that prompt=none is supported and use the traditional SPA solution
                 await this._performAccessTokenRenewalViaIframeRedirect();
             }
 
@@ -351,5 +351,6 @@ export class Authenticator {
 
         await this._userManager.removeUser();
         HtmlStorageHelper.isLoggedIn = false;
+        this._loginTime = null;
     }
 }
