@@ -58,7 +58,7 @@ export class ApiClient {
         // Get the full path
         const url = `${this._apiBaseUrl}${path}`;
 
-        // Get the access token, and if it does not exist a login redirect will be triggered
+        // Get the access token
         let token = await this._authenticator.getAccessToken();
         if (!token) {
 

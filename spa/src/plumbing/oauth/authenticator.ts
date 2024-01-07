@@ -64,7 +64,7 @@ export class Authenticator {
         }
 
         // If the page has been reloaded, try a silent refresh to get an access token
-        return this.refreshAccessToken();
+        return await this.refreshAccessToken();
     }
 
     /*
@@ -75,10 +75,10 @@ export class Authenticator {
         // This flag avoids an unnecessary silent refresh when the app first loads
         if (HtmlStorageHelper.isLoggedIn) {
 
+            const user = await this._userManager.getUser();
             if (this._configuration.provider === 'cognito') {
 
                 // For Cognito, refresh the access token using a refresh token stored in JavaScript memory
-                const user = await this._userManager.getUser();
                 if (user && user.refresh_token) {
                     await this._performAccessTokenRenewalViaRefreshToken();
                 }
@@ -87,12 +87,17 @@ export class Authenticator {
 
                 // For other providers, assume that prompt=none is supported and use the traditional SPA solution
                 await this._performAccessTokenRenewalViaIframeRedirect();
+
+                // The SPA does not use refresh tokens, so remove one if received, to ensure iframe renewal
+                if (user && user.refresh_token) {
+                    user.refresh_token = '';
+                    this._userManager.storeUser(user);
+                }
             }
 
             // Return a fresh access token if found
-            const updatedUser = await this._userManager.getUser();
-            if (updatedUser && updatedUser.access_token) {
-                return updatedUser.access_token;
+            if (user && user.access_token) {
+                return user.access_token;
             }
         }
 
@@ -104,7 +109,7 @@ export class Authenticator {
      */
     public async startLogin(): Promise<void> {
 
-        // Otherwise start a login redirect, by first storing the SPA's client side location
+        // Start a login redirect, by first storing the SPA's client side location
         // Some apps might also want to store form fields being edited in the state parameter
         const data = {
             hash: location.hash.length > 0 ? location.hash : '#',
@@ -139,8 +144,10 @@ export class Authenticator {
                 let redirectLocation = '#';
                 try {
 
-                    // Handle the login response
+                    // Handle the login response and save tokens to memory
                     const user = await this._userManager.signinRedirectCallback();
+                    user.refresh_token = '';
+                    this._userManager.storeUser(user);
 
                     // We will return to the app location before the login redirect
                     redirectLocation = user.state.hash;
