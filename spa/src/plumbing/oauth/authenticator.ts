@@ -3,6 +3,7 @@ import urlparse from 'url-parse';
 import {OAuthConfiguration} from '../../configuration/oauthConfiguration';
 import {ErrorCodes} from '../errors/errorCodes';
 import {ErrorFactory} from '../errors/errorFactory';
+import {UIError} from '../errors/uiError';
 import {HtmlStorageHelper} from '../utilities/htmlStorageHelper';
 import {OAuthUserInfo} from './oauthUserInfo';
 
@@ -13,6 +14,7 @@ export class Authenticator {
 
     private readonly _configuration: OAuthConfiguration;
     private readonly _userManager: UserManager;
+    private _loginTime: number | null;
 
     public constructor(configuration: OAuthConfiguration) {
 
@@ -50,6 +52,7 @@ export class Authenticator {
 
         // Create the user manager
         this._userManager = new UserManager(settings);
+        this._loginTime = null;
     }
 
     /*
@@ -63,41 +66,47 @@ export class Authenticator {
             return user.access_token;
         }
 
-        // If a new token is needed or the page is refreshed, try to refresh the access token
-        return this.refreshAccessToken();
+        // A new token is needed when the page is reloaded, so see if we can refresh the access token
+        return this.refreshAccessToken(null);
     }
 
     /*
      * Try to refresh an access token
      */
-    public async refreshAccessToken(): Promise<string> {
+    public async refreshAccessToken(error: UIError | null): Promise<string> {
 
-        // Avoid an unnecessary refresh attempt when the app first loads
+        // This flag avoids an unnecessary refresh attempt when the app first loads
         if (HtmlStorageHelper.isLoggedIn) {
 
-            let user = await this._userManager.getUser();
-            if (user && user.refresh_token && user.refresh_token.length > 0) {
+            // 
+            if (error != null) {
+                await this._preventRedirectLoop(error);
+            }
 
-                // Refresh the access token using a refresh token
-                await this._performAccessTokenRenewalViaRefreshToken();
+            if (this._configuration.provider === 'cognito') {
 
-            } else if (this._configuration.provider !== 'cognito') {
+                // For Cognito, refresh the access token using a refresh token stored in JavaScript memory
+                const user = await this._userManager.getUser();
+                if (user && user.refresh_token && user.refresh_token.length > 0) {
+                    await this._performAccessTokenRenewalViaRefreshToken();
+                }
 
-                // Use the traditional SPA solution, when prompt=none is supported
+            } else {
+
+                // For other providers, that prompt=none is supported and use the traditional SPA renewal solution
                 await this._performAccessTokenRenewalViaIframeRedirect();
             }
 
             // Return a renewed access token if found
-            user = await this._userManager.getUser();
-            if (user && user.access_token) {
-                return user.access_token;
+            const updatedUser = await this._userManager.getUser();
+            if (updatedUser && updatedUser.access_token) {
+                return updatedUser.access_token;
             }
         }
 
-        // Otherwise trigger a login redirect
+        // Trigger a login redirect if we cannot get an access token
+        // Also end the API request in a controlled way, by throwing an error that is not rendered
         await this._startLogin();
-
-        // End the API request which brought us here with an error code that can be ignored
         throw ErrorFactory.getFromLoginRequired();
     }
 
@@ -119,9 +128,7 @@ export class Authenticator {
      * Handler logout notifications from other browser tabs
      */
     public async onExternalLogout(): Promise<void> {
-
-        await this._userManager.removeUser();
-        HtmlStorageHelper.isLoggedIn = false;
+        await this._resetDataOnLogout();
     }
 
     /*
@@ -203,9 +210,9 @@ export class Authenticator {
                     // We will return to the app location before the login redirect
                     redirectLocation = user.state.hash;
 
-                    // Set the logged in flag
+                    // Update login state
                     HtmlStorageHelper.isLoggedIn = true;
-                    HtmlStorageHelper.multiTabLogout = false;
+                    this._loginTime = new Date().getTime();
 
                 } catch (e: any) {
 
@@ -222,16 +229,37 @@ export class Authenticator {
     }
 
     /*
+     * If an API returns a 401 immediately after login, then the API configuration is wrong and will fail permanently
+     * In such cases, avoid a redirect loop for the user of the frontend app
+     * My app uses a small tolerance so that expiry testing also works
+     */
+    private async _preventRedirectLoop(error: UIError): Promise<void> {
+
+        if (this._loginTime! != null) {
+
+            const currentTime = new Date().getTime();
+            const millisecondsSinceLogin = currentTime - this._loginTime;
+            if (millisecondsSinceLogin < 250) {
+
+                await this._resetDataOnLogout();
+                throw error;
+            }
+        }
+    }
+
+    /*
      * Redirect in order to log out at the authorization server and remove the session cookie
      */
     private async _startLogout(): Promise<void> {
 
         try {
 
+            // Instruct other tabs to logout
+            HtmlStorageHelper.raiseLoggedOutEvent();
+
             if (this._configuration.provider === 'cognito') {
 
-                // Cognito requires a vendor specific message
-                await this._userManager.removeUser();
+                // Cognito requires a vendor specific logout request URL
                 location.replace(this._getCognitoEndSessionRequestUrl());
 
             } else {
@@ -239,10 +267,6 @@ export class Authenticator {
                 // Otherwise use a standard end session request message
                 await this._userManager.signoutRedirect();
             }
-
-            // Update the state for this app and notify other tabs
-            HtmlStorageHelper.isLoggedIn = false;
-            HtmlStorageHelper.multiTabLogout = true;
 
         } catch (e: any) {
 
@@ -271,8 +295,8 @@ export class Authenticator {
 
             if (e.error === ErrorCodes.loginRequired) {
 
-                // Clear token data and our code will then trigger a new login redirect
-                await this._userManager.removeUser();
+                // Clear data and our code will then trigger a new login redirect
+                await this._resetDataOnLogout();
 
             } else {
 
@@ -285,7 +309,7 @@ export class Authenticator {
     /*
      * It is not recommended to use a refresh token in the browser, even when stored only in memory, as in this sample
      * The browser cannot store a long lived token securely and malicious code could potentially access it
-     * Cognito provides no option to disable refresh tokens for SPAs
+     * When using memory storage and a new browser tab is opened, there is an unwelcome browser redirect
      */
     private async _performAccessTokenRenewalViaRefreshToken(): Promise<void> {
 
@@ -300,7 +324,7 @@ export class Authenticator {
             if (e.error === ErrorCodes.sessionExpired) {
 
                 // Clear token data and our code will then trigger a new login redirect
-                await this._userManager.removeUser();
+                await this._resetDataOnLogout();
 
             } else {
 
@@ -318,5 +342,14 @@ export class Authenticator {
         let url = `${this._configuration.customLogoutEndpoint}`;
         url += `?client_id=${this._configuration.clientId}&logout_uri=${this._configuration.postLogoutRedirectUri}`;
         return url;
+    }
+
+    /*
+     * Clean data when the session expires or the user logs out
+     */
+    private async _resetDataOnLogout(): Promise<void> {
+
+        await this._userManager.removeUser();
+        HtmlStorageHelper.isLoggedIn = false;
     }
 }

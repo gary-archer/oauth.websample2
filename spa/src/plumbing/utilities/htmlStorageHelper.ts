@@ -5,7 +5,7 @@ export class HtmlStorageHelper {
 
     private static _prefix = 'basicspa.';
     private static _loggedInKey = 'loggedin';
-    private static _externalLogoutKey = 'external-logout';
+    private static _loggedOutEventKeyName = 'loggedoutEvent';
     private static _oidcLogLevelKeyName = 'oidc-log-level';
 
     /*
@@ -28,28 +28,35 @@ export class HtmlStorageHelper {
     }
 
     /*
-     * Notify other tabs when we logout
+     * Raise the logged out value to local storage, to enable multi tab logout
      */
-    public static set multiTabLogout(value: boolean) {
+    public static raiseLoggedOutEvent(): void {
 
-        const key = `${HtmlStorageHelper._prefix}${HtmlStorageHelper._externalLogoutKey}`;
-        localStorage.setItem(key, String(value));
+        const key = `${HtmlStorageHelper._prefix}${HtmlStorageHelper._loggedOutEventKeyName}`;
+        localStorage.setItem(key, 'raised');
     }
 
     /*
-     * Receive a notification when another tab logs out
+     * This determines if a local storage update to logged out occurred on another browser tab
      */
-    public static isMultiTabLogoutEvent(event: StorageEvent): boolean {
+    public static isLoggedOutEvent(event: StorageEvent): boolean {
 
-        if (event.storageArea == localStorage) {
+        if (event.storageArea === localStorage) {
 
-            const key = `${HtmlStorageHelper._prefix}${HtmlStorageHelper._externalLogoutKey}`;
-            if (event.key === key && event.newValue === 'true') {
-                return true;
-            }
+            const key = `${HtmlStorageHelper._prefix}${HtmlStorageHelper._loggedOutEventKeyName}`;
+            return event.key === key && event.newValue === 'raised';
         }
 
         return false;
+    }
+
+    /*
+     * Clear the event data from local storage
+     */
+    public static clearLoggedOutEvent(): void {
+
+        const key = `${HtmlStorageHelper._prefix}${HtmlStorageHelper._loggedOutEventKeyName}`;
+        localStorage.removeItem(key);
     }
 
     /*

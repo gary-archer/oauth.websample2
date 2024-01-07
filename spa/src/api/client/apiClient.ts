@@ -5,6 +5,7 @@ import {AxiosUtils} from '../../plumbing/utilities/axiosUtils';
 import {ApiUserInfo} from '../entities/apiUserInfo';
 import {Company} from '../entities/company';
 import {CompanyTransactions} from '../entities/companyTransactions';
+import { UIError } from '../../plumbing/errors/uiError';
 
 /*
  * Logic related to making API calls
@@ -67,12 +68,13 @@ export class ApiClient {
         } catch (e: any) {
 
             // Report Ajax errors if this is not a 401
-            if (e.statusCode !== 401) {
-                throw e;
+            const error = e as UIError;
+            if (error.statusCode !== 401) {
+                throw error;
             }
 
             // If we received a 401 then try to refresh the access token
-            token = await this._authenticator.refreshAccessToken();
+            token = await this._authenticator.refreshAccessToken(error);
 
             // The general pattern for calling an OAuth secured API is to retry 401s once with a new token
             return await this._callApiWithToken(url, method, dataToSend, token);

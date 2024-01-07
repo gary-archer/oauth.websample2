@@ -13,6 +13,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 npm start
 if [ $? -ne 0 ]; then
   echo 'Problem encountered running the API'
+  read -n 1
   exit 1
 fi
 

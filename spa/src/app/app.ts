@@ -219,7 +219,6 @@ export class App {
     private async _onLogout(): Promise<void> {
 
         try {
-
             // Start the logout redirect
             await this._authenticator!.startLogout();
 
@@ -236,7 +235,7 @@ export class App {
      */
     private _onStorageChange(event: StorageEvent): void {
 
-        if (HtmlStorageHelper.isMultiTabLogoutEvent(event)) {
+        if (HtmlStorageHelper.isLoggedOutEvent(event)) {
 
             this._authenticator!.onExternalLogout();
             location.hash = '#loggedout';

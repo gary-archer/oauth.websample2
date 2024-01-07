@@ -1,3 +1,4 @@
+import {HtmlStorageHelper} from '../plumbing/utilities/htmlStorageHelper';
 import {DomUtils} from './domUtils';
 
 /*
@@ -9,6 +10,10 @@ export class LoginRequiredView {
      * Show logout details when the view loads
      */
     public async load(): Promise<void> {
+
+        setTimeout(() => {
+            HtmlStorageHelper.clearLoggedOutEvent();
+        }, 250);
 
         const html =
             `<div class='row'>
