@@ -3,7 +3,6 @@ import urlparse from 'url-parse';
 import {OAuthConfiguration} from '../../configuration/oauthConfiguration';
 import {ErrorCodes} from '../errors/errorCodes';
 import {ErrorFactory} from '../errors/errorFactory';
-import {UIError} from '../errors/uiError';
 import {HtmlStorageHelper} from '../utilities/htmlStorageHelper';
 import {OAuthUserInfo} from './oauthUserInfo';
 
@@ -14,7 +13,6 @@ export class Authenticator {
 
     private readonly _configuration: OAuthConfiguration;
     private readonly _userManager: UserManager;
-    private _loginTime: number | null;
 
     public constructor(configuration: OAuthConfiguration) {
 
@@ -52,13 +50,12 @@ export class Authenticator {
 
         // Create the user manager
         this._userManager = new UserManager(settings);
-        this._loginTime = null;
     }
 
     /*
      * Get an access token and login if required
      */
-    public async getAccessToken(): Promise<string> {
+    public async getAccessToken(): Promise<string | null> {
 
         // On most calls we just return the existing token from memory
         const user = await this._userManager.getUser();
@@ -66,22 +63,17 @@ export class Authenticator {
             return user.access_token;
         }
 
-        // Otherwise try to refresh the access token
-        return this.refreshAccessToken(null);
+        // If the page has been reloaded, try a silent refresh to get an access token
+        return this.refreshAccessToken();
     }
 
     /*
      * Try to refresh an access token
      */
-    public async refreshAccessToken(error: UIError | null): Promise<string> {
+    public async refreshAccessToken(): Promise<string | null> {
 
-        // This flag avoids an unnecessary refresh attempt when the app first loads
+        // This flag avoids an unnecessary silent refresh when the app first loads
         if (HtmlStorageHelper.isLoggedIn) {
-
-            // Protect against redirect loops if APIs are misconfigured
-            if (error != null) {
-                await this._preventRedirectLoop(error);
-            }
 
             if (this._configuration.provider === 'cognito') {
 
@@ -97,24 +89,77 @@ export class Authenticator {
                 await this._performAccessTokenRenewalViaIframeRedirect();
             }
 
-            // Return a renewed access token if found
+            // Return a fresh access token if found
             const updatedUser = await this._userManager.getUser();
             if (updatedUser && updatedUser.access_token) {
                 return updatedUser.access_token;
             }
         }
 
-        // Trigger a login redirect if we cannot get an access token
-        // Also end the API request in a controlled way, by throwing an error that is not rendered
-        await this._startLogin();
-        throw ErrorFactory.getFromLoginRequired();
+        return null;
+    }
+
+    /*
+     * Do the interactive login redirect on the main window
+     */
+    public async startLogin(): Promise<void> {
+
+        // Otherwise start a login redirect, by first storing the SPA's client side location
+        // Some apps might also want to store form fields being edited in the state parameter
+        const data = {
+            hash: location.hash.length > 0 ? location.hash : '#',
+        };
+
+        try {
+            // Start a login redirect
+            await this._userManager.signinRedirect({
+                state: data,
+            });
+
+        } catch (e: any) {
+
+            // Handle OAuth specific errors, such as those calling the metadata endpoint
+            throw ErrorFactory.getFromLoginOperation(e, ErrorCodes.loginRequestFailed);
+        }
     }
 
     /*
      * Handle the response from the authorization server
      */
     public async handleLoginResponse(): Promise<void> {
-        return this._handleLoginResponse();
+
+        // If the page loads with a state query parameter we classify it as an OAuth response
+        const urlData = urlparse(location.href, true);
+        if (urlData.query && urlData.query.state) {
+
+            // Only try to process a login response if the state exists
+            const storedState = await this._userManager.settings.stateStore?.get(urlData.query.state);
+            if (storedState) {
+
+                let redirectLocation = '#';
+                try {
+
+                    // Handle the login response
+                    const user = await this._userManager.signinRedirectCallback();
+
+                    // We will return to the app location before the login redirect
+                    redirectLocation = user.state.hash;
+
+                    // Update login state
+                    HtmlStorageHelper.isLoggedIn = true;
+
+                } catch (e: any) {
+
+                    // Handle and rethrow OAuth response errors
+                    throw ErrorFactory.getFromLoginOperation(e, ErrorCodes.loginResponseFailed);
+
+                } finally {
+
+                    // Always replace the browser location, to remove OAuth details from back navigation
+                    history.replaceState({}, document.title, redirectLocation);
+                }
+            }
+        }
     }
 
     /*
@@ -161,89 +206,6 @@ export class Authenticator {
             // Add a character to the signature to make it fail validation
             user.access_token = `${user.access_token}x`;
             this._userManager.storeUser(user);
-        }
-    }
-
-    /*
-     * Do the interactive login redirect on the main window
-     */
-    private async _startLogin(): Promise<void> {
-
-        // Otherwise start a login redirect, by first storing the SPA's client side location
-        // Some apps might also want to store form fields being edited in the state parameter
-        const data = {
-            hash: location.hash.length > 0 ? location.hash : '#',
-        };
-
-        try {
-            // Start a login redirect
-            await this._userManager.signinRedirect({
-                state: data,
-            });
-
-        } catch (e: any) {
-
-            // Handle OAuth specific errors, such as those calling the metadata endpoint
-            throw ErrorFactory.getFromLoginOperation(e, ErrorCodes.loginRequestFailed);
-        }
-    }
-
-    /*
-     * Handle the response from the authorization server
-     */
-    private async _handleLoginResponse(): Promise<void> {
-
-        // If the page loads with a state query parameter we classify it as an OAuth response
-        const urlData = urlparse(location.href, true);
-        if (urlData.query && urlData.query.state) {
-
-            // Only try to process a login response if the state exists
-            const storedState = await this._userManager.settings.stateStore?.get(urlData.query.state);
-            if (storedState) {
-
-                let redirectLocation = '#';
-                try {
-
-                    // Handle the login response
-                    const user = await this._userManager.signinRedirectCallback();
-
-                    // We will return to the app location before the login redirect
-                    redirectLocation = user.state.hash;
-
-                    // Update login state
-                    HtmlStorageHelper.isLoggedIn = true;
-                    this._loginTime = new Date().getTime();
-
-                } catch (e: any) {
-
-                    // Handle and rethrow OAuth response errors
-                    throw ErrorFactory.getFromLoginOperation(e, ErrorCodes.loginResponseFailed);
-
-                } finally {
-
-                    // Always replace the browser location, to remove OAuth details from back navigation
-                    history.replaceState({}, document.title, redirectLocation);
-                }
-            }
-        }
-    }
-
-    /*
-     * If an API returns a 401 immediately after login, then the API configuration is wrong and will fail permanently
-     * In such cases, avoid a redirect loop for the user of the frontend app
-     * My app uses a small tolerance so that expiry testing also works
-     */
-    private async _preventRedirectLoop(error: UIError): Promise<void> {
-
-        if (this._loginTime! != null) {
-
-            const currentTime = new Date().getTime();
-            const millisecondsSinceLogin = currentTime - this._loginTime;
-            if (millisecondsSinceLogin < 250) {
-
-                await this._resetDataOnLogout();
-                throw error;
-            }
         }
     }
 
@@ -351,6 +313,5 @@ export class Authenticator {
 
         await this._userManager.removeUser();
         HtmlStorageHelper.isLoggedIn = false;
-        this._loginTime = null;
     }
 }
