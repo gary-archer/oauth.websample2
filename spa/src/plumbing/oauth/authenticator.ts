@@ -183,7 +183,8 @@ export class Authenticator {
 
         try {
 
-            // Instruct other tabs to logout
+            // Clear data and instruct other tabs to logout
+            await this._resetDataOnLogout();
             HtmlStorageHelper.raiseLoggedOutEvent();
 
             if (this._configuration.provider === 'cognito') {
@@ -205,7 +206,7 @@ export class Authenticator {
     }
 
     /*
-     * Handler logout notifications from other browser tabs
+     * Handle logout notifications from other browser tabs
      */
     public async onExternalLogout(): Promise<void> {
         await this._resetDataOnLogout();
@@ -285,7 +286,6 @@ export class Authenticator {
         try {
 
             // The library will use the refresh token grant to get a new access token
-            console.log('*** USE REFRESH TOKEN');
             await this._userManager.signinSilent();
 
         } catch (e: any) {
