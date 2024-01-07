@@ -345,7 +345,7 @@ export class Authenticator {
     }
 
     /*
-     * Clean data when the session expires or the user logs out
+     * Clear data when the session expires or the user logs out
      */
     private async _resetDataOnLogout(): Promise<void> {
 
