@@ -75,10 +75,10 @@ export class Authenticator {
         // This flag avoids an unnecessary silent refresh when the app first loads
         if (HtmlStorageHelper.isLoggedIn) {
 
-            const user = await this._userManager.getUser();
             if (this._configuration.provider === 'cognito') {
 
                 // For Cognito, refresh the access token using a refresh token stored in JavaScript memory
+                const user = await this._userManager.getUser();
                 if (user && user.refresh_token) {
                     await this._performAccessTokenRenewalViaRefreshToken();
                 }
@@ -89,15 +89,16 @@ export class Authenticator {
                 await this._performAccessTokenRenewalViaIframeRedirect();
 
                 // The SPA does not use refresh tokens, so remove one if received, to ensure iframe renewal
+                const user = await this._userManager.getUser();
                 if (user && user.refresh_token) {
                     user.refresh_token = '';
                     this._userManager.storeUser(user);
                 }
             }
 
-            // Return a fresh access token if found
-            if (user && user.access_token) {
-                return user.access_token;
+            const updatedUser = await this._userManager.getUser();
+            if (updatedUser && updatedUser.access_token) {
+                return updatedUser.access_token;
             }
         }
 
@@ -144,12 +145,18 @@ export class Authenticator {
                 let redirectLocation = '#';
                 try {
 
-                    // Handle the login response and save tokens to memory
+                    // Handle the login response
                     const user = await this._userManager.signinRedirectCallback();
-                    user.refresh_token = '';
+
+                    // Remove the refresh token if using iframe based renewal
+                    if (this._configuration.provider !== 'cognito') {
+                        user.refresh_token = '';
+                    }
+
+                    // Store tokens in memory
                     this._userManager.storeUser(user);
 
-                    // We will return to the app location before the login redirect
+                    // We will return to the app location from before the login redirect
                     redirectLocation = user.state.hash;
 
                     // Update login state
@@ -170,10 +177,31 @@ export class Authenticator {
     }
 
     /*
-     * Redirect in order to log out at the authorization server and remove vendor cookies
+     * Redirect in order to log out at the authorization server and remove the session cookie
      */
     public async startLogout(): Promise<void> {
-        return this._startLogout();
+
+        try {
+
+            // Instruct other tabs to logout
+            HtmlStorageHelper.raiseLoggedOutEvent();
+
+            if (this._configuration.provider === 'cognito') {
+
+                // Cognito requires a vendor specific logout request URL
+                location.replace(this._getCognitoEndSessionRequestUrl());
+
+            } else {
+
+                // Otherwise use a standard end session request message
+                await this._userManager.signoutRedirect();
+            }
+
+        } catch (e: any) {
+
+            // Handle failures
+            throw ErrorFactory.getFromLogoutOperation(e, ErrorCodes.logoutRequestFailed);
+        }
     }
 
     /*
@@ -213,34 +241,6 @@ export class Authenticator {
             // Add a character to the signature to make it fail validation
             user.access_token = `${user.access_token}x`;
             this._userManager.storeUser(user);
-        }
-    }
-
-    /*
-     * Redirect in order to log out at the authorization server and remove the session cookie
-     */
-    private async _startLogout(): Promise<void> {
-
-        try {
-
-            // Instruct other tabs to logout
-            HtmlStorageHelper.raiseLoggedOutEvent();
-
-            if (this._configuration.provider === 'cognito') {
-
-                // Cognito requires a vendor specific logout request URL
-                location.replace(this._getCognitoEndSessionRequestUrl());
-
-            } else {
-
-                // Otherwise use a standard end session request message
-                await this._userManager.signoutRedirect();
-            }
-
-        } catch (e: any) {
-
-            // Handle failures
-            throw ErrorFactory.getFromLogoutOperation(e, ErrorCodes.logoutRequestFailed);
         }
     }
 
@@ -285,6 +285,7 @@ export class Authenticator {
         try {
 
             // The library will use the refresh token grant to get a new access token
+            console.log('*** USE REFRESH TOKEN');
             await this._userManager.signinSilent();
 
         } catch (e: any) {
