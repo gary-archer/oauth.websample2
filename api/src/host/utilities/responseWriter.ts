@@ -16,22 +16,13 @@ export class ResponseWriter {
     }
 
     /*
-     * Return an error to the caller
+     * This blog's examples use a JSON response to provide client friendly OAuth errors
+     * When required, such as to inform clients how to integrate, a www-authenticate header can be added here
+     * - https://datatracker.ietf.org/doc/html/rfc6750#section-3
      */
     public static writeErrorResponse(response: Response, error: ClientError): void {
 
-        // Write standard headers
         response.setHeader('content-type', 'application/json');
-        if (error.statusCode === 401) {
-
-            const realm = 'mycompany.com';
-            let wwwAuthenticateHeader = `Bearer realm="${realm}"`;
-            wwwAuthenticateHeader += `, error="${error.errorCode}"`;
-            wwwAuthenticateHeader += `, error_description="${error.message}"`;
-            response.setHeader('www-authenticate', wwwAuthenticateHeader);
-        }
-
-        // Write the data
         response.status(error.statusCode).send(JSON.stringify(error.toResponseFormat()));
     }
 }
