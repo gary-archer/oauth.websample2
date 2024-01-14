@@ -256,9 +256,9 @@ export class Authenticator {
 
         try {
 
-            // Redirect on an iframe using the Authorization Server session cookie and prompt=none
-            // This instructs the Authorization Server to not render the login page on the iframe
-            // If the request fails there should be a login_required error returned from the Authorization Server
+            // Redirect on an iframe using the authorization server session cookie and prompt=none
+            // This instructs the authorization server to not render the login page on the iframe
+            // If the request fails there should be a login_required error returned from the authorization server
             await this._userManager.signinSilent();
 
         } catch (e: any) {
