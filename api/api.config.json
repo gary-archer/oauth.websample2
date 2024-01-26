@@ -10,9 +10,9 @@
         "proxyUrl": "http://127.0.0.1:8888"
     },
     "oauth": {
-        "jwksEndpoint":                  "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_qqJgVeuTn/.well-known/jwks.json",
+        "jwksEndpoint":                  "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_CuhLeqiE9/.well-known/jwks.json",
         "userInfoEndpoint":              "https://login.authsamples.com/oauth2/userInfo",
-        "issuer":                        "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_qqJgVeuTn",
+        "issuer":                        "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_CuhLeqiE9",
         "audience":                      "",
         "scope":                         "https://api.authsamples.com/investments",
         "claimsCacheTimeToLiveMinutes":  15

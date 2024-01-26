@@ -4,8 +4,8 @@
     },
     "oauth": {
         "provider":               "cognito",
-        "authority":              "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_qqJgVeuTn",
-        "clientId":               "1942b2l2068euci25g5k2mrg2s",
+        "authority":              "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_CuhLeqiE9",
+        "clientId":               "hje94a2jj3lgkobkh57ikenhh",
         "redirectUri":            "https://web.mycompany.com/spa",
         "postLogoutRedirectUri":  "https://web.mycompany.com/spa/loggedout.html",
         "scope":                  "openid profile https://api.authsamples.com/investments",
