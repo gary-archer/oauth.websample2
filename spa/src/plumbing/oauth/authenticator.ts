@@ -76,7 +76,11 @@ export class Authenticator {
 
             if (this._configuration.provider === 'cognito') {
 
-                // For Cognito, refresh the access token using a refresh token stored in JavaScript memory
+                // For Cognito, the traditional iframe renewal flow is not supported
+                // This is due to issuing a SameSite=lax SSO cookie instead of SameSite=none
+                // Also the OpenID Connect prompt=none parameter is unsupported
+                // This can lead to hangs where the login window is rendered on the invisible iframe
+                // Therefore refresh the access token using a refresh token stored in JavaScript memory
                 const user = await this._userManager.getUser();
                 if (user && user.refresh_token) {
                     await this._performAccessTokenRenewalViaRefreshToken();
@@ -84,10 +88,11 @@ export class Authenticator {
 
             } else {
 
-                // For other providers, assume that prompt=none is supported and use the traditional SPA solution
+                // For other providers, assume that SSO cookies with SameSite=none are issued
+                // Also assume that prompt=none works and returns a login_required error when the SSO cookie expires
                 await this._performAccessTokenRenewalViaIframeRedirect();
 
-                // The SPA does not use refresh tokens, so remove one if received, to ensure iframe renewal
+                // Ensure that the iframe flow is used, by removing any refresh tokens received
                 const user = await this._userManager.getUser();
                 if (user && user.refresh_token) {
                     user.refresh_token = '';
@@ -247,10 +252,8 @@ export class Authenticator {
 
     /*
      * Try to refresh the access token by manually triggering a silent token renewal on an iframe
-     * This will fail if there is no authorization server SSO cookie yet
-     * It will fail in some browsers, which will not send the 3rd party SSO cookie due to RFC6265bis restrictions
-     * It may also fail if there has been no top level redirect yet for the current browser session
-     * The top level redirect may serve as a user gesture after which the browser also sends the SSO cookie silently
+     * This will fail if there is no authorization server SSO cookie or if it does not use SameSite=none
+     * It will always fail in the Safari browser, which will refuse to send the cookie from an iframe
      */
     private async _performAccessTokenRenewalViaIframeRedirect(): Promise<void> {
 
@@ -258,7 +261,7 @@ export class Authenticator {
 
             // Redirect on an iframe using the authorization server session cookie and prompt=none
             // This instructs the authorization server to not render the login page on the iframe
-            // If the request fails there should be a login_required error returned from the authorization server
+            // If the request fails there should be a login_required error returned from the Authorization Server
             await this._userManager.signinSilent();
 
         } catch (e: any) {

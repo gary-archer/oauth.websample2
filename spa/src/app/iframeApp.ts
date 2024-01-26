@@ -1,11 +1,11 @@
-import {ConfigurationLoader} from '../configuration/configurationLoader';
+import {UserManager} from 'oidc-client';
 import {ErrorConsoleReporter} from '../plumbing/errors/errorConsoleReporter';
 import {ErrorCodes} from '../plumbing/errors/errorCodes';
 import {ErrorFactory} from '../plumbing/errors/errorFactory';
-import {TokenRenewalResponseHandler} from '../plumbing/oauth/tokenRenewalResponseHandler';
 
 /*
  * A mini application for the hidden iframe that does silent token renewal
+ * The iframe redirect is triggered from the main window, and the below code receives the response
  */
 export class IFrameApp {
 
@@ -13,16 +13,22 @@ export class IFrameApp {
 
         try {
 
-            // Download configuration
-            const configuration = await ConfigurationLoader.download('spa.config.json');
+            // If the frame loads with a state query parameter we classify it as an OAuth response
+            const args = new URLSearchParams(location.search);
+            const state = args.get('state');
+            if (state) {
 
-            // Handle token renewal responses on an iframe
-            const handler = new TokenRenewalResponseHandler(configuration.oauth);
-            await handler.handleSilentTokenRenewalResponse();
+                // The libary posts the authorization response URL to the main window
+                // Therefore no UserManager settings need to be supplied for this instance
+                const userManager = new UserManager({});
+                
+                // This causes the main window to extract the authorization code and swaps it for tokens
+                await userManager.signinSilentCallback();
+            }
 
         } catch (e: any) {
 
-            // In the event of errors, avoid impacting end users and output the error to the console
+            // In the event of errors calling the main window, output the error to the console
             const uiError = ErrorFactory.getFromTokenError(e, ErrorCodes.tokenRenewalError);
             ErrorConsoleReporter.output(uiError);
         }
