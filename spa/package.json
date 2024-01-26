@@ -17,14 +17,12 @@
     "clean": "rm -rf dist/*bundle*"
   },
   "dependencies": {
-    "axios": "^1.6.0",
+    "axios": "^1.6.7",
     "mustache": "^4.2.0",
-    "oidc-client": "^1.11.5",
-    "url-parse": "^1.5.10"
+    "oidc-client": "^1.11.5"
   },
   "devDependencies": {
     "@types/mustache": "^4.2.2",
-    "@types/url-parse": "^1.4.8",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@typescript-eslint/parser": "^6.9.0",
     "eslint": "^8.52.0",

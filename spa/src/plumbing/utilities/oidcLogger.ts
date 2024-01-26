@@ -1,5 +1,4 @@
 import {Log} from 'oidc-client';
-import urlparse from 'url-parse';
 import {HtmlStorageHelper} from './htmlStorageHelper';
 
 /*
@@ -39,15 +38,11 @@ export class OidcLogger {
      */
     private _getUrlLogLevel(): string {
 
-        if (location.hash.startsWith('#')) {
-
-            const hashFragment = location.hash.substring(1);
-            if (hashFragment) {
-                const data = urlparse('?' + hashFragment, true);
-                const logLevel = data.query.log;
-                if (logLevel) {
-                    return logLevel.toLowerCase();
-                }
+        if (location.hash) {
+            const args = new URLSearchParams('?' + location.hash.substring(1));
+            const logLevel = args.get('log');
+            if (logLevel) {
+                return logLevel.toLowerCase();
             }
         }
 

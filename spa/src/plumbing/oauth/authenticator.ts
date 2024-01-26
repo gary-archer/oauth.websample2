@@ -1,5 +1,4 @@
 import {InMemoryWebStorage, UserManager, WebStorageStateStore} from 'oidc-client';
-import urlparse from 'url-parse';
 import {OAuthConfiguration} from '../../configuration/oauthConfiguration';
 import {ErrorCodes} from '../errors/errorCodes';
 import {ErrorFactory} from '../errors/errorFactory';
@@ -135,11 +134,12 @@ export class Authenticator {
     public async handleLoginResponse(): Promise<void> {
 
         // If the page loads with a state query parameter we classify it as an OAuth response
-        const urlData = urlparse(location.href, true);
-        if (urlData.query && urlData.query.state) {
+        const args = new URLSearchParams(location.search);
+        const state = args.get('state');
+        if (state) {
 
             // Only try to process a login response if the state exists
-            const storedState = await this._userManager.settings.stateStore?.get(urlData.query.state);
+            const storedState = await this._userManager.settings.stateStore?.get(state);
             if (storedState) {
 
                 let redirectLocation = '#';

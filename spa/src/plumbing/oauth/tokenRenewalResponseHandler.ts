@@ -1,5 +1,4 @@
 import {UserManager} from 'oidc-client';
-import urlparse from 'url-parse';
 import {OAuthConfiguration} from '../../configuration/oauthConfiguration';
 
 /*
@@ -25,8 +24,9 @@ export class TokenRenewalResponseHandler {
     public async handleSilentTokenRenewalResponse(): Promise<void> {
 
         // If the page loads with a state query parameter we classify it as an OAuth response
-        const urlData = urlparse(location.href, true);
-        if (urlData.query && urlData.query.state) {
+        const args = new URLSearchParams(location.search);
+        const state = args.get('state');
+        if (state) {
 
             // Start processing of the authorization response on the iframe
             // Any errors are reported via the authenticator class of the main window
