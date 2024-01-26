@@ -21,7 +21,7 @@ export class IFrameApp {
                 // The libary posts the authorization response URL to the main window
                 // Therefore no UserManager settings need to be supplied for this instance
                 const userManager = new UserManager({});
-                
+
                 // This causes the main window to extract the authorization code and swaps it for tokens
                 await userManager.signinSilentCallback();
             }
