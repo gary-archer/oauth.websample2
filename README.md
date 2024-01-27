@@ -10,7 +10,7 @@
 A sample focused on the following OAuth areas for SPAs and APIs:
 
 - The SPA uses the traditional OpenID connect flow, with session management features
-- The API uses extensible claims for authorization
+- The API authorizes access to data using claims from multiple data sources
 
 ## Views
 
