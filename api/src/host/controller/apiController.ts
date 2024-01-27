@@ -12,7 +12,7 @@ import {ExtraClaimsProvider} from '../claims/extraClaimsProvider.js';
 import {Configuration} from '../configuration/configuration.js';
 import {ErrorFactory} from '../errors/errorFactory.js';
 import {ExceptionHandler} from '../errors/exceptionHandler.js';
-import {Authenticator} from '../oauth/authenticator.js';
+import {AccessTokenValidator} from '../oauth/accessTokenValidator.js';
 import {Authorizer} from '../oauth/authorizer.js';
 import {JwksRetriever} from '../oauth/jwksRetriever.js';
 import {HttpProxy} from '../utilities/httpProxy.js';
@@ -43,9 +43,9 @@ export class ApiController {
     public async authorizationHandler(request: Request, response: Response, next: NextFunction): Promise<void> {
 
         // Create authorization related classes on every API request
-        const authenticator = new Authenticator(this._configuration.oauth, this._jwksRetriever, this._httpProxy);
+        const accessTokenValidator = new AccessTokenValidator(this._configuration.oauth, this._jwksRetriever);
         const extraClaimsProvider = new ExtraClaimsProvider();
-        const authorizer = new Authorizer(this._claimsCache, authenticator, extraClaimsProvider);
+        const authorizer = new Authorizer(this._claimsCache, accessTokenValidator, extraClaimsProvider);
 
         // Call the authorizer to do the work
         const claims = await authorizer.authorizeRequestAndGetClaims(request);

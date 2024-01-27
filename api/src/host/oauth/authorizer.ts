@@ -2,10 +2,9 @@ import {createHash} from 'crypto';
 import {Request} from 'express';
 import {ClaimsPrincipal} from '../../logic/entities/claims/claimsPrincipal.js';
 import {ClientError} from '../../logic/errors/clientError.js';
-import {CachedClaims} from '../claims/cachedClaims.js';
 import {ClaimsCache} from '../claims/claimsCache.js';
 import {ExtraClaimsProvider} from '../claims/extraClaimsProvider.js';
-import {Authenticator} from './authenticator.js';
+import {AccessTokenValidator} from './accessTokenValidator.js';
 
 /*
  * The entry point for the processing to validate tokens and lookup claims
@@ -14,16 +13,16 @@ import {Authenticator} from './authenticator.js';
 export class Authorizer {
 
     private readonly _cache: ClaimsCache;
-    private readonly _authenticator: Authenticator;
+    private readonly _accessTokenValidator: AccessTokenValidator;
     private readonly _extraClaimsProvider: ExtraClaimsProvider;
 
     public constructor(
         cache: ClaimsCache,
-        authenticator: Authenticator,
+        accessTokenValidator: AccessTokenValidator,
         extraClaimsProvider: ExtraClaimsProvider) {
 
         this._cache = cache;
-        this._authenticator = authenticator;
+        this._accessTokenValidator = accessTokenValidator;
         this._extraClaimsProvider = extraClaimsProvider;
     }
 
@@ -39,25 +38,23 @@ export class Authorizer {
         }
 
         // On every API request we validate the JWT, in a zero trust manner
-        const tokenClaims = await this._authenticator.validateToken(accessToken);
+        const tokenClaims = await this._accessTokenValidator.execute(accessToken);
 
         // Return cached claims immediately if found
         const accessTokenHash = createHash('sha256').update(accessToken).digest('hex');
-        const cachedClaims = await this._cache.getClaimsForToken(accessTokenHash);
-        if (cachedClaims) {
-            return new ClaimsPrincipal(tokenClaims, cachedClaims.userInfo, cachedClaims.extra);
+        let extraClaims = await this._cache.getExtraUserClaims(accessTokenHash);
+        if (extraClaims) {
+            return new ClaimsPrincipal(tokenClaims, extraClaims);
         }
 
         // Look up extra claims not in the JWT access token when the token is first received
-        const userInfo = await this._authenticator.getUserInfo(accessToken);
-        const extraClaims = await this._extraClaimsProvider.lookupExtraClaims(tokenClaims);
-        const claimsToCache = new CachedClaims(userInfo, extraClaims);
+        extraClaims = await this._extraClaimsProvider.lookupExtraClaims(tokenClaims);
 
         // Cache the extra claims for subsequent requests with the same access token
-        await this._cache.addClaimsForToken(accessTokenHash, claimsToCache, tokenClaims.exp!);
+        await this._cache.setExtraUserClaims(accessTokenHash, extraClaims, tokenClaims.exp!);
 
         // Return the final claims used by the API's authorization logic
-        return new ClaimsPrincipal(tokenClaims, claimsToCache.userInfo, claimsToCache.extra);
+        return new ClaimsPrincipal(tokenClaims, extraClaims);
     }
 
     /*

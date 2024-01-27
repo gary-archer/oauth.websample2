@@ -1,3 +1,4 @@
+import {JWTPayload} from 'jose';
 import {ErrorFactory} from '../errors/errorFactory.js';
 
 /*
@@ -6,14 +7,15 @@ import {ErrorFactory} from '../errors/errorFactory.js';
 export class ClaimsReader {
 
     /*
-     * Sanity checks when receiving claims to avoid failing later with a cryptic error
+     * Get a mandatory string claim from the claims payload
      */
-    public static getClaim(claim: string | undefined, name: string): string {
+    public static getStringClaim(data: JWTPayload, name: string): string {
 
-        if (!claim) {
+        const value = data[name];
+        if (!value) {
             throw ErrorFactory.fromMissingClaim(name);
         }
 
-        return claim;
+        return value as string;
     }
 }

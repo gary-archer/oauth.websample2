@@ -1,8 +1,8 @@
 import {ClaimsPrincipal} from '../entities/claims/claimsPrincipal.js';
 
 /*
- * The SPA gets OAuth user info from the authorization server
- * It gets extra user attributes from the business data by calling the API
+ * Return user info from the business data to the client
+ * These values are separate to the core identity data returned from the OAuth user info endpoint
  */
 export class UserInfoService {
 

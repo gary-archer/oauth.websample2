@@ -1,33 +1,28 @@
-import axios, {AxiosRequestConfig} from 'axios';
 import {JWTPayload, JWTVerifyOptions, jwtVerify} from 'jose';
-import {UserInfoClaims} from '../../logic/entities/claims/userInfoClaims.js';
 import {ClientError} from '../../logic/errors/clientError.js';
 import {ErrorCodes} from '../../logic/errors/errorCodes.js';
 import {ClaimsReader} from '../claims/claimsReader.js';
 import {OAuthConfiguration} from '../configuration/oauthConfiguration.js';
 import {ErrorFactory} from '../errors/errorFactory.js';
-import {HttpProxy} from '../utilities/httpProxy.js';
 import {JwksRetriever} from './jwksRetriever.js';
 
 /*
  * The entry point for OAuth related operations
  */
-export class Authenticator {
+export class AccessTokenValidator {
 
     private readonly _configuration: OAuthConfiguration;
     private readonly _jwksRetriever: JwksRetriever;
-    private readonly _httpProxy: HttpProxy;
 
-    public constructor(configuration: OAuthConfiguration, jwksRetriever: JwksRetriever, httpProxy: HttpProxy) {
+    public constructor(configuration: OAuthConfiguration, jwksRetriever: JwksRetriever) {
         this._configuration = configuration;
         this._jwksRetriever = jwksRetriever;
-        this._httpProxy = httpProxy;
     }
 
     /*
      * Make a call to the introspection endpoint to read our token
      */
-    public async validateToken(accessToken: string): Promise<JWTPayload> {
+    public async execute(accessToken: string): Promise<JWTPayload> {
 
         const options = {
             algorithms: ['RS256'],
@@ -64,7 +59,7 @@ export class Authenticator {
 
         // The sample API requires the same scope for all endpoints, and it is enforced here
         // In AWS this is a URL value of the form https://api.authsamples.com/investments
-        const scopes = ClaimsReader.getClaim(claims['scope'] as string, 'scope');
+        const scopes = ClaimsReader.getStringClaim(claims, 'scope').split(' ');
         if (scopes.indexOf(this._configuration.scope) === -1) {
 
             throw new ClientError(
@@ -74,37 +69,5 @@ export class Authenticator {
         }
 
         return claims;
-    }
-
-    /*
-     * The API can get OAuth user info if required, by calling the user info endpoint
-     */
-    public async getUserInfo(accessToken: string): Promise<UserInfoClaims> {
-
-        try {
-
-            const options = {
-                url: this._configuration.userInfoEndpoint,
-                method: 'GET',
-                headers: {
-                    'accept': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`,
-                },
-                httpsAgent: this._httpProxy.agent,
-            };
-
-            const response = await axios.request(options as AxiosRequestConfig);
-            const userInfo = response.data as any;
-
-            const givenName = ClaimsReader.getClaim(userInfo.given_name, 'given_name');
-            const familyName = ClaimsReader.getClaim(userInfo.family_name, 'family_name');
-            const email = ClaimsReader.getClaim(userInfo.email, 'email');
-            return new UserInfoClaims(givenName, familyName, email);
-
-        } catch (e: any) {
-
-            // Report user info errors clearly
-            throw ErrorFactory.fromUserInfoError(e, this._configuration.userInfoEndpoint);
-        }
     }
 }

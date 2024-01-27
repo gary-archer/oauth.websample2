@@ -116,7 +116,7 @@ export class ErrorFactory {
      */
     public static fromMissingClaim(claimName: string): ServerError {
 
-        const error = new ServerError(ErrorCodes.claimsFailure, 'Authorization Data Not Found');
+        const error = new ServerError(ErrorCodes.insufficientScope, 'Authorization Data Not Found');
         error.details = `An empty value was found for the expected claim ${claimName}`;
         return error;
     }

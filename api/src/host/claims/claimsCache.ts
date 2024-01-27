@@ -1,6 +1,6 @@
 import NodeCache from 'node-cache';
+import {ExtraClaims} from '../../logic/entities/claims/extraClaims.js';
 import {OAuthConfiguration} from '../configuration/oauthConfiguration.js';
-import {CachedClaims} from './cachedClaims.js';
 
 /*
  * A simple in memory claims cache for our API
@@ -30,10 +30,10 @@ export class ClaimsCache {
     /*
      * Get claims from the cache or return null if not found
      */
-    public async getClaimsForToken(accessTokenHash: string): Promise<CachedClaims | null> {
+    public async getExtraUserClaims(accessTokenHash: string): Promise<ExtraClaims | null> {
 
         // Get the token hash and see if it exists in the cache
-        const claims = await this._cache.get<CachedClaims>(accessTokenHash);
+        const claims = await this._cache.get<ExtraClaims>(accessTokenHash);
         if (!claims) {
 
             // If this is a new token and we need to do claims processing
@@ -49,7 +49,7 @@ export class ClaimsCache {
     /*
      * Add claims to the cache until the token's time to live
      */
-    public async addClaimsForToken(accessTokenHash: string, claims: CachedClaims, expiry: number): Promise<void> {
+    public async setExtraUserClaims(accessTokenHash: string, claims: ExtraClaims, expiry: number): Promise<void> {
 
         // Use the exp field returned from the token to work out the expiry time
         const epochSeconds = Math.floor((new Date() as any) / 1000);

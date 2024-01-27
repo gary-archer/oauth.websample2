@@ -21,9 +21,6 @@ export class ErrorCodes {
     // A problem calling the user info endpoint
     public static readonly userinfoFailure = 'userinfo_failure';
 
-    // A problem reading claims from payloads
-    public static readonly claimsFailure = 'claims_failure';
-
     // A company was requested that does not exist or the user is unauthorized to access
     public static readonly companyNotFound = 'company_not_found';
 
