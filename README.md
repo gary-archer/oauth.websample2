@@ -72,4 +72,4 @@ You can then test all lifecycle operations, including token refresh, multi tab b
 * AWS Cognito is used as the default Authorization Server
 * The [oidc-client-ts](https://github.com/authts/oidc-client-ts) is used by the SPA to implement OpenID Connect
 * The [jose](https://github.com/panva/jose) library is used by the API to validate JWT access tokens
-* The [Node cache](https://github.com/mpneuried/nodecache) is used to cache extra claims, when access tokens are first received
+* The [node-cache](https://github.com/mpneuried/nodecache) library is used to cache extra claims, when access tokens are first received
