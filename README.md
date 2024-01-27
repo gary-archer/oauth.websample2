@@ -70,6 +70,6 @@ You can then test all lifecycle operations, including token refresh, multi tab b
 
 * Express is used to host both the API and the SPA content
 * AWS Cognito is used as the default Authorization Server
-* The [oidc-client library](https://github.com/IdentityModel/oidc-client-js) is used by the SPA to implement OpenID Connect
-* The [JOSE library](https://github.com/panva/jose) is used by the API to validate JWT access tokens
+* The [oidc-client-ts](https://github.com/authts/oidc-client-ts) is used by the SPA to implement OpenID Connect
+* The [jose](https://github.com/panva/jose) library is used by the API to validate JWT access tokens
 * The [Node cache](https://github.com/mpneuried/nodecache) is used to cache extra claims, when access tokens are first received
