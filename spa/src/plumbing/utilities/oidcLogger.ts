@@ -1,4 +1,4 @@
-import {Log} from 'oidc-client';
+import {Log} from 'oidc-client-ts';
 import {HtmlStorageHelper} from './htmlStorageHelper';
 
 /*
@@ -11,7 +11,7 @@ export class OidcLogger {
      */
     public constructor() {
 
-        Log.logger = console;
+        Log.setLogger(console);
 
         let level = this._getUrlLogLevel();
         if (!level) {
@@ -72,7 +72,7 @@ export class OidcLogger {
         const levelToSet = level || 'none';
         const numericLevel = data[levelToSet];
         if (numericLevel !== undefined) {
-            Log.level = numericLevel;
+            Log.setLevel(numericLevel);
         }
     }
 }

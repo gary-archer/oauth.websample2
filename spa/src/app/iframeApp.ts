@@ -1,4 +1,5 @@
-import {UserManager} from 'oidc-client';
+import {UserManager} from 'oidc-client-ts';
+import {ConfigurationLoader} from '../configuration/configurationLoader';
 import {ErrorConsoleReporter} from '../plumbing/errors/errorConsoleReporter';
 import {ErrorCodes} from '../plumbing/errors/errorCodes';
 import {ErrorFactory} from '../plumbing/errors/errorFactory';
@@ -18,11 +19,17 @@ export class IFrameApp {
             const state = args.get('state');
             if (state) {
 
-                // The libary posts the authorization response URL to the main window
-                // Therefore no UserManager settings need to be supplied for this instance
-                const userManager = new UserManager({});
+                // Configure user manager settings
+                const configuration = await ConfigurationLoader.download('spa.config.json');
+                const settings = {
+                    authority: configuration.oauth.authority,
+                    client_id: configuration.oauth.clientId,
+                    redirect_uri: configuration.oauth.redirectUri,
+                };
 
-                // This causes the main window to extract the authorization code and swaps it for tokens
+                // The libary posts the authorization response URL to the main window
+                // The main window then extract the authorization code and swaps it for tokens
+                const userManager = new UserManager(settings);
                 await userManager.signinSilentCallback();
             }
 
