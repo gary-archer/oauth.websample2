@@ -1,4 +1,4 @@
-import {InMemoryWebStorage, UserManager, WebStorageStateStore} from 'oidc-client';
+import {InMemoryWebStorage, UserManager, WebStorageStateStore} from 'oidc-client-ts';
 import {OAuthConfiguration} from '../../configuration/oauthConfiguration';
 import {ErrorCodes} from '../errors/errorCodes';
 import {ErrorFactory} from '../errors/errorFactory';
@@ -162,7 +162,7 @@ export class Authenticator {
                     this._userManager.storeUser(user);
 
                     // We will return to the app location from before the login redirect
-                    redirectLocation = user.state.hash;
+                    redirectLocation = (user.state as any).hash;
 
                     // Update login state
                     HtmlStorageHelper.isLoggedIn = true;
