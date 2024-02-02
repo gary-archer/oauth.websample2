@@ -173,6 +173,9 @@ export class Authenticator {
                     // Update login state
                     HtmlStorageHelper.isLoggedIn = true;
 
+                    // The login time enables a check that avoids redirect loops when configuration is invalid
+                    this._loginTime = new Date().getTime();
+
                 } catch (e: any) {
 
                     // Handle and rethrow OAuth response errors
