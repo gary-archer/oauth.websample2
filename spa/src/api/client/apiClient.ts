@@ -1,4 +1,5 @@
 import axios, {Method} from 'axios';
+import {ErrorCodes} from '../../plumbing/errors/errorCodes';
 import {ErrorFactory} from '../../plumbing/errors/errorFactory';
 import {UIError} from '../../plumbing/errors/uiError';
 import {Authenticator} from '../../plumbing/oauth/authenticator';
@@ -64,7 +65,7 @@ export class ApiClient {
 
             // Trigger a login redirect if we cannot get an access token
             // Also end the API request in a controlled way, by throwing an error that is not rendered
-            await this._authenticator.startLogin();
+            await this._authenticator.startLogin(null);
             throw ErrorFactory.getFromLoginRequired();
         }
 
@@ -73,10 +74,10 @@ export class ApiClient {
             // Call the API
             return await this._callApiWithToken(url, method, dataToSend, token);
 
-        } catch (e: any) {
+        } catch (e1: any) {
 
             // Report Ajax errors if this is not a 401
-            const error = e as UIError;
+            const error = e1 as UIError;
             if (error.statusCode !== 401) {
                 throw error;
             }
@@ -87,12 +88,29 @@ export class ApiClient {
 
                 // Trigger a login redirect if we cannot refresh the access token
                 // Also end the API request in a controlled way, by throwing an error that is not rendered
-                await this._authenticator.startLogin();
+                await this._authenticator.startLogin(error);
                 throw ErrorFactory.getFromLoginRequired();
             }
 
-            // The general pattern for calling an OAuth secured API is to retry 401s once with a new token
-            return await this._callApiWithToken(url, method, dataToSend, token);
+            try {
+
+                // Call the API again
+                return await this._callApiWithToken(url, method, dataToSend, token);
+
+            } catch (e2: any) {
+
+                // If there is a permanent token error then the token configuration is wrong
+                // Present an error and ensure that the retry does a new top level login
+                // This enables recovery once the token configuration is fixed at the authorization server
+                const error = e1 as UIError;
+                if ((error.statusCode === 401 && error.errorCode === ErrorCodes.invalidToken) ||
+                    (error.statusCode === 403 && error.errorCode === ErrorCodes.insufficientScope)) {
+
+                    await this._authenticator.clearLoginState();
+                }
+
+                throw error;
+            }
         }
     }
 

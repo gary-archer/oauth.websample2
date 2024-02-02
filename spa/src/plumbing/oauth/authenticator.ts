@@ -2,6 +2,7 @@ import {InMemoryWebStorage, UserManager, WebStorageStateStore} from 'oidc-client
 import {OAuthConfiguration} from '../../configuration/oauthConfiguration';
 import {ErrorCodes} from '../errors/errorCodes';
 import {ErrorFactory} from '../errors/errorFactory';
+import {UIError} from '../errors/uiError';
 import {HtmlStorageHelper} from '../utilities/htmlStorageHelper';
 import {OAuthUserInfo} from './oauthUserInfo';
 
@@ -12,6 +13,7 @@ export class Authenticator {
 
     private readonly _configuration: OAuthConfiguration;
     private readonly _userManager: UserManager;
+    private _loginTime: number | null;
 
     public constructor(configuration: OAuthConfiguration) {
 
@@ -49,6 +51,7 @@ export class Authenticator {
 
         // Create the user manager
         this._userManager = new UserManager(settings);
+        this._loginTime = null;
     }
 
     /*
@@ -112,15 +115,18 @@ export class Authenticator {
     /*
      * Do the interactive login redirect on the main window
      */
-    public async startLogin(): Promise<void> {
-
-        // Start a login redirect, by first storing the SPA's client side location
-        // Some apps might also want to store form fields being edited in the state parameter
-        const data = {
-            hash: location.hash.length > 0 ? location.hash : '#',
-        };
+    public async startLogin(api401Error: UIError | null): Promise<void> {
 
         try {
+            // Start a login redirect, by first storing the SPA's client side location
+            // Some apps might also want to store form fields being edited in the state parameter
+            const data = {
+                hash: location.hash.length > 0 ? location.hash : '#',
+            };
+
+            // Handle a special case
+            await this._preventRedirectLoop(api401Error);
+
             // Start a login redirect
             await this._userManager.signinRedirect({
                 state: data,
@@ -189,7 +195,7 @@ export class Authenticator {
         try {
 
             // Clear data and instruct other tabs to logout
-            await this._resetDataOnLogout();
+            await this.clearLoginState();
             HtmlStorageHelper.raiseLoggedOutEvent();
 
             if (this._configuration.provider === 'cognito') {
@@ -214,7 +220,7 @@ export class Authenticator {
      * Handle logout notifications from other browser tabs
      */
     public async onExternalLogout(): Promise<void> {
-        await this._resetDataOnLogout();
+        await this.clearLoginState();
     }
 
     /*
@@ -269,7 +275,7 @@ export class Authenticator {
             if (e.error === ErrorCodes.loginRequired) {
 
                 // Clear data and our code will then trigger a new login redirect
-                await this._resetDataOnLogout();
+                await this.clearLoginState();
 
             } else {
 
@@ -297,7 +303,7 @@ export class Authenticator {
             if (e.error === ErrorCodes.sessionExpired) {
 
                 // Clear token data and our code will then trigger a new login redirect
-                await this._resetDataOnLogout();
+                await this.clearLoginState();
 
             } else {
 
@@ -318,9 +324,28 @@ export class Authenticator {
     }
 
     /*
+     * Iframe token refresh can fail due to SSO cookies being dropped during iframe token renewal
+     * This can create a cycle so this check prevents a redirect loop if a successful login has just completed
+     */
+    private async _preventRedirectLoop(api401Error: UIError | null): Promise<void> {
+
+        if (api401Error && this._loginTime) {
+
+            const currentTime = new Date().getTime();
+            const millisecondsSinceLogin = currentTime - this._loginTime;
+            if (millisecondsSinceLogin < 1000) {
+
+                // This causes an error to be presented after which a retry does a new top level redirect
+                await this.clearLoginState();
+                throw api401Error;
+            }
+        }
+    }
+
+    /*
      * Clear data when the session expires or the user logs out
      */
-    private async _resetDataOnLogout(): Promise<void> {
+    public async clearLoginState(): Promise<void> {
 
         await this._userManager.removeUser();
         HtmlStorageHelper.isLoggedIn = false;

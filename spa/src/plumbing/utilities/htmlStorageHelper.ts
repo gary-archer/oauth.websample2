@@ -15,7 +15,7 @@ export class HtmlStorageHelper {
 
         const key = `${HtmlStorageHelper._prefix}${HtmlStorageHelper._loggedInKey}`;
         const value = localStorage.getItem(key);
-        return !!value;
+        return value === 'false';
     }
 
     /*
