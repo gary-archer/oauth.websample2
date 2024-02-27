@@ -1,5 +1,5 @@
 
-import HttpsProxyAgent from 'https-proxy-agent';
+import {HttpsProxyAgent} from 'https-proxy-agent';
 import {Configuration} from '../configuration/configuration.js';
 
 /*
@@ -7,7 +7,7 @@ import {Configuration} from '../configuration/configuration.js';
  */
 export class HttpProxy {
 
-    private readonly _agent: any;
+    private readonly _agent: any = null;
 
     /*
      * Create an HTTP agent to route requests to
@@ -15,14 +15,14 @@ export class HttpProxy {
     public constructor(configuration: Configuration) {
 
         if (configuration.api.useProxy) {
-            this._agent = HttpsProxyAgent(configuration.api.proxyUrl);
+            this._agent = new HttpsProxyAgent(configuration.api.proxyUrl);
         }
     }
 
     /*
      * Return the agent to other parts of the app
      */
-    public get agent(): any {
+    public get agent(): HttpsProxyAgent<string> {
         return this._agent;
     }
 }
