@@ -21,7 +21,7 @@ The data is returned from an API that authorizes using claims from multiple sour
 
 ## Local Development Quick Start
 
-Ensure that Node.js is installed, then run the build script:
+First ensure that Node.js 20+ is installed, then run the build script:
 
 ```bash
 ./build.sh
@@ -63,7 +63,7 @@ You can then test all lifecycle operations, including token refresh, multi tab b
 
 ## Programming Languages
 
-* Plain Typescript is used for the SPA, to explain OAuth behaviour in the simplest way
+* Plain TypeScript is used for the SPA, to explain OAuth behaviour in the simplest way
 * Node.js and TypeScript are used to implement the API
 
 ## Infrastructure
