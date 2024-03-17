@@ -351,6 +351,7 @@ export class Authenticator {
     public async clearLoginState(): Promise<void> {
 
         await this._userManager.removeUser();
+        this._loginTime = null;
         HtmlStorageHelper.isLoggedIn = false;
     }
 }
