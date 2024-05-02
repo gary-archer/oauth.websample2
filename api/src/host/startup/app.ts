@@ -5,30 +5,27 @@ import {ErrorFactory} from '../errors/errorFactory.js';
 import {ApiLogger} from '../logging/apiLogger.js';
 import {HttpServerConfiguration} from './httpServerConfiguration.js';
 
-(async () => {
+const logger = new ApiLogger();
+try {
 
-    const logger = new ApiLogger();
-    try {
+    // First load configuration
+    const apiConfigBuffer = await fs.readFile('api.config.json');
+    const apiConfig = JSON.parse(apiConfigBuffer.toString()) as Configuration;
 
-        // First load configuration
-        const apiConfigBuffer = await fs.readFile('api.config.json');
-        const apiConfig = JSON.parse(apiConfigBuffer.toString()) as Configuration;
+    // Next configure web server behaviour
+    const expressApp = express();
+    const httpServer = new HttpServerConfiguration(expressApp, apiConfig, logger);
+    await httpServer.initializeApi();
 
-        // Next configure web server behaviour
-        const expressApp = express();
-        const httpServer = new HttpServerConfiguration(expressApp, apiConfig, logger);
-        await httpServer.initializeApi();
+    // We will also host web static content
+    httpServer.initializeWebStaticContentHosting();
 
-        // We will also host web static content
-        httpServer.initializeWebStaticContentHosting();
+    // Start receiving requests
+    await httpServer.startListening();
 
-        // Start receiving requests
-        await httpServer.startListening();
+} catch (e: any) {
 
-    } catch (e: any) {
-
-        // Report startup errors
-        const error = ErrorFactory.fromServerError(e);
-        logger.startupError(error);
-    }
-})();
+    // Report startup errors
+    const error = ErrorFactory.fromServerError(e);
+    logger.startupError(error);
+}
