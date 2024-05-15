@@ -33,7 +33,7 @@ Custom development domains are used so you must add these entries to your hosts 
 127.0.0.1 localhost web.mycompany.com api.mycompany.com
 ```
 
-Next configure [Browser SSL Trust](https://authguidance.com/2017/11/11/developer-ssl-setup#browser) for the SSL root certificate:
+Next configure [Browser SSL Trust](https://apisandclients.com/posts/developer-ssl-setup) for the SSL root certificate:
 
 ```
 ./api/certs/localhost/mycompany.com.ca.pem
@@ -54,7 +54,7 @@ You can then test all lifecycle operations, including token refresh, multi tab b
 
 ## Further Information
 
-* See the [Updated SPA and API Code Sample](https://authguidance.com/2017/10/13/improved-spa-code-sample-overview/) blog post a walkthrough and the key technical points
+* See the [Updated SPA and API Code Sample](https://apisandclients.com/posts/improved-spa-code-sample-overview) blog post a walkthrough and the key technical points
 
 ## ![Red icon](https://via.placeholder.com/15/f03c15/f03c15.png) 2021 Security Update
 
