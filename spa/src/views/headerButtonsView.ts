@@ -41,7 +41,7 @@ export class HeaderButtonsView {
                     <button id='btnExpireAccessToken' type='button' disabled class='btn btn-primary w-100 p-1 sessionbutton'>Expire Token</button>
                 </div>
                 <div class='col-3 my-2 d-flex'>
-                    <button id='btnLogout' type='button' disabled class='btn btn-primary w-100 p-1 sessionbutton'>Logout</button>
+                    <button id='btnLogout' type='button' disabled class='btn btn-primary w-100 p-1 sessionbutton'>Sign Out</button>
                 </div>
             </div>`;
         DomUtils.html('#headerbuttons', html);

@@ -30,7 +30,7 @@ First ensure that Node.js 20+ is installed, then run the build script:
 Custom development domains are used so you must add these entries to your hosts file:
 
 ```
-127.0.0.1 localhost web.mycompany.com api.mycompany.com
+127.0.0.1 localhost www.mycompany.com api.mycompany.com
 ```
 
 Next configure [Browser SSL Trust](https://apisandclients.com/posts/developer-ssl-setup) for the SSL root certificate:
