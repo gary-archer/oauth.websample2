@@ -54,6 +54,13 @@ export class HeaderButtonsView {
     }
 
     /*
+     * Update the home button to display Sign In when not authenticated yet
+     */
+    public setIsAuthenticated(isAuthenticated: boolean): void {
+        DomUtils.text('#btnHome', isAuthenticated ? 'Home' : 'Sign In');
+    }
+
+    /*
      * Buttons are disabled before data is loaded
      */
     public disableSessionButtons(): void {

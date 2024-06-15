@@ -120,11 +120,13 @@ export class App {
         if (this._router!.isInLoggedOutView()) {
 
             // If we are logged out then clear user info
+            this._headerButtonsView!.setIsAuthenticated(false);
             this._clearUserInfo();
 
         } else {
 
             // Otherwise re-enable buttons
+            this._headerButtonsView!.setIsAuthenticated(true);
             this._headerButtonsView!.enableSessionButtons();
         }
     }
