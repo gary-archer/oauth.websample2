@@ -30,13 +30,13 @@ First ensure that Node.js 20+ is installed, then run the build script:
 Custom development domains are used so you must add these entries to your hosts file:
 
 ```
-127.0.0.1 localhost www.mycompany.com api.mycompany.com
+127.0.0.1 localhost www.authsamples-dev.com api.authsamples-dev.com
 ```
 
 Next configure [Browser SSL Trust](https://apisandclients.com/posts/developer-ssl-setup) for the SSL root certificate:
 
 ```
-./api/certs/localhost/mycompany.com.ca.pem
+./api/certs/localhost/authsamples-dev.com.ca.pem
 ```
 
 Then run the following script to run the code for both SPA and API:

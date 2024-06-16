@@ -47,8 +47,8 @@ fi
 #
 # Get URLs to wait for
 #
-SPA_URL='https://www.mycompany.com/spa'
-API_URL='https://api.mycompany.com/api'
+SPA_URL='https://www.authsamples-dev.com/spa'
+API_URL='https://api.authsamples-dev.com/api'
 
 #
 # Wait for the API to come up

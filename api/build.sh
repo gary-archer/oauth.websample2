@@ -24,7 +24,7 @@ if [ ! -d 'certs' ]; then
   rm -rf ./resources
   git clone https://github.com/gary-archer/oauth.developmentcertificates ./resources
   rm -rf certs
-  mv ./resources/mycompany ./certs
+  mv ./resources/authsamples-dev ./certs
   rm -rf ./resources
 fi
 
