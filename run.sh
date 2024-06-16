@@ -69,7 +69,7 @@ done
 
 #
 # Run the SPA in the default browser, then sign in with these credentials:
-# - guestuser@mycompany.com
+# - guestuser@example.com
 # - Password1
 #
 if [ "$PLATFORM" == 'MACOS' ]; then

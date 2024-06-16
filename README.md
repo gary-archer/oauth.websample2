@@ -47,7 +47,7 @@ Then run the following script to run the code for both SPA and API:
 
 The browser is invoked and you can sign in with my AWS test credentials:
 
-- User: `guestuser@mycompany.com`
+- User: `guestuser@example.com`
 - Password: `GuestPassword1`
 
 You can then test all lifecycle operations, including token refresh, multi tab browsing and logout.
