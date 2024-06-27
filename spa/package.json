@@ -11,25 +11,31 @@
     "node": ">=20"
   },
   "scripts": {
-    "lint": "npx eslint . --ext .ts",
+    "lint": "npx eslint ./src",
     "start": "npm run clean && webpack --config webpack/webpack.config.dev.mjs --watch",
     "build": "npm run clean && webpack --config webpack/webpack.config.prod.mjs",
     "clean": "rm -rf dist/*bundle*"
   },
   "dependencies": {
-    "axios": "^1.6.8",
+    "axios": "^1.7.2",
     "mustache": "^4.2.0",
     "oidc-client-ts": "^3.0.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.5.0",
+    "@types/eslint__js": "^8.42.3",
     "@types/mustache": "^4.2.5",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "@typescript-eslint/parser": "^7.3.1",
     "eslint": "^8.57.0",
     "ts-loader": "^9.5.0",
-    "typescript": "^5.4.3",
+    "typescript": "^5.5.2",
+    "typescript-eslint": "^7.14.1",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4",
     "webpack-merge": "^5.10.0"
+  },
+  "overrides": {
+    "eslint": {
+      "file-entry-cache": "8.x"
+    }
   }
 }
