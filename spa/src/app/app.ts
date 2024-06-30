@@ -15,14 +15,14 @@ import {TitleView} from '../views/titleView';
  */
 export class App {
 
-    private _configuration?: Configuration;
-    private _authenticator?: Authenticator;
-    private _apiClient?: ApiClient;
+    private _configuration!: Configuration;
+    private _authenticator!: Authenticator;
+    private _apiClient!: ApiClient;
     private _oidcLogger: OidcLogger;
-    private _router?: Router;
-    private _titleView?: TitleView;
-    private _headerButtonsView?: HeaderButtonsView;
-    private _errorView?: ErrorView;
+    private _router!: Router;
+    private _titleView!: TitleView;
+    private _headerButtonsView!: HeaderButtonsView;
+    private _errorView!: ErrorView;
     private _isInitialised: boolean;
 
     public constructor() {
@@ -49,13 +49,13 @@ export class App {
             await this._initialiseApp();
 
             // We must be prepared for page invocation to be an OAuth response
-            await this._authenticator!.handleLoginResponse();
+            await this._authenticator.handleLoginResponse();
 
             // Load the main view, which may trigger a login redirect
             await this._loadMainView();
 
             // Get user info from the API unless we are in the logged out view
-            if (!this._router!.isInLoggedOutView()) {
+            if (!this._router.isInLoggedOutView()) {
                 await this._loadUserInfo();
             }
 
@@ -100,7 +100,7 @@ export class App {
         this._apiClient = new ApiClient(this._configuration.app.apiBaseUrl, this._authenticator);
 
         // Our simple router passes the API Client instance between views
-        this._router = new Router(this._apiClient, this._errorView!);
+        this._router = new Router(this._apiClient, this._errorView);
 
         // Update state to indicate that global objects are loaded
         this._isInitialised = true;
@@ -112,22 +112,22 @@ export class App {
     private async _loadMainView(): Promise<void> {
 
         // Indicate busy
-        this._headerButtonsView!.disableSessionButtons();
+        this._headerButtonsView.disableSessionButtons();
 
         // Load the view
-        await this._router!.loadView();
+        await this._router.loadView();
 
-        if (this._router!.isInLoggedOutView()) {
+        if (this._router.isInLoggedOutView()) {
 
             // If we are logged out then clear user info
-            this._headerButtonsView!.setIsAuthenticated(false);
+            this._headerButtonsView.setIsAuthenticated(false);
             this._clearUserInfo();
 
         } else {
 
             // Otherwise re-enable buttons
-            this._headerButtonsView!.setIsAuthenticated(true);
-            this._headerButtonsView!.enableSessionButtons();
+            this._headerButtonsView.setIsAuthenticated(true);
+            this._headerButtonsView.enableSessionButtons();
         }
     }
 
@@ -135,14 +135,14 @@ export class App {
      * Load API data for the user info fragment
      */
     private async _loadUserInfo(): Promise<void> {
-        await this._titleView!.loadUserInfo(this._authenticator!, this._apiClient!);
+        await this._titleView.loadUserInfo(this._authenticator, this._apiClient);
     }
 
     /*
      * Load API data for the user info fragment
      */
     private _clearUserInfo(): void {
-        this._titleView!.clearUserInfo();
+        this._titleView.clearUserInfo();
     }
 
     /*
@@ -163,7 +163,7 @@ export class App {
         } catch (e: any) {
 
             // Report failures
-            this._errorView!.report(e);
+            this._errorView.report(e);
         }
     }
 
@@ -181,7 +181,7 @@ export class App {
 
             if (this._isInitialised) {
 
-                if (this._router!.isInHomeView()) {
+                if (this._router.isInHomeView()) {
 
                     // Force a reload if we are already in the home view
                     await this._loadMainView();
@@ -196,7 +196,7 @@ export class App {
         } catch (e: any) {
 
             // Report failures
-            this._errorView!.report(e);
+            this._errorView.report(e);
         }
     }
 
@@ -211,7 +211,7 @@ export class App {
 
         } catch (e: any) {
 
-            this._errorView!.report(e);
+            this._errorView.report(e);
         }
     }
 
@@ -222,7 +222,7 @@ export class App {
 
         try {
             // Start the logout redirect
-            await this._authenticator!.startLogout();
+            await this._authenticator.startLogout();
 
         } catch (e: any) {
 
@@ -239,7 +239,7 @@ export class App {
 
         if (HtmlStorageHelper.isLoggedOutEvent(event)) {
 
-            this._authenticator!.onExternalLogout();
+            this._authenticator.onExternalLogout();
             location.hash = '#loggedout';
         }
     }
@@ -248,7 +248,7 @@ export class App {
      * Force a new access token to be retrieved
      */
     private async _onExpireToken(): Promise<void> {
-        await this._authenticator!.expireAccessToken();
+        await this._authenticator.expireAccessToken();
     }
 
     /*

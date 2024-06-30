@@ -1,4 +1,4 @@
-import {ApiClient} from '../api/client/apiClient';
+import type {ApiClient} from '../api/client/apiClient';
 import {Authenticator} from '../plumbing/oauth/authenticator';
 import {UserInfoView} from './userInfoView';
 import {DomUtils} from './domUtils';

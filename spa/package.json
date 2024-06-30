@@ -11,7 +11,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "lint": "npx eslint ./src",
+    "lint": "npx eslint . --ignore-pattern dist",
     "start": "npm run clean && webpack --config webpack/webpack.config.dev.mjs --watch",
     "build": "npm run clean && webpack --config webpack/webpack.config.prod.mjs",
     "clean": "rm -rf dist/*bundle*"

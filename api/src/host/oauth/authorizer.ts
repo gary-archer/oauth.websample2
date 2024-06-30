@@ -42,7 +42,7 @@ export class Authorizer {
 
         // Return cached claims immediately if found
         const accessTokenHash = createHash('sha256').update(accessToken).digest('hex');
-        let extraClaims = await this._cache.getExtraUserClaims(accessTokenHash);
+        let extraClaims = this._cache.getExtraUserClaims(accessTokenHash);
         if (extraClaims) {
             return new ClaimsPrincipal(tokenClaims, extraClaims);
         }
@@ -51,7 +51,7 @@ export class Authorizer {
         extraClaims = await this._extraClaimsProvider.lookupExtraClaims(tokenClaims);
 
         // Cache the extra claims for subsequent requests with the same access token
-        await this._cache.setExtraUserClaims(accessTokenHash, extraClaims, tokenClaims.exp!);
+        this._cache.setExtraUserClaims(accessTokenHash, extraClaims, tokenClaims.exp || 0);
 
         // Return the final claims used by the API's authorization logic
         return new ClaimsPrincipal(tokenClaims, extraClaims);
