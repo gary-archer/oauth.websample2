@@ -13,7 +13,7 @@ import {Configuration} from '../configuration/configuration.js';
 import {ErrorFactory} from '../errors/errorFactory.js';
 import {ExceptionHandler} from '../errors/exceptionHandler.js';
 import {AccessTokenValidator} from '../oauth/accessTokenValidator.js';
-import {OAuthHandler} from '../oauth/oauthHandler.js';
+import {OAuthFilter} from '../oauth/oauthFilter.js';
 import {JwksRetriever} from '../oauth/jwksRetriever.js';
 import {HttpProxy} from '../utilities/httpProxy.js';
 import {ResponseWriter} from '../utilities/responseWriter.js';
@@ -45,10 +45,10 @@ export class ApiController {
         // Wire up authorization related dependencies on every API request
         const accessTokenValidator = new AccessTokenValidator(this._configuration.oauth, this._jwksRetriever);
         const extraClaimsProvider = new ExtraClaimsProvider();
-        const handler = new OAuthHandler(this._claimsCache, accessTokenValidator, extraClaimsProvider);
+        const filter = new OAuthFilter(this._claimsCache, accessTokenValidator, extraClaimsProvider);
 
-        // Call the handler to do the work
-        const claims = await handler.authorizeRequestAndGetClaims(request);
+        // Call the filter to do the work
+        const claims = await filter.authorizeRequestAndGetClaims(request);
 
         // On success, set claims against the request context and move on to the service logic
         response.locals.claims = claims;

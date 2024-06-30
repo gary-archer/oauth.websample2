@@ -10,7 +10,7 @@ import {AccessTokenValidator} from './accessTokenValidator.js';
  * The entry point for the processing to validate tokens and lookup claims
  * Our approach provides extensible claims to our API and enables good performance
  */
-export class OAuthHandler {
+export class OAuthFilter {
 
     private readonly _cache: ClaimsCache;
     private readonly _accessTokenValidator: AccessTokenValidator;
