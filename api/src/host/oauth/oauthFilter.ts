@@ -7,7 +7,7 @@ import {ExtraClaimsProvider} from '../claims/extraClaimsProvider.js';
 import {AccessTokenValidator} from './accessTokenValidator.js';
 
 /*
- * The entry point for the processing to validate tokens and lookup claims
+ * The entry point for the processing to validate tokens and look up claims
  * Our approach provides extensible claims to our API and enables good performance
  */
 export class OAuthFilter {
