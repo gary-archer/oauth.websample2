@@ -3,7 +3,7 @@ import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config({
-    files: ['**/*.ts', '**/*.mjs'],
+    files: ['**/*.ts'],
     extends: [
         eslint.configs.strict,
         ...tseslint.configs.strict,
@@ -11,7 +11,7 @@ export default tseslint.config({
     rules: {
         '@typescript-eslint/explicit-module-boundary-types': ['error', {
             'allowArgumentsExplicitlyTypedAsAny': true,
-        }],  
+        }],
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-extraneous-class': 'off',
         '@typescript-eslint/quotes': ['error', 'single', { 'avoidEscape': true }],
