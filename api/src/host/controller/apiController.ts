@@ -13,7 +13,7 @@ import {Configuration} from '../configuration/configuration.js';
 import {ErrorFactory} from '../errors/errorFactory.js';
 import {ExceptionHandler} from '../errors/exceptionHandler.js';
 import {AccessTokenValidator} from '../oauth/accessTokenValidator.js';
-import {Authorizer} from '../oauth/authorizer.js';
+import {OAuthHandler} from '../oauth/oauthHandler.js';
 import {JwksRetriever} from '../oauth/jwksRetriever.js';
 import {HttpProxy} from '../utilities/httpProxy.js';
 import {ResponseWriter} from '../utilities/responseWriter.js';
@@ -42,13 +42,13 @@ export class ApiController {
      */
     public async authorizationHandler(request: Request, response: Response, next: NextFunction): Promise<void> {
 
-        // Create authorization related classes on every API request
+        // Wire up authorization related dependencies on every API request
         const accessTokenValidator = new AccessTokenValidator(this._configuration.oauth, this._jwksRetriever);
         const extraClaimsProvider = new ExtraClaimsProvider();
-        const authorizer = new Authorizer(this._claimsCache, accessTokenValidator, extraClaimsProvider);
+        const handler = new OAuthHandler(this._claimsCache, accessTokenValidator, extraClaimsProvider);
 
-        // Call the authorizer to do the work
-        const claims = await authorizer.authorizeRequestAndGetClaims(request);
+        // Call the handler to do the work
+        const claims = await handler.authorizeRequestAndGetClaims(request);
 
         // On success, set claims against the request context and move on to the service logic
         response.locals.claims = claims;
