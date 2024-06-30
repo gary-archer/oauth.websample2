@@ -8,7 +8,7 @@ import {OAuthConfiguration} from '../configuration/oauthConfiguration.js';
 export class ClaimsCache {
 
     private readonly _cache: NodeCache;
-    private readonly _defaultTimeToLive: number;
+    private readonly _defaultTimeToLiveSeconds: number;
 
     /*
      * Create the cache at application startup
@@ -17,9 +17,9 @@ export class ClaimsCache {
     public constructor(configuration: OAuthConfiguration) {
 
         // Create the cache and set a default time to live in seconds
-        this._defaultTimeToLive = configuration.claimsCacheTimeToLiveMinutes * 60;
+        this._defaultTimeToLiveSeconds = configuration.claimsCacheTimeToLiveMinutes * 60;
         this._cache = new NodeCache({
-            stdTTL: this._defaultTimeToLive,
+            stdTTL: this._defaultTimeToLiveSeconds,
         });
 
         // If required add debug output here to verify expiry occurs when expected
@@ -61,8 +61,8 @@ export class ClaimsCache {
             console.debug(`Token to be cached will expire in ${secondsToCache} seconds (hash: ${accessTokenHash})`);
 
             // Do not exceed the maximum time we configured
-            if (secondsToCache > this._defaultTimeToLive) {
-                secondsToCache = this._defaultTimeToLive;
+            if (secondsToCache > this._defaultTimeToLiveSeconds) {
+                secondsToCache = this._defaultTimeToLiveSeconds;
             }
 
             // Cache the token until the above time
