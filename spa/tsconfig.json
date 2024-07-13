@@ -2,9 +2,9 @@
   "compilerOptions": {
     "strict": true,
     "target": "ES2017",
-    "lib": ["ES2022", "DOM"],
-    "module":"ES2015",
-    "moduleResolution": "Node",
+    "lib": ["ES2023", "DOM"],
+    "module":"ES2022",
+    "moduleResolution": "Bundler",
     "allowSyntheticDefaultImports": true,
     "outDir": "dist",
     "sourceMap": true
