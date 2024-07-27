@@ -43,8 +43,8 @@ export class AccessTokenValidator {
 
         } catch (e: any) {
 
-            // Generic errors are returned when the JWKS download fails
-            if (e.code === 'ERR_JOSE_GENERIC') {
+            // JWKS URI connection failures return a 500
+            if (e.code === 'ERR_JOSE_GENERIC' || e.code === 'UNABLE_TO_VERIFY_LEAF_SIGNATURE') {
                 throw ErrorFactory.fromJwksDownloadError(e, this._configuration.jwksEndpoint);
             }
 
