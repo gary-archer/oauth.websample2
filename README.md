@@ -36,7 +36,7 @@ Custom development domains are used so you must add these entries to your hosts 
 Next configure [Browser SSL Trust](https://apisandclients.com/posts/developer-ssl-setup) for the SSL root certificate:
 
 ```
-./api/certs/localhost/authsamples-dev.com.ca.pem
+./api/certs/localhost/authsamples-dev.com.ca.crt
 ```
 
 Then run the following script to run the code for both SPA and API:
