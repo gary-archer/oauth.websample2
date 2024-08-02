@@ -55,7 +55,6 @@ export class TransactionsView {
     /*
      * Render data after receiving it from the API
      */
-    /* eslint-disable max-len */
     private _renderData(data: CompanyTransactions): void {
 
         // Build a view model from the data

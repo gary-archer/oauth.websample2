@@ -102,7 +102,7 @@ export class ApiClient {
                 // If there is a permanent token error then the token configuration is wrong
                 // Present an error and ensure that the retry does a new top level login
                 // This enables recovery once the token configuration is fixed at the authorization server
-                const error = e1 as UIError;
+                const error = e2 as UIError;
                 if ((error.statusCode === 401 && error.errorCode === ErrorCodes.invalidToken) ||
                     (error.statusCode === 403 && error.errorCode === ErrorCodes.insufficientScope)) {
 

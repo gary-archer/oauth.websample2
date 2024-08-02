@@ -22,20 +22,15 @@
     "oidc-client-ts": "^3.0.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.5.0",
+    "@eslint/js": "^9.8.0",
     "@types/eslint__js": "^8.42.3",
     "@types/mustache": "^4.2.5",
-    "eslint": "^8.57.0",
+    "eslint": "^9.8.0",
     "ts-loader": "^9.5.0",
     "typescript": "^5.5.2",
-    "typescript-eslint": "^7.14.1",
+    "typescript-eslint": "^8.0.0",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4",
     "webpack-merge": "^5.10.0"
-  },
-  "overrides": {
-    "eslint": {
-      "file-entry-cache": "8.x"
-    }
   }
 }

@@ -109,7 +109,6 @@ export class ApiController {
     /*
      * Remove the ETag header from API responses
      */
-    /* eslint-disable @typescript-eslint/no-unused-vars */
     public onWriteHeaders(
         request: Request,
         response: Response,
