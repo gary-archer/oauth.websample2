@@ -9,8 +9,8 @@ const logger = new ApiLogger();
 try {
 
     // First load configuration
-    const apiConfigBuffer = await fs.readFile('api.config.json');
-    const apiConfig = JSON.parse(apiConfigBuffer.toString()) as Configuration;
+    const apiConfigJson = await fs.readFile('api.config.json', 'utf8');
+    const apiConfig = JSON.parse(apiConfigJson) as Configuration;
 
     // Next configure web server behaviour
     const expressApp = express();
