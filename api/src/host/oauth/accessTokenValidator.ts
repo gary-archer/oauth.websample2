@@ -26,7 +26,7 @@ export class AccessTokenValidator {
     public async execute(accessToken: string): Promise<JWTPayload> {
 
         const options = {
-            algorithms: ['RS256'],
+            algorithms: [this.configuration.algorithm],
             issuer: this.configuration.issuer,
         } as JWTVerifyOptions;
 

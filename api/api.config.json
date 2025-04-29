@@ -14,6 +14,7 @@
         "userInfoEndpoint":              "https://login.authsamples.com/oauth2/userInfo",
         "issuer":                        "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_CuhLeqiE9",
         "audience":                      "",
+        "algorithm":                     "RS256",
         "scope":                         "https://api.authsamples.com/investments",
         "claimsCacheTimeToLiveMinutes":  15
     }

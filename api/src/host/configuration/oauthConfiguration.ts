@@ -6,6 +6,7 @@ export interface OAuthConfiguration {
     userInfoEndpoint: string;
     issuer: string;
     audience: string;
+    algorithm: string;
     scope: string;
     claimsCacheTimeToLiveMinutes: number;
 }
