@@ -1,24 +1,24 @@
 import {JWTPayload} from 'jose';
-import {ExtraValues} from './extraValues.js';
+import {ExtraClaims} from './extraClaims.js';
 
 /*
- * Our claims principal contains claims from the token and other authorization values
+ * Our claims principal contains claims from the token and other sources
  */
 export class ClaimsPrincipal {
 
     private jwtClaims: JWTPayload;
-    private extraValues: ExtraValues;
+    private extraClaims: ExtraClaims;
 
-    public constructor(jwtClaims: JWTPayload, extraValues: ExtraValues) {
+    public constructor(jwtClaims: JWTPayload, extraClaims: ExtraClaims) {
         this.jwtClaims = jwtClaims;
-        this.extraValues = extraValues;
+        this.extraClaims = extraClaims;
     }
 
     public getJwt(): JWTPayload {
         return this.jwtClaims;
     }
 
-    public getExtra(): ExtraValues {
-        return this.extraValues;
+    public getExtra(): ExtraClaims {
+        return this.extraClaims;
     }
 }

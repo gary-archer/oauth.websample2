@@ -3,31 +3,31 @@ import {Request} from 'express';
 import {ClaimsPrincipal} from '../../logic/entities/claims/claimsPrincipal.js';
 import {ClientError} from '../../logic/errors/clientError.js';
 import {ClaimsCache} from '../claims/claimsCache.js';
-import {ExtraValuesProvider} from '../claims/extraValuesProvider.js';
+import {ExtraClaimsProvider} from '../claims/extraClaimsProvider.js';
 import {AccessTokenValidator} from './accessTokenValidator.js';
 
 /*
  * The entry point for the processing to validate tokens and look up claims
- * This approach demonstrates one way to provide extensible authorization values to the API's business logic
+ * Our approach provides extensible claims to our API and enables good performance
  */
 export class OAuthFilter {
 
     private readonly cache: ClaimsCache;
     private readonly accessTokenValidator: AccessTokenValidator;
-    private readonly extraValuesProvider: ExtraValuesProvider;
+    private readonly extraClaimsProvider: ExtraClaimsProvider;
 
     public constructor(
         cache: ClaimsCache,
         accessTokenValidator: AccessTokenValidator,
-        extraValuesProvider: ExtraValuesProvider) {
+        extraClaimsProvider: ExtraClaimsProvider) {
 
         this.cache = cache;
         this.accessTokenValidator = accessTokenValidator;
-        this.extraValuesProvider = extraValuesProvider;
+        this.extraClaimsProvider = extraClaimsProvider;
     }
 
     /*
-     * Authorize a request and set up the claims principal
+     * Authorize a request and set up the claims principal, including domain specific claims
      */
     public async authorizeRequestAndGetClaims(request: Request): Promise<ClaimsPrincipal> {
 
@@ -40,21 +40,21 @@ export class OAuthFilter {
         // On every API request we validate the JWT, in a zero trust manner
         const tokenClaims = await this.accessTokenValidator.execute(accessToken);
 
-        // Return extra authorization values immediately if they are cached
+        // Return cached claims immediately if found
         const accessTokenHash = createHash('sha256').update(accessToken).digest('hex');
-        let extraValues = this.cache.getExtraUserValues(accessTokenHash);
-        if (extraValues) {
-            return new ClaimsPrincipal(tokenClaims, extraValues);
+        let extraClaims = this.cache.getExtraUserClaims(accessTokenHash);
+        if (extraClaims) {
+            return new ClaimsPrincipal(tokenClaims, extraClaims);
         }
 
-        // Look up extra authorization values not in the JWT access token when the token is first received
-        extraValues = await this.extraValuesProvider.lookupExtraValues(tokenClaims);
+        // Look up extra claims not in the JWT access token when the token is first received
+        extraClaims = await this.extraClaimsProvider.lookupExtraClaims(tokenClaims);
 
-        // Cache the extra values for subsequent requests with the same access token
-        this.cache.setExtraUserValues(accessTokenHash, extraValues, tokenClaims.exp || 0);
+        // Cache the extra claims for subsequent requests with the same access token
+        this.cache.setExtraUserClaims(accessTokenHash, extraClaims, tokenClaims.exp || 0);
 
-        // Return the final object used by the API's authorization logic
-        return new ClaimsPrincipal(tokenClaims, extraValues);
+        // Return the final claims used by the API's authorization logic
+        return new ClaimsPrincipal(tokenClaims, extraClaims);
     }
 
     /*

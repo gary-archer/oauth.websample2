@@ -1,9 +1,9 @@
 import NodeCache from 'node-cache';
-import {ExtraValues} from '../../logic/entities/claims/extraValues.js';
+import {ExtraClaims} from '../../logic/entities/claims/extraClaims.js';
 import {OAuthConfiguration} from '../configuration/oauthConfiguration.js';
 
 /*
- * A simple in memory cache for extra authorization values
+ * A simple in memory claims cache for our API
  */
 export class ClaimsCache {
 
@@ -24,33 +24,33 @@ export class ClaimsCache {
 
         // If required add debug output here to verify expiry occurs when expected
         this.cache.on('expired', (key: string, value: any) => {
-            console.log(`Values for expired access token have been removed from the cache (hash: ${key})`);
+            console.log(`Expired token has been removed from the cache (hash: ${key})`);
         });
     }
 
     /*
-     * Get authorization values from the cache or return null if not found
+     * Get claims from the cache or return null if not found
      */
-    public getExtraUserValues(accessTokenHash: string): ExtraValues | null {
+    public getExtraUserClaims(accessTokenHash: string): ExtraClaims | null {
 
         // Get the token hash and see if it exists in the cache
-        const values = this.cache.get<ExtraValues>(accessTokenHash);
-        if (!values) {
+        const claims = this.cache.get<ExtraClaims>(accessTokenHash);
+        if (!claims) {
 
             // If this is a new token and we need to do claims processing
-            console.debug(`New values will be added to claims cache (hash: ${accessTokenHash})`);
+            console.debug(`New token will be added to claims cache (hash: ${accessTokenHash})`);
             return null;
         }
 
-        // Otherwise return cached values
-        console.debug(`Found existing values in claims cache (hash: ${accessTokenHash})`);
-        return values;
+        // Otherwise return cached claims
+        console.debug(`Found existing token in claims cache (hash: ${accessTokenHash})`);
+        return claims;
     }
 
     /*
-     * Add authorization values to the cache until the token's time to live
+     * Add claims to the cache until the token's time to live
      */
-    public setExtraUserValues(accessTokenHash: string, values: ExtraValues, expiry: number): void {
+    public setExtraUserClaims(accessTokenHash: string, claims: ExtraClaims, expiry: number): void {
 
         // Use the exp field returned from the token to work out the expiry time
         const epochSeconds = Math.floor((new Date() as any) / 1000);
@@ -58,7 +58,7 @@ export class ClaimsCache {
         if (secondsToCache > 0) {
 
             // Get the hash and output debug info
-            console.debug(`Values to be cached will expire in ${secondsToCache} seconds (hash: ${accessTokenHash})`);
+            console.debug(`Token to be cached will expire in ${secondsToCache} seconds (hash: ${accessTokenHash})`);
 
             // Do not exceed the maximum time we configured
             if (secondsToCache > this.defaultTimeToLiveSeconds) {
@@ -66,8 +66,8 @@ export class ClaimsCache {
             }
 
             // Cache the token until the above time
-            console.debug(`Adding values to claims cache for ${secondsToCache} seconds (hash: ${accessTokenHash})`);
-            this.cache.set(accessTokenHash, values, secondsToCache);
+            console.debug(`Adding token to claims cache for ${secondsToCache} seconds (hash: ${accessTokenHash})`);
+            this.cache.set(accessTokenHash, claims, secondsToCache);
         }
     }
 }
