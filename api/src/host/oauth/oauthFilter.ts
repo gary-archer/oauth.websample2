@@ -3,7 +3,7 @@ import {Request} from 'express';
 import {ClaimsPrincipal} from '../../logic/entities/claims/claimsPrincipal.js';
 import {ClientError} from '../../logic/errors/clientError.js';
 import {ClaimsCache} from '../claims/claimsCache.js';
-import {ExtraClaimsProvider} from '../claims/extraClaimsProvider.js';
+import {ExtraValuesProvider} from '../claims/extraValuesProvider.js';
 import {AccessTokenValidator} from './accessTokenValidator.js';
 
 /*
@@ -14,16 +14,16 @@ export class OAuthFilter {
 
     private readonly cache: ClaimsCache;
     private readonly accessTokenValidator: AccessTokenValidator;
-    private readonly extraClaimsProvider: ExtraClaimsProvider;
+    private readonly extraValuesProvider: ExtraValuesProvider;
 
     public constructor(
         cache: ClaimsCache,
         accessTokenValidator: AccessTokenValidator,
-        extraClaimsProvider: ExtraClaimsProvider) {
+        extraValuesProvider: ExtraValuesProvider) {
 
         this.cache = cache;
         this.accessTokenValidator = accessTokenValidator;
-        this.extraClaimsProvider = extraClaimsProvider;
+        this.extraValuesProvider = extraValuesProvider;
     }
 
     /*
@@ -42,19 +42,19 @@ export class OAuthFilter {
 
         // Return cached claims immediately if found
         const accessTokenHash = createHash('sha256').update(accessToken).digest('hex');
-        let extraClaims = this.cache.getExtraUserClaims(accessTokenHash);
-        if (extraClaims) {
-            return new ClaimsPrincipal(tokenClaims, extraClaims);
+        let extraValues = this.cache.getExtraUserValues(accessTokenHash);
+        if (extraValues) {
+            return new ClaimsPrincipal(tokenClaims, extraValues);
         }
 
-        // Look up extra claims not in the JWT access token when the token is first received
-        extraClaims = await this.extraClaimsProvider.lookupExtraClaims(tokenClaims);
+        // Look up extra authorization values not in the JWT access token when the token is first received
+        extraValues = await this.extraValuesProvider.lookupExtraValues(tokenClaims);
 
         // Cache the extra claims for subsequent requests with the same access token
-        this.cache.setExtraUserClaims(accessTokenHash, extraClaims, tokenClaims.exp || 0);
+        this.cache.setExtraUserValues(accessTokenHash, extraValues, tokenClaims.exp || 0);
 
         // Return the final claims used by the API's authorization logic
-        return new ClaimsPrincipal(tokenClaims, extraClaims);
+        return new ClaimsPrincipal(tokenClaims, extraValues);
     }
 
     /*

@@ -1,7 +1,7 @@
 /*
- * Represents extra claims not received in access tokens
+ * Represents extra authorization values not received in access tokens
  */
-export class ExtraClaims {
+export class ExtraValues {
 
     private title: string;
     private regions: string[];

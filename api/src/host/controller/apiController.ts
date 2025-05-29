@@ -8,7 +8,7 @@ import {CompanyService} from '../../logic/services/companyService.js';
 import {UserInfoService} from '../../logic/services/userInfoService.js';
 import {JsonFileReader} from '../../logic/utilities/jsonFileReader.js';
 import {ClaimsCache} from '../claims/claimsCache.js';
-import {ExtraClaimsProvider} from '../claims/extraClaimsProvider.js';
+import {ExtraValuesProvider} from '../claims/extraValuesProvider.js';
 import {Configuration} from '../configuration/configuration.js';
 import {ErrorFactory} from '../errors/errorFactory.js';
 import {ExceptionHandler} from '../errors/exceptionHandler.js';
@@ -44,8 +44,8 @@ export class ApiController {
 
         // Wire up authorization related dependencies on every API request
         const accessTokenValidator = new AccessTokenValidator(this.configuration.oauth, this.jwksRetriever);
-        const extraClaimsProvider = new ExtraClaimsProvider();
-        const filter = new OAuthFilter(this.claimsCache, accessTokenValidator, extraClaimsProvider);
+        const extraValuesProvider = new ExtraValuesProvider();
+        const filter = new OAuthFilter(this.claimsCache, accessTokenValidator, extraValuesProvider);
 
         // Call the filter to do the work
         const claims = await filter.authorizeRequestAndGetClaims(request);

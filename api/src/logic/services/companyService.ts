@@ -1,4 +1,4 @@
-import { ClaimsReader } from '../../host/claims/claimsReader.js';
+import {ClaimsReader} from '../../host/claims/claimsReader.js';
 import {ClaimsPrincipal} from '../entities/claims/claimsPrincipal.js';
 import {Company} from '../entities/company.js';
 import {CompanyTransactions} from '../entities/companyTransactions.js';
