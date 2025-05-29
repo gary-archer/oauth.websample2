@@ -16,17 +16,17 @@ export class ExtraValuesProvider {
         const managerId = ClaimsReader.getStringClaim(jwtClaims, 'manager_id');
         if (managerId === '20116') {
 
-            // These claims are used for the guestadmin@example.com user account
+            // These values are used for the guestadmin@example.com user account
             return new ExtraValues('Global Manager', ['Europe', 'USA', 'Asia']);
 
         } else if (managerId == '10345') {
 
-            // These claims are used for the guestuser@example.com user account
+            // These values are used for the guestuser@example.com user account
             return new ExtraValues('Regional Manager', ['USA']);
 
         } else {
 
-            // Use empty claims for unrecognized users
+            // Use empty values for unrecognized users
             return new ExtraValues('', []);
         }
     }

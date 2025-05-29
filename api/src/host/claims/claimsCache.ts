@@ -48,7 +48,7 @@ export class ClaimsCache {
     }
 
     /*
-     * Add claims to the cache until the token's time to live
+     * Add authorization values to the cache until the token's time to live
      */
     public setExtraUserValues(accessTokenHash: string, values: ExtraValues, expiry: number): void {
 

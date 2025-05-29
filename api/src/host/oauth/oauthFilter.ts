@@ -8,7 +8,7 @@ import {AccessTokenValidator} from './accessTokenValidator.js';
 
 /*
  * The entry point for the processing to validate tokens and look up claims
- * Our approach provides extensible claims to our API and enables good performance
+ * This approach demonstrates one way to provide extensible authorization values to the API's business logic
  */
 export class OAuthFilter {
 
@@ -27,7 +27,7 @@ export class OAuthFilter {
     }
 
     /*
-     * Authorize a request and set up the claims principal, including domain specific claims
+     * Authorize a request and set up the claims principal
      */
     public async authorizeRequestAndGetClaims(request: Request): Promise<ClaimsPrincipal> {
 
@@ -40,7 +40,7 @@ export class OAuthFilter {
         // On every API request we validate the JWT, in a zero trust manner
         const tokenClaims = await this.accessTokenValidator.execute(accessToken);
 
-        // Return cached claims immediately if found
+        // Return extra authorization values immediately if they are cached
         const accessTokenHash = createHash('sha256').update(accessToken).digest('hex');
         let extraValues = this.cache.getExtraUserValues(accessTokenHash);
         if (extraValues) {
@@ -50,10 +50,10 @@ export class OAuthFilter {
         // Look up extra authorization values not in the JWT access token when the token is first received
         extraValues = await this.extraValuesProvider.lookupExtraValues(tokenClaims);
 
-        // Cache the extra claims for subsequent requests with the same access token
+        // Cache the extra values for subsequent requests with the same access token
         this.cache.setExtraUserValues(accessTokenHash, extraValues, tokenClaims.exp || 0);
 
-        // Return the final claims used by the API's authorization logic
+        // Return the final object used by the API's authorization logic
         return new ClaimsPrincipal(tokenClaims, extraValues);
     }
 
