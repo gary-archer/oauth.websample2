@@ -24,7 +24,7 @@ export class ClaimsCache {
 
         // If required add debug output here to verify expiry occurs when expected
         this.cache.on('expired', (key: string, value: any) => {
-            console.log(`Expired token has been removed from the cache (hash: ${key})`);
+            console.log(`Expired entry has been removed from the cache (hash: ${key})`);
         });
     }
 
@@ -38,12 +38,12 @@ export class ClaimsCache {
         if (!claims) {
 
             // If this is a new token and we need to do claims processing
-            console.debug(`New token will be added to claims cache (hash: ${accessTokenHash})`);
+            console.debug(`New entry will be added to claims cache (hash: ${accessTokenHash})`);
             return null;
         }
 
         // Otherwise return cached claims
-        console.debug(`Found existing token in claims cache (hash: ${accessTokenHash})`);
+        console.debug(`Found existing entry in claims cache (hash: ${accessTokenHash})`);
         return claims;
     }
 
@@ -58,7 +58,7 @@ export class ClaimsCache {
         if (secondsToCache > 0) {
 
             // Get the hash and output debug info
-            console.debug(`Token to be cached will expire in ${secondsToCache} seconds (hash: ${accessTokenHash})`);
+            console.debug(`Entry to be cached will expire in ${secondsToCache} seconds (hash: ${accessTokenHash})`);
 
             // Do not exceed the maximum time we configured
             if (secondsToCache > this.defaultTimeToLiveSeconds) {
@@ -66,7 +66,7 @@ export class ClaimsCache {
             }
 
             // Cache the token until the above time
-            console.debug(`Adding token to claims cache for ${secondsToCache} seconds (hash: ${accessTokenHash})`);
+            console.debug(`Adding entry to claims cache for ${secondsToCache} seconds (hash: ${accessTokenHash})`);
             this.cache.set(accessTokenHash, claims, secondsToCache);
         }
     }

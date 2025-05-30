@@ -64,7 +64,7 @@ export class CompanyService {
         }
 
         // Next authorize based on a business rule that links the user to regional data
-        const found = this.claims.getExtra().getRegions().find((c) => c === company.region);
+        const found = this.claims.getExtra().regions.find((c) => c === company.region);
         return !!found;
     }
 

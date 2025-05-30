@@ -1,21 +1,22 @@
 /*
- * Represents extra claims not received in access tokens
+ * Represents finer grained authorization values not issued to access tokens
+ * These values are often easier to manage in APIs rather than the authorization server
  */
 export class ExtraClaims {
 
-    private title: string;
-    private regions: string[];
+    public title: string;
+    public regions: string[];
 
-    public constructor(title: string, regions: string[]) {
-        this.title = title;
-        this.regions = regions;
+    public constructor() {
+        this.title = '';
+        this.regions = [];
     }
 
-    public getTitle(): string {
-        return this.title;
-    }
+    public static create(title: string, regions: string[]): ExtraClaims {
 
-    public getRegions(): string[] {
-        return this.regions;
+        const claims = new ExtraClaims();
+        claims.title = title;
+        claims.regions = regions;
+        return claims;
     }
 }

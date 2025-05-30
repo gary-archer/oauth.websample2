@@ -15,8 +15,8 @@ export class UserInfoService {
     public getUserInfo(): any {
 
         return {
-            title: this.claims.getExtra().getTitle(),
-            regions: this.claims.getExtra().getRegions(),
+            title: this.claims.getExtra().title,
+            regions: this.claims.getExtra().regions,
         };
     }
 }
