@@ -1,0 +1,40 @@
+{
+  "name": "basicapi",
+  "version": "2.0.0",
+  "description": "An OAuth secured API with control over extensible claims",
+  "main": "index.ts",
+  "keywords": [],
+  "author": "Gary Archer",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "lint": "npx eslint .",
+    "start": "tsx watch src/host/startup/app.ts",
+    "buildRelease": "tsc --sourceMap false"
+  },
+  "dependencies": {
+    "axios": "^1.9.0",
+    "cors": "^2.8.5",
+    "express": "^5.0.1",
+    "fs-extra": "^11.3.0",
+    "https-proxy-agent": "^7.0.5",
+    "jose": "^6.0.10",
+    "node-cache": "^5.1.2",
+    "on-headers": "^1.0.2",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.15.18",
+    "eslint": "^9.22.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.8",
+    "typescript-eslint": "^8.26.1"
+  }
+}
