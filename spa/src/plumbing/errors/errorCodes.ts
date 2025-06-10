@@ -12,9 +12,6 @@ export class ErrorCodes {
     // A technical error processing the login response containing the authorization code
     public static readonly loginResponseFailed = 'login_response_failed';
 
-    // Used when a refresh token can no longer renew the access token
-    public static readonly sessionExpired = 'invalid_grant';
-
     // A technical problem during silent token renewal
     public static readonly tokenRenewalError = 'token_renewal_error';
 
