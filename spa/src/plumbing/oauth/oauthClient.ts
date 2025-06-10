@@ -65,42 +65,26 @@ export class OAuthClient {
             return user.access_token;
         }
 
-        // If the page has been reloaded, try a silent refresh to get an access token
+        // If the page has been reloaded, try a silent refresh to get a new access token
         return await this.refreshAccessToken();
     }
 
     /*
-     * Try to refresh an access token
+     * Try to refresh an access token using iframe silent renewal
      */
     public async refreshAccessToken(): Promise<string | null> {
 
         // This flag avoids an unnecessary silent refresh when the app first loads
         if (HtmlStorageHelper.isLoggedIn) {
 
-            if (this.configuration.provider === 'cognito') {
+            // Run the code flow on an iframe using prompt=none
+            await this.performAccessTokenRenewalViaIframeRedirect();
 
-                // For Cognito, the traditional iframe renewal flow is not supported
-                // This is due to issuing a SameSite=lax SSO cookie instead of SameSite=none
-                // Also the OpenID Connect prompt=none parameter is unsupported
-                // This can lead to hangs where the login window is rendered on the invisible iframe
-                // Therefore refresh the access token using a refresh token stored in JavaScript memory
-                const user = await this.userManager.getUser();
-                if (user && user.refresh_token) {
-                    await this.performAccessTokenRenewalViaRefreshToken();
-                }
-
-            } else {
-
-                // For other providers, assume that SSO cookies with SameSite=none are issued
-                // Also assume that prompt=none works and returns a login_required error when the SSO cookie expires
-                await this.performAccessTokenRenewalViaIframeRedirect();
-
-                // Ensure that the iframe flow is used, by removing any refresh tokens received
-                const user = await this.userManager.getUser();
-                if (user && user.refresh_token) {
-                    user.refresh_token = '';
-                    this.userManager.storeUser(user);
-                }
+            // Ensure that the iframe flow is used, by removing any refresh tokens received
+            const user = await this.userManager.getUser();
+            if (user && user.refresh_token) {
+                user.refresh_token = '';
+                this.userManager.storeUser(user);
             }
 
             const updatedUser = await this.userManager.getUser();
@@ -159,9 +143,8 @@ export class OAuthClient {
                     // Handle the login response
                     const user = await this.userManager.signinRedirectCallback();
 
-                    // Remove the refresh token if using iframe based renewal
-                    // It remains unsatisfactory that the SPA receives a refresh token
-                    if (this.configuration.provider !== 'cognito') {
+                    // Ensure no refresh token, since the app is not supposed to use one but AWS Cognito returns them
+                    if (this.configuration.provider === 'cognito') {
                         user.refresh_token = '';
                     }
 
@@ -289,34 +272,6 @@ export class OAuthClient {
             if (e.error === ErrorCodes.loginRequired) {
 
                 // Clear data and our code will then trigger a new login redirect
-                await this.clearLoginState();
-
-            } else {
-
-                // Rethrow any technical errors
-                throw ErrorFactory.getFromTokenError(e, ErrorCodes.tokenRenewalError);
-            }
-        }
-    }
-
-    /*
-     * It is not recommended to use a refresh token in the browser, even when stored only in memory, as in this sample
-     * The browser cannot store a long lived token securely and malicious code could potentially access it
-     * When using memory storage and a new browser tab is opened, there is an unwelcome browser redirect
-     */
-    private async performAccessTokenRenewalViaRefreshToken(): Promise<void> {
-
-        try {
-
-            // The library will use the refresh token grant to get a new access token
-            await this.userManager.signinSilent();
-
-        } catch (e: any) {
-
-            // When the session expires this will fail with an 'invalid_grant' response
-            if (e.error === ErrorCodes.sessionExpired) {
-
-                // Clear token data and our code will then trigger a new login redirect
                 await this.clearLoginState();
 
             } else {
