@@ -3,6 +3,8 @@ node_modules
 resources
 certs/*.p12
 certs/*.crt
+certs/*.key
 /spa/dist/*
 !/spa/dist/loggedout.js
+
 .DS_Store
