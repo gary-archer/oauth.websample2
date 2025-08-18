@@ -11,7 +11,6 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 #
 DOMAIN="authsamples-dev"
 PRIVATE_KEY_PASSWORD='Password1'
-cd "$SECRETS_FOLDER"
 
 #
 # Handle Git bash on Windows
@@ -46,7 +45,7 @@ openssl req \
     -subj "/CN=Development CA for $DOMAIN.com" \
     -days 3650
 if [ $? -ne 0 ]; then
-  echo '*** Problem encountered creating the Root CA'
+  echo 'Problem encountered creating the Root CA'
   exit 1
 fi
 
@@ -95,5 +94,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-rm ./*.csr
+rm *.csr
+chmod 644 *.key
+chmod 644 *.p12
 echo 'All certificates created successfully'
