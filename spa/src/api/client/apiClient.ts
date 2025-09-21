@@ -84,7 +84,6 @@ export class ApiClient {
             if (!token) {
 
                 // The session is expired so trigger a new login
-                await this.oauthClient.clearLoginState();
                 throw ErrorFactory.getFromLoginRequired();
             }
 
