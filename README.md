@@ -68,7 +68,7 @@ You can then test all lifecycle operations, including token refresh, multi tab b
 
 ## Further Information
 
-* See the [Updated SPA and API Code Sample](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/improved-spa-code-sample-overview.mdx) blog post a walkthrough and the key technical points
+* See the [Updated SPA and API Code Sample](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/improved-spa-code-sample-overview.mdx) blog post a walkthrough and the key technical points.
 
 ## Programming Languages
 
