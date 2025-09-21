@@ -3,6 +3,7 @@ import {Configuration} from '../configuration/configuration';
 import {ConfigurationLoader} from '../configuration/configurationLoader';
 import {ErrorConsoleReporter} from '../plumbing/errors/errorConsoleReporter';
 import {OAuthClient} from '../plumbing/oauth/oauthClient';
+import {CurrentLocation} from '../plumbing/utilities/currentLocation';
 import {HtmlStorageHelper} from '../plumbing/utilities/htmlStorageHelper';
 import {OidcLogger} from '../plumbing/utilities/oidcLogger';
 import {ErrorView} from '../views/errorView';
@@ -181,15 +182,23 @@ export class App {
 
             if (this.isInitialised) {
 
-                if (this.router.isInHomeView()) {
+                if (!await this.oauthClient.getIsLoggedIn()) {
 
-                    // Force a reload if we are already in the home view
-                    await this.loadMainView();
+                    // Start a login if required
+                    await this.oauthClient.startLogin(CurrentLocation.path);
 
                 } else {
 
-                    // Otherwise move to the home view
-                    location.hash = '#';
+                    if (this.router.isInHomeView()) {
+
+                        // Force a reload if we are already in the home view
+                        await this.loadMainView();
+
+                    } else {
+
+                        // Otherwise move to the home view
+                        location.hash = '#';
+                    }
                 }
             }
 

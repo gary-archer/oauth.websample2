@@ -2,7 +2,6 @@ import {InMemoryWebStorage, UserManager, WebStorageStateStore} from 'oidc-client
 import {OAuthConfiguration} from '../../configuration/oauthConfiguration';
 import {ErrorCodes} from '../errors/errorCodes';
 import {ErrorFactory} from '../errors/errorFactory';
-import {UIError} from '../errors/uiError';
 import {HtmlStorageHelper} from '../utilities/htmlStorageHelper';
 import {OAuthUserInfo} from './oauthUserInfo';
 
@@ -13,7 +12,6 @@ export class OAuthClient {
 
     private readonly configuration: OAuthConfiguration;
     private readonly userManager: UserManager;
-    private loginTime: number | null;
 
     public constructor(configuration: OAuthConfiguration) {
 
@@ -32,10 +30,10 @@ export class OAuthClient {
             // Use the Authorization Code Flow (PKCE)
             response_type: 'code',
 
-            // Tokens are stored only in memory, which is better from a security viewpoint
+            // Tokens are stored only in memory, which is better from an XSS prevention viewpoint
             userStore: new WebStorageStateStore({ store: new InMemoryWebStorage() }),
 
-            // Store redirect state such as PKCE verifiers in session storage, for more reliable cleanup
+            // Store redirect state such as PKCE verifiers in session storage, for reliable cleanup
             stateStore: new WebStorageStateStore({ store: sessionStorage }),
 
             // The SPA handles 401 errors and does not do silent token renewal in the background
@@ -51,7 +49,15 @@ export class OAuthClient {
 
         // Create the user manager
         this.userManager = new UserManager(settings);
-        this.loginTime = null;
+    }
+
+    /*
+     * Indicate whether the user has a valid session
+     */
+    public async getIsLoggedIn(): Promise<boolean> {
+
+        const user = await this.userManager.getUser();
+        return !!user;
     }
 
     /*
@@ -99,16 +105,13 @@ export class OAuthClient {
     /*
      * Do the interactive login redirect on the main window
      */
-    public async startLogin(api401Error: UIError | null): Promise<void> {
+    public async startLogin(currentLocation: string): Promise<void> {
 
         try {
             // Start a login redirect, by first storing the SPA's client side location
             const data = {
-                hash: location.hash.length > 0 ? location.hash : '#',
+                hash: currentLocation || '#',
             };
-
-            // Handle a special case
-            await this.preventRedirectLoop(api401Error);
 
             // Start a login redirect
             await this.userManager.signinRedirect({
@@ -128,46 +131,45 @@ export class OAuthClient {
     public async handleLoginResponse(): Promise<void> {
 
         // If the page loads with a state query parameter we classify it as an OAuth response
-        const args = new URLSearchParams(location.search);
-        const state = args.get('state');
-        if (state) {
+        if (location.search) {
 
-            // Only try to process a login response if the state exists
-            const storedState = await this.userManager.settings.stateStore?.get(state);
-            if (storedState) {
+            // If the page loads with a state query parameter we classify it as an OAuth response
+            const args = new URLSearchParams(location.search);
+            const state = args.get('state');
+            if (state) {
 
-                let redirectLocation = '#';
-                try {
+                // Only try to process a login response if the state exists
+                const storedState = await this.userManager.settings.stateStore?.get(state);
+                if (storedState) {
 
-                    // Handle the login response
-                    const user = await this.userManager.signinRedirectCallback();
+                    let redirectLocation = '#';
+                    try {
 
-                    // Ensure no refresh token, since the app is not supposed to use one but AWS Cognito returns them
-                    if (this.configuration.provider === 'cognito') {
-                        user.refresh_token = '';
+                        // Handle the login response
+                        const user = await this.userManager.signinRedirectCallback();
+
+                        // Ensure no refresh token, since AWS Cognito returns one but the SPA is not meant to use them
+                        if (user.refresh_token) {
+                            user.refresh_token = '';
+                            await this.userManager.storeUser(user);
+                        }
+
+                        // We will return to the app location from before the login redirect
+                        redirectLocation = (user.state as any).hash;
+
+                        // Update login state
+                        HtmlStorageHelper.isLoggedIn = true;
+
+                    } catch (e: any) {
+
+                        // Handle and rethrow OAuth response errors
+                        throw ErrorFactory.getFromLoginOperation(e, ErrorCodes.loginResponseFailed);
+
+                    } finally {
+
+                        // Always replace the browser location, to remove OAuth details from back navigation
+                        history.replaceState({}, document.title, redirectLocation);
                     }
-
-                    // Store tokens in memory
-                    this.userManager.storeUser(user);
-
-                    // We will return to the app location from before the login redirect
-                    redirectLocation = (user.state as any).hash;
-
-                    // Update login state
-                    HtmlStorageHelper.isLoggedIn = true;
-
-                    // The login time enables a check that avoids redirect loops when configuration is invalid
-                    this.loginTime = new Date().getTime();
-
-                } catch (e: any) {
-
-                    // Handle and rethrow OAuth response errors
-                    throw ErrorFactory.getFromLoginOperation(e, ErrorCodes.loginResponseFailed);
-
-                } finally {
-
-                    // Always replace the browser location, to remove OAuth details from back navigation
-                    history.replaceState({}, document.title, redirectLocation);
                 }
             }
         }
@@ -234,7 +236,6 @@ export class OAuthClient {
     public async clearLoginState(): Promise<void> {
 
         await this.userManager.removeUser();
-        this.loginTime = null;
         HtmlStorageHelper.isLoggedIn = false;
     }
 
@@ -289,24 +290,5 @@ export class OAuthClient {
         let url = `${this.configuration.customLogoutEndpoint}`;
         url += `?client_id=${this.configuration.clientId}&logout_uri=${this.configuration.postLogoutRedirectUri}`;
         return url;
-    }
-
-    /*
-     * Iframe token refresh can fail due to SSO cookies being dropped during iframe token renewal
-     * This can create a cycle so this check prevents a redirect loop if a successful login has just completed
-     */
-    private async preventRedirectLoop(api401Error: UIError | null): Promise<void> {
-
-        if (api401Error && this.loginTime) {
-
-            const currentTime = new Date().getTime();
-            const millisecondsSinceLogin = currentTime - this.loginTime;
-            if (millisecondsSinceLogin < 1000) {
-
-                // This causes an error to be presented after which a retry does a new top level redirect
-                await this.clearLoginState();
-                throw api401Error;
-            }
-        }
     }
 }
