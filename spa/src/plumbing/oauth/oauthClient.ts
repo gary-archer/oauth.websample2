@@ -103,7 +103,6 @@ export class OAuthClient {
 
         try {
             // Start a login redirect, by first storing the SPA's client side location
-            // Some apps might also want to store form fields being edited in the state parameter
             const data = {
                 hash: location.hash.length > 0 ? location.hash : '#',
             };
