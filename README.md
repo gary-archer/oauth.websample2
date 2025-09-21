@@ -62,9 +62,9 @@ You can then test all lifecycle operations, including token refresh, multi tab b
 
 ## Problem Areas
 
-The SPA demonstrates the original PKCE flow with tokens in the browser, which is no longer recommended in 2021.\
-The SPA also demonstrates some usability problems with iframe-based silent token renewal.\
-See the [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) for a hardened implementation.
+- The SPA demonstrates the original PKCE flow with tokens in the browser, which is no longer recommended in 2021.\
+- The SPA also demonstrates some usability problems with iframe-based silent token renewal.\
+- The [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) solves these problems bur requires a more complex flow.
 
 ## Further Information
 
