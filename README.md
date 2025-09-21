@@ -47,7 +47,7 @@ Finally, configure [Browser SSL Trust](https://github.com/gary-archer/oauth.blog
 
 ### Run the Code
 
-Ensure that Node.js 22+ is installed, then build and run the SPA and API:
+Ensure that Node.js 24+ is installed, then build and run the SPA and API:
 
 ```bash
 ./build.sh && ./run.sh
