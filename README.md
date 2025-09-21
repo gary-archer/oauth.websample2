@@ -13,10 +13,6 @@ An OAuth code sample to extend the [initial code sample](https://github.com/gary
 - The API combines claims-based authorization with finer-grained business permissions.
 - The SPA and API both use OAuth user attributes and business user attributes.
 
-The SPA demonstrates the original PKCE flow with tokens in the browser, which is no longer recommended in 2021.\
-The SPA also demonstrates some usability problems with iframe-based silent token renewal.\
-See the [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) for a hardened implementation.
-
 ## Views
 
 The SPA is a simple UI with some basic navigation between views, to render fictional investment resources.
@@ -63,6 +59,12 @@ The system browser runs and you can sign in with my AWS test credentials:
 - Password: `GuestPassword1`
 
 You can then test all lifecycle operations, including token refresh, multi tab browsing and logout.
+
+## Problem Areas
+
+The SPA demonstrates the original PKCE flow with tokens in the browser, which is no longer recommended in 2021.\
+The SPA also demonstrates some usability problems with iframe-based silent token renewal.\
+See the [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) for a hardened implementation.
 
 ## Further Information
 
