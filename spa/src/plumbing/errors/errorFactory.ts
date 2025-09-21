@@ -117,7 +117,7 @@ export class ErrorFactory {
     }
 
     /*
-     * Return an object for HTTPerrors
+     * Return an object for HTTP errors
      */
     public static getFromHttpError(exception: any, url: string, source: string): UIError {
 

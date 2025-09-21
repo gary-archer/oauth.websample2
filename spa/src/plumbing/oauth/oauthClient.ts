@@ -83,10 +83,10 @@ export class OAuthClient {
         // This flag avoids an unnecessary silent refresh when the app first loads
         if (HtmlStorageHelper.isLoggedIn) {
 
-            // Run the code flow on an iframe using prompt=none
+            // Use the traditional SPA iframe renewal solution if the page is reloaded
             await this.performAccessTokenRenewalViaIframeRedirect();
 
-            // Ensure that the iframe flow is used, by removing any refresh tokens received
+            // Ensure no refresh token, since the SPA is not meant to use them
             const user = await this.userManager.getUser();
             if (user && user.refresh_token) {
                 user.refresh_token = '';
@@ -133,7 +133,6 @@ export class OAuthClient {
         // If the page loads with a state query parameter we classify it as an OAuth response
         if (location.search) {
 
-            // If the page loads with a state query parameter we classify it as an OAuth response
             const args = new URLSearchParams(location.search);
             const state = args.get('state');
             if (state) {
@@ -148,7 +147,7 @@ export class OAuthClient {
                         // Handle the login response
                         const user = await this.userManager.signinRedirectCallback();
 
-                        // Ensure no refresh token, since AWS Cognito returns one but the SPA is not meant to use them
+                        // Ensure no refresh token, since the SPA is not meant to use them
                         if (user.refresh_token) {
                             user.refresh_token = '';
                             await this.userManager.storeUser(user);

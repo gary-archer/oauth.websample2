@@ -74,7 +74,7 @@ export class Router {
     }
 
     /*
-     * AWS Cognito requires the use of a /loggedout path rather than #loggedout
+     * Check for loggedout anywhere in the URL
      */
     public isInLoggedOutView(): boolean {
         return location.href.indexOf('loggedout') !== -1;

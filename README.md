@@ -67,7 +67,7 @@ You can then test all lifecycle operations, including token refresh, multi tab b
 ## 2021 Security Update
 
 The initial SPA uses OAuth tokens in JavaScript code, to demonstrate a productive SPA architecture.\
-In 2021 the best practice is to keep tokens out of the browser, to limit the impact of XSS exploits.\
+In 2021 the best practice is to instead keep tokens out of the browser, to limit the impact of XSS exploits.\
 See the [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) for a more secure implementation.
 
 ## Programming Languages
