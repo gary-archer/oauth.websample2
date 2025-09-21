@@ -106,7 +106,7 @@ export class ErrorFactory {
     }
 
     /*
-     * Return an object for Ajax errors
+     * Return an object for JSON parse errors
      */
     public static getFromJsonParseError(): UIError {
 
@@ -117,7 +117,7 @@ export class ErrorFactory {
     }
 
     /*
-     * Return an object for Ajax errors
+     * Return an object for HTTP errors
      */
     public static getFromHttpError(exception: any, url: string, source: string): UIError {
 

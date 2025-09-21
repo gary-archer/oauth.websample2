@@ -58,6 +58,7 @@ export class HttpServerConfiguration {
     public initializeWebStaticContentHosting(): void {
 
         this.express.use('/spa', express.static('../spa'));
+        this.express.use('/spa/loggedout', express.static('../spa'));
         this.express.use('/favicon.ico', express.static('../spa/favicon.ico'));
     }
 

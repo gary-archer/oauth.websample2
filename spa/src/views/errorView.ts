@@ -48,11 +48,14 @@ export class ErrorView {
 
         // Get the error into an object
         const error = ErrorFactory.getFromException(exception);
+        if (error.getErrorCode() == ErrorCodes.loginRequired) {
 
-        // Do not render if we are just short circuiting page execution to start a login redirect
-        if (error.getErrorCode() !== ErrorCodes.loginRequired) {
+            // Do not render this error and instead move to the login required view
+            location.hash = '#loggedout';
 
-            // Otherwise render the error fields
+        } else {
+
+            // Otherwise render the error
             this.renderError(error);
         }
     }
