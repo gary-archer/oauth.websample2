@@ -9,9 +9,13 @@
 
 An OAuth code sample to extend the [initial code sample](https://github.com/gary-archer/oauth.websample1) with the following behaviors:
 
-- The SPA uses the traditional OpenID connect flow, with session management features.
+- The SPA uses the traditional OpenID connect flow, with a complete application lifecycle.
 - The API combines claims-based authorization with finer-grained business permissions.
-- The SPA and API use both OAuth user attributes and business user attributes.
+- The SPA and API both use OAuth user attributes and business user attributes.
+
+The SPA demonstrates the original PKCE flow with tokens in the browser, which is no longer recommended in 2021.\
+The SPA also demonstrates some usability problems with iframe-based silent token renewal.\
+See the [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) for a hardened implementation.
 
 ## Views
 
@@ -63,12 +67,6 @@ You can then test all lifecycle operations, including token refresh, multi tab b
 ## Further Information
 
 * See the [Updated SPA and API Code Sample](https://github.com/gary-archer/oauth.blog/tree/master/public/posts/improved-spa-code-sample-overview.mdx) blog post a walkthrough and the key technical points
-
-## 2021 Security Update
-
-The initial SPA uses OAuth tokens in JavaScript code, to demonstrate a productive SPA architecture.\
-In 2021 the best practice is to instead keep tokens out of the browser, to limit the impact of XSS exploits.\
-See the [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) for a more secure implementation.
 
 ## Programming Languages
 
