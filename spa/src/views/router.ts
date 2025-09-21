@@ -74,9 +74,9 @@ export class Router {
     }
 
     /*
-     * The logged out view has some special logic related to not showing user info
+     * AWS Cognito requires the use of a /loggedout path rather than #loggedout
      */
     public isInLoggedOutView(): boolean {
-        return location.hash.indexOf('loggedout') !== -1;
+        return location.href.indexOf('loggedout') !== -1;
     }
 }
