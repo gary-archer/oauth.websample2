@@ -1,5 +1,5 @@
 import express from 'express';
-import fs from 'fs-extra';
+import fs from 'node:fs/promises';
 import {Configuration} from '../configuration/configuration.js';
 import {ErrorFactory} from '../errors/errorFactory.js';
 import {ApiLogger} from '../logging/apiLogger.js';
@@ -9,7 +9,7 @@ const logger = new ApiLogger();
 try {
 
     // First load configuration
-    const apiConfigJson = await fs.readFile('api.config.json', 'utf8');
+    const apiConfigJson = await fs.readFile('api.config.json', 'utf-8');
     const apiConfig = JSON.parse(apiConfigJson) as Configuration;
 
     // Next configure web server behaviour

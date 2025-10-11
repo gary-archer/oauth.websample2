@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import fs from 'node:fs/promises';
 import {ErrorCodes} from '../errors/errorCodes.js';
 import {ServerError} from '../errors/serverError.js';
 
@@ -14,7 +14,7 @@ export class JsonFileReader {
 
         try {
 
-            const json = await fs.readFile(filePath, 'utf8');
+            const json = await fs.readFile(filePath, 'utf-8');
             return JSON.parse(json) as T;
 
         } catch (e: any) {
