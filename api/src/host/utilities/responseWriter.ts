@@ -16,11 +16,31 @@ export class ResponseWriter {
     }
 
     /*
-     * This blog's examples use a JSON response to provide client friendly OAuth errors
-     * When required, such as to inform clients how to integrate, a www-authenticate header can be added here
-     * - https://datatracker.ietf.org/doc/html/rfc6750#section-3
+     * This blog's clients read a JSON response, to handle OAuth errors in the same way as other errors
+     * Also add the standard www-authenticate header for interoperability
      */
-    public static writeErrorResponse(response: Response, error: ClientError): void {
+    public static writeErrorResponse(response: Response, error: ClientError, scope: string): void {
+
+        if (error.getStatusCode() === 401) {
+            response.setHeader(
+                'www-authenticate',
+                `Bearer error="${error.getStatusCode()}", error_description="${error.message}"`);
+        }
+
+        if (error.getStatusCode() === 403) {
+            response.setHeader(
+                'www-authenticate',
+                `Bearer error="${error.getStatusCode()}", error_description="${error.message}", scope="${scope}"`);
+        }
+
+        response.setHeader('content-type', 'application/json');
+        response.status(error.getStatusCode()).send(JSON.stringify(error.toResponseFormat()));
+    }
+
+    /*
+     * Write an error response for not found routes
+     */
+    public static writeNotFoundErrorResponse(response: Response, error: ClientError): void {
 
         response.setHeader('content-type', 'application/json');
         response.status(error.getStatusCode()).send(JSON.stringify(error.toResponseFormat()));

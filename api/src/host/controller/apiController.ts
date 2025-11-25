@@ -129,7 +129,7 @@ export class ApiController {
 
         const clientError = ErrorFactory.fromRequestNotFound();
         ExceptionHandler.handleError(clientError, response);
-        ResponseWriter.writeErrorResponse(response, clientError);
+        ResponseWriter.writeNotFoundErrorResponse(response, clientError);
     }
 
     /*
@@ -142,7 +142,7 @@ export class ApiController {
         next: NextFunction): void {
 
         const clientError = ExceptionHandler.handleError(unhandledException, response);
-        ResponseWriter.writeErrorResponse(response, clientError);
+        ResponseWriter.writeErrorResponse(response, clientError, this.configuration.oauth.scope);
     }
 
     /*
@@ -157,6 +157,7 @@ export class ApiController {
      */
     private setupCallbacks(): void {
         this.authorizationHandler = this.authorizationHandler.bind(this);
+        this.onException = this.onException.bind(this);
         this.getUserInfo = this.getUserInfo.bind(this);
         this.getCompanyList = this.getCompanyList.bind(this);
         this.getCompanyTransactions = this.getCompanyTransactions.bind(this);
