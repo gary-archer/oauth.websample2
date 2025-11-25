@@ -24,13 +24,13 @@ export class ResponseWriter {
         if (error.getStatusCode() === 401) {
             response.setHeader(
                 'www-authenticate',
-                `Bearer error="${error.getStatusCode()}", error_description="${error.message}"`);
+                `Bearer error="${error.getErrorCode()}", error_description="${error.message}"`);
         }
 
         if (error.getStatusCode() === 403) {
             response.setHeader(
                 'www-authenticate',
-                `Bearer error="${error.getStatusCode()}", error_description="${error.message}", scope="${scope}"`);
+                `Bearer error="${error.getErrorCode()}", error_description="${error.message}", scope="${scope}"`);
         }
 
         response.setHeader('content-type', 'application/json');
