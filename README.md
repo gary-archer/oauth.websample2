@@ -50,7 +50,7 @@ Finally, configure [Browser SSL Trust](https://github.com/gary-archer/oauth.blog
 Ensure that Node.js 24+ is installed, then build and run the SPA and API:
 
 ```bash
-./build.sh && ./run.sh
+./start.sh
 ```
 
 The system browser runs and you can sign in with my AWS test credentials:
