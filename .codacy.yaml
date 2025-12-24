@@ -6,5 +6,4 @@ exclude_paths: [
     'api/data/**',
     'spa/*',    
     'spa/css/**',
-    'spa/webpack/**'
 ]

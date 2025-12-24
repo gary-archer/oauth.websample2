@@ -5,12 +5,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch SPA",
-            "url": "https://www.authsamples-dev.com/spa/",
-            "webRoot": "${workspaceRoot}/src/*",
-            "sourceMaps": true,
-            "sourceMapPathOverrides":{
-                "webpack:///./*": "${workspaceRoot}/dist/*"
-            }
+            "url": "https://www.authsamples-dev.com/spa/"
         }
     ]
 }

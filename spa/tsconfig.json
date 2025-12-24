@@ -6,8 +6,7 @@
     "module":"ES2022",
     "moduleResolution": "Bundler",
     "allowSyntheticDefaultImports": true,
-    "outDir": "dist",
-    "sourceMap": true
+    "outDir": "dist"
   },
   "include": [
     "./src"

@@ -37,19 +37,19 @@ fi
 #
 if [ "$PLATFORM" == 'MACOS' ]; then
 
-  open -a Terminal ./spa/run.sh
-  open -a Terminal ./api/run.sh
+  open -a Terminal ./spa/start.sh
+  open -a Terminal ./api/start.sh
 
 elif [ "$PLATFORM" == 'WINDOWS' ]; then
 
   GIT_BASH="C:\Program Files\Git\git-bash.exe"
-  "$GIT_BASH" -c ./spa/run.sh &
-  "$GIT_BASH" -c ./api/run.sh &
+  "$GIT_BASH" -c ./spa/start.sh &
+  "$GIT_BASH" -c ./api/start.sh &
 
 elif [ "$PLATFORM" == 'LINUX' ]; then
 
-  gnome-terminal -- ./spa/run.sh
-  gnome-terminal -- ./api/run.sh
+  gnome-terminal -- ./spa/start.sh
+  gnome-terminal -- ./api/start.sh
 fi
 
 #

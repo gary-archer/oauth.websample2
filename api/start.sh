@@ -7,6 +7,24 @@
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 #
+# Download the API's dependencies
+#
+npm install
+if [ $? -ne 0 ]; then
+  echo 'Problem encountered installing API dependencies'
+  exit 1
+fi
+
+#
+# Run code quality checks
+#
+npm run lint
+if [ $? -ne 0 ]; then
+  echo 'Problem encountered running API code quality checks'
+  exit 1
+fi
+
+#
 # On Linux ensure that you have first granted Node.js permissions to listen on port 443:
 # - sudo setcap 'cap_net_bind_service=+ep' $(which node)
 #
