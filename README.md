@@ -50,7 +50,7 @@ Finally, configure [Browser SSL Trust](https://github.com/gary-archer/oauth.blog
 Ensure that Node.js 24+ is installed, then build and run the SPA and API:
 
 ```bash
-./build.sh && ./run.sh
+./start.sh
 ```
 
 The system browser runs and you can sign in with my AWS test credentials:
@@ -59,12 +59,6 @@ The system browser runs and you can sign in with my AWS test credentials:
 - Password: `GuestPassword1`
 
 You can then test all lifecycle operations, including token refresh, multi tab browsing and logout.
-
-## Problem Areas
-
-- The updated SPA does not handle tokens in line with 2021 security recommendations.
-- The SPA also demonstrates some usability problems with iframe-based silent token renewal.
-- The [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) solves these problems but requires a more complex flow.
 
 ## Further Information
 
@@ -81,3 +75,9 @@ You can then test all lifecycle operations, including token refresh, multi tab b
 * The SPA uses the [oidc-client-ts](https://github.com/authts/oidc-client-ts) library to implement OpenID Connect.
 * The API uses the [jose](https://github.com/panva/jose) library to validate JWT access tokens.
 * AWS Cognito is the default authorization server for the SPA and API.
+
+## Limitations
+
+- The updated SPA does not handle tokens in line with 2021 security recommendations.
+- The SPA also demonstrates some usability problems with iframe-based silent token renewal.
+- The [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) solves these problems but requires a more complex flow.

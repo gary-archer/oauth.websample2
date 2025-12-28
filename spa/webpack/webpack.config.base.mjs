@@ -34,7 +34,11 @@ export default {
 
         // Output bundles to a dist folder
         path: path.resolve(dirname, './dist'),
-        filename: '[name].bundle.js'
+        filename: '[name].bundle.js',
+        module: true,
+    },
+    experiments: {
+        outputModule: true,
     },
     optimization: {
 

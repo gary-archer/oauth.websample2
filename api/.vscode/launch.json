@@ -8,9 +8,7 @@
             "runtimeArgs": ["--import", "tsx"],
             "args": ["src/host/startup/app.ts"],
             "outputCapture": "std",
-            "skipFiles": [
-                "<node_internals>/**"
-            ]
+            "skipFiles": ["<node_internals>/**"]
         }
     ]
 }

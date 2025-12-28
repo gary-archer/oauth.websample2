@@ -17,5 +17,5 @@ export default merge(baseConfig, {
         new webpack.DefinePlugin({
             IS_DEBUG: 'true',
         }),
-    ]
+    ],
 });
