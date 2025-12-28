@@ -1,6 +1,6 @@
 {
     "api": {
-        "port": 443,
+        "port": 446,
         "sslCertificateFileName": "../certs/authsamples-dev.ssl.p12",
         "sslCertificatePassword": "Password1",
         "trustedOrigins": [

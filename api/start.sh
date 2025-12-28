@@ -28,7 +28,7 @@ fi
 
 #
 # Start the API
-# On Linux ensure that you have first granted Node.js permissions to listen on port 443:
+# On Linux ensure that you have first granted Node.js permissions to listen on port 446:
 # - sudo setcap 'cap_net_bind_service=+ep' $(which node)
 #
 npm start

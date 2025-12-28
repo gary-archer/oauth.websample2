@@ -12,9 +12,9 @@
   },
   "scripts": {
     "lint": "npx eslint . --ignore-pattern dist",
-    "start": "npm run clean && NODE_OPTIONS='--import tsx' npx webpack --config webpack/webpack.config.dev.ts --watch",
+    "start": "npm run clean && NODE_OPTIONS='--import tsx' npx webpack serve --config webpack/webpack.config.dev.ts",
     "build": "npm run clean && NODE_OPTIONS='--import tsx' npx webpack --config webpack/webpack.config.prod.ts",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist && mkdir dist && cp index.html css/* spa.config.json dist/"
   },
   "dependencies": {
     "axios": "^1.13.2",
@@ -24,6 +24,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@types/mustache": "^4.2.5",
+    "@types/node": "^24.10.3",
     "eslint": "^9.39.2",
     "ts-loader": "^9.5.4",
     "tsx": "^4.21.0",
@@ -31,6 +32,7 @@
     "typescript-eslint": "^8.49.0",
     "webpack": "^5.103.0",
     "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2",
     "webpack-merge": "^6.0.1"
   }
 }

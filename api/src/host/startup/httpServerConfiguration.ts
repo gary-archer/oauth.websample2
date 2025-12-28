@@ -1,5 +1,4 @@
 import cors from 'cors';
-import express from 'express';
 import {Application} from 'express';
 import fs from 'node:fs/promises';
 import https from 'https';
@@ -50,16 +49,6 @@ export class HttpServerConfiguration {
         // Handle errors after routes are defined
         this.express.use('/api/*_', this.apiController.onRequestNotFound);
         this.express.use('/api/*_', this.apiController.onException);
-    }
-
-    /*
-     * For code sample simplicity, the API serves web content, though a real API would not do this
-     */
-    public initializeWebStaticContentHosting(): void {
-
-        this.express.use('/spa', express.static('../spa'));
-        this.express.use('/spa/loggedout', express.static('../spa'));
-        this.express.use('/favicon.ico', express.static('../spa/favicon.ico'));
     }
 
     /*
