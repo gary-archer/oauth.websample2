@@ -27,9 +27,7 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Start the API
-# On Linux ensure that you have first granted Node.js permissions to listen on port 443:
-# - sudo setcap 'cap_net_bind_service=+ep' $(which node)
+# Start the SPA
 #
 npm start
 if [ $? -ne 0 ]; then

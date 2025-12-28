@@ -78,6 +78,6 @@ You can then test all lifecycle operations, including token refresh, multi tab b
 
 ## Limitations
 
-- The updated SPA does not handle tokens in line with 2021 security recommendations.
-- The SPA also demonstrates some usability problems with iframe-based silent token renewal.
+- The SPA uses tokens in the browser, which is against 2021 security best practices.
+- The SPA uses the original iframe-based silent token renewal which has some usability problems.
 - The [Final SPA Code Sample](https://github.com/gary-archer/oauth.websample.final) solves these problems but requires a more complex flow.

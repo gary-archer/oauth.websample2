@@ -7,7 +7,7 @@ export default merge(baseConfig, {
     // Let webpack know this is a development build
     mode: 'development',
 
-    // This setting enables us to step through our TypeScript in Visual Studio Code
+    // This setting enables code step through in Visual Studio Code
     output: Object.assign({}, baseConfig.output, {
         devtoolModuleFilenameTemplate: 'file:///[absolute-resource-path]'
     }),
