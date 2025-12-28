@@ -7,12 +7,12 @@ export default merge(baseConfig, {
     // Let webpack know this is a production build
     mode: 'production',
 
-    // Turn off performance warnings until we have a plan for dealing with them
+    // Disable performance warnings about bundle sizes
     performance: {
         hints: false
     },
 
-    // Pass a variable through to our Web UI to tell it to not display stack traces
+    // Pass a variable through to the frontend to tell it to not display stack traces
     plugins:[
         new webpack.DefinePlugin({
             IS_DEBUG: 'false',

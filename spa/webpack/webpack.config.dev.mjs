@@ -7,12 +7,12 @@ export default merge(baseConfig, {
     // Let webpack know this is a development build
     mode: 'development',
 
-    // This setting enables code step through in Visual Studio Code
+    // Enable stepping through the SPA's TypeScript code in the Visual Studio Code debugger
     output: Object.assign({}, baseConfig.output, {
         devtoolModuleFilenameTemplate: 'file:///[absolute-resource-path]'
     }),
 
-    // Pass a variable through to our Web UI to tell it to display stack traces
+    // Pass a variable through to the frontend to tell it to display stack traces
     plugins:[
         new webpack.DefinePlugin({
             IS_DEBUG: 'true',

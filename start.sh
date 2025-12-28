@@ -4,6 +4,8 @@
 # Run the OAuth-secured SPA and API, which use tokens from the authorization server
 ###################################################################################
 
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
 #
 # Get the platform
 #
