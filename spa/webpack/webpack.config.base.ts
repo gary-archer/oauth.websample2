@@ -1,7 +1,8 @@
 import path from 'path';
+import webpack from 'webpack';
 
 const dirname = process.cwd();
-export default {
+const config: webpack.Configuration = {
 
     // Set the working folder and build bundles for the browser
     context: path.resolve(dirname, './src'),
@@ -55,3 +56,5 @@ export default {
         }
     }
 };
+
+export default config;

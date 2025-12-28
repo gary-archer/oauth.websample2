@@ -12,8 +12,8 @@
   },
   "scripts": {
     "lint": "npx eslint . --ignore-pattern dist",
-    "start": "npm run clean && webpack --config webpack/webpack.config.dev.mjs --watch",
-    "build": "npm run clean && webpack --config webpack/webpack.config.prod.mjs",
+    "start": "npm run clean && NODE_OPTIONS='--import tsx' npx webpack --config webpack/webpack.config.dev.ts --watch",
+    "build": "npm run clean && NODE_OPTIONS='--import tsx' npx webpack --config webpack/webpack.config.prod.ts",
     "clean": "rm -rf dist"
   },
   "dependencies": {
@@ -26,6 +26,7 @@
     "@types/mustache": "^4.2.5",
     "eslint": "^9.39.2",
     "ts-loader": "^9.5.4",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.49.0",
     "webpack": "^5.103.0",

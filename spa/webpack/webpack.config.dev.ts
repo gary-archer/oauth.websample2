@@ -1,8 +1,8 @@
 import webpack from 'webpack';
 import {merge} from 'webpack-merge';
-import baseConfig from './webpack.config.base.mjs';
+import baseConfig from './webpack.config.base.js';
 
-export default merge(baseConfig, {
+const devConfig: webpack.Configuration = {
 
     // Let webpack know this is a development build
     mode: 'development',
@@ -18,4 +18,6 @@ export default merge(baseConfig, {
             IS_DEBUG: 'true',
         }),
     ],
-});
+};
+
+export default merge(baseConfig, devConfig);
