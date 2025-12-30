@@ -71,7 +71,8 @@ You can then test all lifecycle operations, including token refresh, multi tab b
 
 ## Infrastructure
 
-* Express is used as the HTTP server for both the API and the SPA's web static content.
+* Express is used as the HTTP server for the secured API.
+* The Webpack development server is used to serve the SPA's static content.
 * The SPA uses the [oidc-client-ts](https://github.com/authts/oidc-client-ts) library to implement OpenID Connect.
 * The API uses the [jose](https://github.com/panva/jose) library to validate JWT access tokens.
 * AWS Cognito is the default authorization server for the SPA and API.
