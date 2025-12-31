@@ -211,9 +211,8 @@ export class App {
 
                     if (this.router.isInHomeView()) {
 
-                        // Force a reload if we are already in the home view
+                        // Re-run the main view if we are already in the home view
                         await this.runMainView();
-                        await this.runUserInfoView();
 
                     } else {
 
