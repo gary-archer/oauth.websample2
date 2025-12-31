@@ -6,6 +6,14 @@
 {
     height: 80px;
 }
+.mobileHeaderRow
+{
+    height: 60px;
+}
+.mobileRow
+{
+    height: 40px;
+}
 .valuecolor
 {
     color: blue;
@@ -61,12 +69,5 @@
     body
     {
         font-size: 0.85em;
-    }
-}
-@media all and (max-width: 768px)
-{
-    body
-    {
-        font-size: 0.45em;
     }
 }

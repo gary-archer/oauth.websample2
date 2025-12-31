@@ -2,7 +2,6 @@ import mustache from 'mustache';
 import {ApiClient} from '../api/client/apiClient';
 import {CompanyTransactions} from '../api/entities/companyTransactions';
 import {ErrorCodes} from '../plumbing/errors/errorCodes';
-import {UIError} from '../plumbing/errors/uiError';
 import {CurrentLocation} from '../plumbing/utilities/currentLocation';
 import {DomUtils} from './domUtils';
 
@@ -13,39 +12,45 @@ export class TransactionsView {
 
     private readonly apiClient: ApiClient;
     private readonly companyId: string;
+    private data: CompanyTransactions | null;
 
     public constructor(apiClient: ApiClient, companyId: string) {
         this.apiClient = apiClient;
         this.companyId = companyId;
+        this.data = null;
+    }
+
+    public getCompanyId(): string {
+        return this.companyId;
     }
 
     /*
     * Wait for data then render it
     */
-    public async load(): Promise<void> {
+    public async run(forceReload: boolean): Promise<void> {
 
         try {
 
             // Record the current location, to support deep linking after login
             CurrentLocation.path = location.hash;
 
-            // Try to get data
-            const data = await this.apiClient.getCompanyTransactions(this.companyId);
+            // Try to get data if required
+            if (!this.data || forceReload) {
+                this.data = await this.apiClient.getCompanyTransactions(this.companyId);
+            }
 
-            // Render new content
-            this.renderData(data);
+            // Render the latest data
+            this.renderData(this.data);
 
-        } catch (e: any) {
-
-            const uiError = e as UIError;
+        } catch (uiError: any) {
 
             // Handle invalid input due to typing an id into the browser address bar
-            if (uiError.getStatusCode() === 404 && uiError.getErrorCode() === ErrorCodes.companyNotFound) {
+            if (uiError.statusCode === 404 && uiError.errorCode === ErrorCodes.companyNotFound) {
 
                 // User typed an id value outside of valid company ids
                 location.hash = '#';
 
-            } else if (uiError.getStatusCode() === 400 && uiError.getErrorCode() === ErrorCodes.invalidCompanyId) {
+            } else if (uiError.statusCode === 400 && uiError.errorCode === ErrorCodes.invalidCompanyId) {
 
                 // User typed an invalid id such as 'abc'
                 location.hash = '#';
@@ -64,7 +69,6 @@ export class TransactionsView {
      */
     private renderData(data: CompanyTransactions): void {
 
-        // Build a view model from the data
         const viewModel = {
             title: `Today's Transactions for ${data.company.name}`,
             transactions: data.transactions.map((transaction) => {
@@ -107,7 +111,6 @@ export class TransactionsView {
                 </div>
             </div>`;
 
-        // Update the main elemnent's content in a manner that handles dangerous characters correctly
         const html = mustache.render(htmlTemplate, viewModel);
         DomUtils.html('#main', html);
     }

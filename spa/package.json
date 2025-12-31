@@ -2,8 +2,6 @@
   "name": "basicspa",
   "version": "2.0.0",
   "description": "An SPA using the OIDC Client security library and a full OAuth lifecycle",
-  "main": "index.ts",
-  "keywords": [],
   "author": "Gary Archer",
   "license": "MIT",
   "type": "module",
@@ -12,9 +10,8 @@
   },
   "scripts": {
     "lint": "npx eslint . --ignore-pattern dist",
-    "start": "npm run clean && NODE_OPTIONS='--import tsx' npx webpack serve --config webpack/webpack.config.dev.ts",
-    "build": "npm run clean && NODE_OPTIONS='--import tsx' npx webpack --config webpack/webpack.config.prod.ts",
-    "clean": "rm -rf dist && mkdir dist && cp index.html css/* spa.config.json dist/"
+    "start": "NODE_OPTIONS='--import tsx' npx webpack serve --config webpack/webpack.config.dev.ts",
+    "build": "NODE_OPTIONS='--import tsx' npx webpack --config webpack/webpack.config.prod.ts"
   },
   "dependencies": {
     "axios": "^1.13.2",
@@ -25,6 +22,7 @@
     "@eslint/js": "^9.39.2",
     "@types/mustache": "^4.2.5",
     "@types/node": "^24.10.3",
+    "copy-webpack-plugin": "^13.0.1",
     "eslint": "^9.39.2",
     "ts-loader": "^9.5.4",
     "tsx": "^4.21.0",

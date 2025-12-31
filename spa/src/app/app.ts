@@ -41,6 +41,7 @@ export class App {
 
             // Start listening for hash changes
             window.onhashchange = this.onHashChange;
+            window.onresize = this.onResize;
             window.onstorage = this.onStorageChange;
 
             // Do the initial render
@@ -53,11 +54,11 @@ export class App {
             await this.oauthClient.handleLoginResponse();
 
             // Load the main view, which may trigger a login redirect
-            await this.loadMainView();
+            await this.runMainView();
 
             // Get user info from the API unless we are in the logged out view
             if (!this.router.isInLoggedOutView()) {
-                await this.loadUserInfo();
+                await this.runUserInfoView();
             }
 
         } catch (e: any) {
@@ -110,13 +111,13 @@ export class App {
     /*
      * Load API data for the main view and update UI controls
      */
-    private async loadMainView(): Promise<void> {
+    private async runMainView(forceReload = false): Promise<void> {
 
         // Indicate busy
         this.headerButtonsView.disableSessionButtons();
 
         // Load the view
-        await this.router.loadView();
+        await this.router.runView(forceReload);
 
         if (this.router.isInLoggedOutView()) {
 
@@ -135,8 +136,8 @@ export class App {
     /*
      * Load API data for the user info fragment
      */
-    private async loadUserInfo(): Promise<void> {
-        await this.titleView.loadUserInfo(this.oauthClient, this.apiClient);
+    private async runUserInfoView(forceReload = false): Promise<void> {
+        await this.titleView.runUserInfoView(this.oauthClient, this.apiClient, forceReload);
     }
 
     /*
@@ -158,13 +159,32 @@ export class App {
 
             // Run main view navigation
             if (this.isInitialised) {
-                await this.loadMainView();
+                await this.runMainView();
             }
 
         } catch (e: any) {
 
             // Report failures
             this.errorView.report(e);
+        }
+    }
+
+    /*
+     * After a resize, re-run the main view in case it needs to render a mobile or desktop layout
+     */
+    private async onResize(): Promise<void> {
+
+        if (this.isInitialised) {
+
+            const viewRunner = async () => {
+                try {
+                    await this.runMainView();
+                } catch (e: any) {
+                    this.errorView.report(e);
+                }
+            };
+
+            setTimeout(async () => viewRunner(), 250);
         }
     }
 
@@ -192,7 +212,8 @@ export class App {
                     if (this.router.isInHomeView()) {
 
                         // Force a reload if we are already in the home view
-                        await this.loadMainView();
+                        await this.runMainView();
+                        await this.runUserInfoView();
 
                     } else {
 
@@ -215,8 +236,8 @@ export class App {
     private async onReloadData(): Promise<void> {
 
         try {
-            await this.loadMainView();
-            await this.loadUserInfo();
+            await this.runMainView(true);
+            await this.runUserInfoView(true);
 
         } catch (e: any) {
 
@@ -265,6 +286,7 @@ export class App {
      */
     private setupCallbacks(): void {
         this.onHashChange = this.onHashChange.bind(this);
+        this.onResize = this.onResize.bind(this);
         this.onHome = this.onHome.bind(this);
         this.onReloadData = this.onReloadData.bind(this);
         this.onLogout = this.onLogout.bind(this);

@@ -12,43 +12,47 @@ export class Router {
 
     private apiClient: ApiClient;
     private errorView: ErrorView;
+    private companiesView: CompaniesView | null;
+    private transactionsView: TransactionsView | null;
 
     public constructor(apiClient: ApiClient, errorView: ErrorView) {
+
         this.apiClient = apiClient;
         this.errorView = errorView;
+        this.companiesView = null;
+        this.transactionsView = null;
     }
 
     /*
-     * Execute a view based on the hash URL data
+     * Run the view based on the hash URL data
      */
-    public async loadView(): Promise<void> {
+    public async runView(forceReload: boolean): Promise<void> {
 
         // Initialise
         DomUtils.createDiv('#root', 'main');
         this.errorView.clear();
 
-        // Our simple router works out which main view to show from a couple of known hash fragments
         if (this.isInLoggedOutView()) {
 
-            // If the user has explicitly logged out show this view
+            // If the user needs to sign in, show the login required view
             const view = new LoginRequiredView();
             await view.load();
 
         } else {
 
             // The transactions view has a URL such as #company=2
-            const transactionsCompany = this.getTransactionsViewId();
-            if (transactionsCompany) {
+            const companyId = this.getTransactionsViewId();
+            if (companyId) {
 
                 // If there is an id we move to the transactions view
-                const view = new TransactionsView(this.apiClient, transactionsCompany);
-                await view.load();
+                const view = this.createTransactionsView(companyId);
+                await view.run(forceReload);
 
             } else {
 
                 // Otherwise we show the companies list view
-                const view = new CompaniesView(this.apiClient);
-                await view.load();
+                const view = this.createCompaniesView();
+                await view.run(forceReload);
             }
         }
     }
@@ -74,9 +78,33 @@ export class Router {
     }
 
     /*
-     * Check for loggedout anywhere in the URL
+     * The logged out view has some special logic related to not showing user info
      */
     public isInLoggedOutView(): boolean {
-        return location.href.indexOf('loggedout') !== -1;
+        return location.hash.indexOf('loggedout') !== -1;
+    }
+
+    /*
+     * Create the companies view the first time
+     */
+    private createCompaniesView(): CompaniesView {
+
+        if (!this.companiesView) {
+            this.companiesView = new CompaniesView(this.apiClient);
+        }
+
+        return this.companiesView;
+    }
+
+    /*
+     * Create the transactions view the first time or if the company ID changes
+     */
+    private createTransactionsView(companyId: string): TransactionsView {
+
+        if (!this.transactionsView || this.transactionsView.getCompanyId() !== companyId) {
+            this.transactionsView = new TransactionsView(this.apiClient, companyId);
+        }
+
+        return this.transactionsView;
     }
 }

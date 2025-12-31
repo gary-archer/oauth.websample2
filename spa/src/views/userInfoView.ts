@@ -6,41 +6,60 @@ import {OAuthUserInfo} from '../plumbing/oauth/oauthUserInfo';
 import {DomUtils} from './domUtils';
 
 /*
- * The user info view renders details of the logged in user
+ * The user info view renders details of the logged in user from multiple data sources
  */
 export class UserInfoView {
 
-    public async load(oauthClient: OAuthClient, apiClient: ApiClient): Promise<void> {
+    private oauthUserInfo: OAuthUserInfo | null;
+    private apiUserInfo: ApiUserInfo | null;
 
-        // Make the requests to get user info
-        const oauthUserInfo = await oauthClient.getUserInfo();
-        const apiUserInfo = await apiClient.getUserInfo();
+    public constructor() {
+        this.oauthUserInfo = null;
+        this.apiUserInfo = null;
+    }
 
-        if (oauthUserInfo && apiUserInfo) {
+    /*
+     * Run the user info view and get data if required
+     */
+    public async run(oauthClient: OAuthClient, apiClient: ApiClient, forceReload: boolean): Promise<void> {
 
-            // Build a view model from the data
-            const viewModel = {
-                userName: this.getUserNameForDisplay(oauthUserInfo),
-                title: this.getUserTitle(apiUserInfo),
-                regions: this.getUserRegions(apiUserInfo),
-            };
-
-            // Form the template
-            const htmlTemplate =
-                `<div class='text-end mx-auto'>
-                    <div class='fw-bold basictooltip'>{{userName}}
-                        <div class='basictooltiptext'>
-                            <small>{{title}}</small>
-                            <br />
-                            <small>{{regions}}</small>
-                        </div>
-                    </div>
-                </div>`;
-
-            // Render results
-            const html = mustache.render(htmlTemplate, viewModel);
-            DomUtils.html('#username', html);
+        if (!this.oauthUserInfo || !this.apiUserInfo && forceReload) {
+            this.oauthUserInfo = await oauthClient.getUserInfo();
+            this.apiUserInfo = await apiClient.getUserInfo();
         }
+
+        if (this.oauthUserInfo && this.apiUserInfo) {
+            this.renderData(this.oauthUserInfo, this.apiUserInfo);
+        }
+    }
+
+    /*
+     * Render user info
+     */
+    private renderData(oauthUserInfo: OAuthUserInfo, apiUserInfo: ApiUserInfo) {
+
+        // Build a view model from the data
+        const viewModel = {
+            userName: this.getUserNameForDisplay(oauthUserInfo),
+            title: this.getUserTitle(apiUserInfo),
+            regions: this.getUserRegions(apiUserInfo),
+        };
+
+        // Form the template
+        const htmlTemplate =
+            `<div class='text-end mx-auto'>
+                <div class='fw-bold basictooltip'>{{userName}}
+                    <div class='basictooltiptext'>
+                        <small>{{title}}</small>
+                        <br />
+                        <small>{{regions}}</small>
+                    </div>
+                </div>
+            </div>`;
+
+        // Render results
+        const html = mustache.render(htmlTemplate, viewModel);
+        DomUtils.html('#username', html);
     }
 
     /*

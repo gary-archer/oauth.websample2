@@ -37,8 +37,8 @@ export class TitleView {
     /*
      * Load the child user info view when requested
      */
-    public async loadUserInfo(oauthClient: OAuthClient, apiClient: ApiClient): Promise<void> {
-        await this.userInfoView.load(oauthClient, apiClient);
+    public async runUserInfoView(oauthClient: OAuthClient, apiClient: ApiClient, forceReload: boolean): Promise<void> {
+        await this.userInfoView.run(oauthClient, apiClient, forceReload);
     }
 
     /*

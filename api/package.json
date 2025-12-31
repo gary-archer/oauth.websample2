@@ -2,8 +2,6 @@
   "name": "basicapi",
   "version": "2.0.0",
   "description": "An OAuth secured API with control over extensible claims",
-  "main": "index.ts",
-  "keywords": [],
   "author": "Gary Archer",
   "license": "MIT",
   "type": "module",

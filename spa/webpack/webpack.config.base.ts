@@ -1,3 +1,4 @@
+import CopyPlugin from 'copy-webpack-plugin';
 import path from 'path';
 import webpack from 'webpack';
 
@@ -5,7 +6,7 @@ const dirname = process.cwd();
 const config: webpack.Configuration = {
 
     // Set the working folder and build bundles for the browser
-    context: path.resolve(dirname, './src'),
+    context: path.resolve(dirname, '.'),
     target: ['web'],
 
     // Always output source maps for SPAs
@@ -14,7 +15,7 @@ const config: webpack.Configuration = {
     entry: {
 
         // Specify the application entry point
-        app: ['./index.ts']
+        app: ['./src/index.ts'],
     },
     module: {
         rules: [
@@ -22,21 +23,22 @@ const config: webpack.Configuration = {
                 // Files with a .ts extension are loaded by the Typescript loader
                 test: /\.ts$/,
                 use: 'ts-loader',
-                exclude: /node_modules/
-            }
-        ]
+                exclude: /node_modules/,
+            },
+        ],
     },
     resolve: {
 
         // Set extensions for import statements, and the .js extension allows us to import modules from JS libraries
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js'],
     },
     output: {
 
-        // Output ECMAScript bundles to a dist folder
+        // Output bundles to a dist folder
         path: path.resolve(dirname, './dist'),
         filename: '[name].bundle.js',
         module: true,
+        clean: true,
     },
     experiments: {
         outputModule: true,
@@ -50,11 +52,31 @@ const config: webpack.Configuration = {
                     chunks: 'initial',
                     name: 'vendor',
                     test: /node_modules/,
-                    enforce: true
+                    enforce: true,
                 },
-            }
-        }
-    }
+            },
+        },
+    },
+    plugins: [
+
+        // Copy static files to the dist folder
+        new CopyPlugin({
+            patterns: [
+                {
+                    from: 'index.html',
+                    to: path.resolve('dist'),
+                },
+                {
+                    from: 'css',
+                    to: path.resolve('dist'),
+                },
+                {
+                    from: 'spa.config.json',
+                    to: path.resolve('dist'),
+                },
+            ]
+        }),
+    ]
 };
 
 export default config;
