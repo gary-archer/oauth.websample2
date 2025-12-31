@@ -71,6 +71,10 @@ const config: webpack.Configuration = {
                     to: path.resolve('dist'),
                 },
                 {
+                    from: 'favicon.ico',
+                    to: path.resolve('dist'),
+                },
+                {
                     from: 'spa.config.json',
                     to: path.resolve('dist'),
                 },
