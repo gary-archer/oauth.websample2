@@ -7,7 +7,7 @@ const config: webpack.Configuration = {
 
     // Set the working folder and build bundles for the browser
     context: path.resolve(dirname, '.'),
-    target: ['web'],
+    target: 'web',
 
     // Always output source maps for SPAs
     devtool: 'source-map',
@@ -15,7 +15,7 @@ const config: webpack.Configuration = {
     entry: {
 
         // Specify the application entry point
-        app: ['./src/index.ts'],
+        app: './src/index.ts',
     },
     module: {
         rules: [
@@ -37,6 +37,7 @@ const config: webpack.Configuration = {
         // Output bundles to a dist folder
         path: path.resolve(dirname, './dist'),
         filename: '[name].bundle.js',
+        chunkFilename: '[name].bundle.js',
         module: true,
         clean: true,
     },
