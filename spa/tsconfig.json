@@ -3,7 +3,7 @@
     "strict": true,
     "target": "ES2017",
     "lib": ["ES2024", "DOM"],
-    "module":"ES2015",
+    "module":"ES2020",
     "moduleResolution": "Bundler",
     "allowSyntheticDefaultImports": true,
     "outDir": "dist",
