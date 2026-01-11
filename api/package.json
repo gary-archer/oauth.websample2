@@ -9,7 +9,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "lint": "npx eslint .",
+    "lint": "eslint .",
     "start": "tsx watch src/host/startup/app.ts",
     "buildRelease": "tsc --sourceMap false"
   },
