@@ -117,20 +117,20 @@ export class ApiClient {
 
         try {
 
-            const options = {
+            const options: RequestInit = {
                 method,
-                data: dataToSend,
+                body: dataToSend,
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                 },
-            } as RequestInit;
+            };
 
             const response = await fetch(url, options);
             if (response.ok) {
                 return await response.json();
             }
 
-            throw await ErrorFactory.getFromFetchResponseError(response, 'web API');
+            throw await ErrorFactory.getFromApiResponseError(response);
 
         } catch (e: any) {
             throw ErrorFactory.getFromFetchError(e, url, 'web API');

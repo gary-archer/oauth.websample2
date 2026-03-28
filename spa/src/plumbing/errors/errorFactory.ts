@@ -144,13 +144,21 @@ export class ErrorFactory {
      */
     public static async getFromFetchResponseError(response: Response, source: string): Promise<UIError> {
 
-        // Create an error indicating a server error
         const error = new UIError(
             source,
             ErrorCodes.responseError,
             `An error response was returned from the ${source}`
         );
         error.setStatusCode(response.status);
+        return error;
+    }
+
+    /*
+     * Response errors can contain an API error response or may be issued by an API gateway
+     */
+    public static async getFromApiResponseError(response: Response): Promise<UIError> {
+
+        const error = await this.getFromFetchResponseError(response, 'web API');
 
         try {
             // The API returns JSON responses for all errors so try to read JSON
