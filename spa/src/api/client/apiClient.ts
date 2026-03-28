@@ -1,8 +1,6 @@
-import axios, {Method} from 'axios';
 import {ErrorFactory} from '../../plumbing/errors/errorFactory';
 import {UIError} from '../../plumbing/errors/uiError';
 import {OAuthClient} from '../../plumbing/oauth/oauthClient';
-import {AxiosUtils} from '../../plumbing/utilities/axiosUtils';
 import {ApiUserInfo} from '../entities/apiUserInfo';
 import {Company} from '../entities/company';
 import {CompanyTransactions} from '../entities/companyTransactions';
@@ -53,7 +51,7 @@ export class ApiClient {
      * A central method to get data from an API and handle 401 retries
      * This basic implementation only works if a single API request is in flight at a time
      */
-    private async callApi(path: string, method: Method, dataToSend?: any): Promise<any> {
+    private async callApi(path: string, method: string, dataToSend?: any): Promise<any> {
 
         // Get the full path
         const url = `${this.apiBaseUrl}${path}`;
@@ -113,26 +111,29 @@ export class ApiClient {
      */
     private async callApiWithToken(
         url: string,
-        method: Method,
+        method: string,
         dataToSend: any,
         accessToken: string): Promise<any> {
 
         try {
 
-            const response = await axios.request({
-                url,
+            const options = {
                 method,
                 data: dataToSend,
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                 },
-            });
+            } as RequestInit;
 
-            AxiosUtils.checkJson(response.data);
-            return response.data;
+            const response = await fetch(url, options);
+            if (response.ok) {
+                return await response.json();
+            }
+
+            throw await ErrorFactory.getFromFetchResponseError(response, 'web API');
 
         } catch (e: any) {
-            throw ErrorFactory.getFromHttpError(e, url, 'web API');
+            throw ErrorFactory.getFromFetchError(e, url, 'web API');
         }
     }
 }
