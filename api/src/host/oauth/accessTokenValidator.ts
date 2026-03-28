@@ -1,5 +1,5 @@
-import {AxiosError} from 'axios';
 import {JWTPayload, JWTVerifyOptions, jwtVerify} from 'jose';
+//import {JOSEError} from 'jose/errors';
 import {ClientError} from '../../logic/errors/clientError.js';
 import {ErrorCodes} from '../../logic/errors/errorCodes.js';
 import {ClaimsReader} from '../claims/claimsReader.js';
@@ -44,8 +44,8 @@ export class AccessTokenValidator {
 
         } catch (e: any) {
 
-            // JWKS URI failures return a 500
-            if (e instanceof AxiosError || e.code === 'ERR_JOSE_GENERIC') {
+            // Backend errors return a 500 status
+            if (e?.cause?.code || e.code === 'ERR_JOSE_GENERIC') {
                 throw ErrorFactory.fromJwksDownloadError(e, this.configuration.jwksEndpoint);
             }
 

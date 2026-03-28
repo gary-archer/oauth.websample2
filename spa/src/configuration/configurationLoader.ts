@@ -1,6 +1,4 @@
-import axios from 'axios';
 import {Configuration} from '../configuration/configuration';
-import {AxiosUtils} from '../plumbing/utilities/axiosUtils';
 import {ErrorFactory} from '../plumbing/errors/errorFactory';
 
 /*
@@ -14,16 +12,19 @@ export class ConfigurationLoader {
      */
     public static async download(fileName: string): Promise<Configuration> {
 
+        const url = `${fileName}?t=${new Date().getTime()}`;
         try {
 
-            const url = `${fileName}?t=${new Date().getTime()}`;
-            const response = await axios.get<Configuration>(url);
-            AxiosUtils.checkJson(response.data);
-            return response.data;
+            const response = await fetch(url);
+            if (response.ok) {
+                return await response.json() as Configuration;
+            }
 
-        } catch (xhr) {
+            throw await ErrorFactory.getFromFetchResponseError(response, 'web host');
 
-            throw ErrorFactory.getFromHttpError(xhr, fileName, 'web host');
+        } catch (e: any) {
+
+            throw ErrorFactory.getFromFetchError(e, url, 'web host');
         }
     }
 }

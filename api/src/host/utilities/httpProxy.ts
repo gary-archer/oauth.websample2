@@ -1,5 +1,4 @@
-
-import {HttpsProxyAgent} from 'https-proxy-agent';
+import {EnvHttpProxyAgent} from 'undici';
 import {Configuration} from '../configuration/configuration.js';
 
 /*
@@ -7,22 +6,29 @@ import {Configuration} from '../configuration/configuration.js';
  */
 export class HttpProxy {
 
-    private readonly agent: any = null;
+    private readonly agent: EnvHttpProxyAgent | null;
 
     /*
      * Create an HTTP agent to route requests to
      */
     public constructor(configuration: Configuration) {
 
-        if (configuration.api.useProxy) {
-            this.agent = new HttpsProxyAgent(configuration.api.proxyUrl);
+        if (!configuration.api.useProxy) {
+
+            this.agent = null;
+
+        } else {
+
+            this.agent = new EnvHttpProxyAgent({
+                httpsProxy: configuration.api.proxyUrl,
+            });
         }
     }
 
     /*
-     * Return the agent to other parts of the app
+     * Return the agent to be assigned during HTTP requests
      */
-    public getAgent(): HttpsProxyAgent<string> {
+    public getDispatcher(): EnvHttpProxyAgent | null {
         return this.agent;
     }
 }

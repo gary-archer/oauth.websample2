@@ -53,61 +53,15 @@ export class ErrorFactory {
     /*
      * Handle the error for key identifier lookups
      */
-    public static fromJwksDownloadError(e: any, url: string): ServerError {
+    public static fromJwksDownloadError(exception: any, url: string): ServerError {
 
         const error = new ServerError(
             ErrorCodes.jwksDownloadError,
             'Problem downloading token signing keys',
-            e.stack);
+            exception.stack);
 
-        const details = this.getExceptionDetails(e);
+        const details = this.getExceptionDetails(exception);
         error.setDetails(`${details}, URL: ${url}`);
-        return error;
-    }
-
-    /*
-     * Handle user info lookup failures
-     */
-    public static fromUserInfoError(e: any, url: string): ServerError | ClientError {
-
-        // Avoid reprocessing
-        if (e instanceof ServerError) {
-            return e;
-        }
-
-        // Collect the parts of the error, including the standard OAuth error / error_description fields
-        let status = 0;
-        if (e.response && e.response.status) {
-            status = e.response.status;
-        }
-
-        let responseData: any = {};
-        if (e.response && e.response.data && typeof e.response.data === 'object') {
-            responseData = e.response.data;
-        }
-
-        const parts: string[] = [];
-        parts.push('User info lookup failed');
-        if (status) {
-            parts.push(`Status: ${status}`);
-        }
-        if (responseData.error) {
-            parts.push(`Code: ${responseData.error}`);
-        }
-        if (responseData.error_description) {
-            parts.push(`Description: ${responseData.error_description}`);
-        }
-        parts.push(`URL: ${url}`);
-        const details = parts.join(', ');
-
-        // Report 401 errors where the access token is rejected
-        if (status == 401) {
-            return ClientError.create401(details);
-        }
-
-        // Otherwise report technical failures
-        const error = new ServerError(ErrorCodes.userinfoFailure, 'User info lookup failed', e.stack);
-        error.setDetails(details);
         return error;
     }
 
@@ -122,15 +76,28 @@ export class ErrorFactory {
     }
 
     /*
-     * Get the message from an exception and avoid returning [object Object]
+     * Get the message from an exception
      */
-    private static getExceptionDetails(e: any): string {
+    private static getExceptionDetails(exception: any): string {
 
-        if (e.message) {
-            return e.message;
+        // Prefer to return a code and message
+        const code = exception?.code || exception?.cause?.code || '';
+        const message = exception.message || '';
+
+        const parts = [];
+        if (code) {
+            parts.push(code);
+        }
+        if (code) {
+            parts.push(message);
         }
 
-        const details = e.toString();
+        if (parts.length > 0) {
+            return parts.join(', ');
+        }
+
+        // Otherwise get raw details and avoid returning [object Object]
+        const details = exception.toString();
         if (details !== {}.toString()) {
             return details;
         }

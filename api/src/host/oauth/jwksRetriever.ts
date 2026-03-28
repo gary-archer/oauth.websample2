@@ -1,5 +1,5 @@
-import axios from 'axios';
 import {createRemoteJWKSet, customFetch, JWTVerifyGetKey, RemoteJWKSetOptions} from 'jose';
+import {fetch, RequestInit} from 'undici';
 import {OAuthConfiguration} from '../configuration/oauthConfiguration.js';
 import {HttpProxy} from '../utilities/httpProxy.js';
 
@@ -34,24 +34,15 @@ export class JwksRetriever {
     }
 
     /*
-     * To support the use of an HTTP proxy I use axios to download the JWKS
+     * Support the use of an HTTP proxy during requests to the authorization server
      */
-    private async fetchJwks(url: string): Promise<any> {
+    private async fetchJwks(url: string) {
 
-        const options = {
-            url,
-            method: 'GET',
-            headers: {
-                'accept': 'application/json',
-            },
-            httpsAgent: this.httpProxy.getAgent(),
+        const options: RequestInit = {
+            dispatcher: this.httpProxy.getDispatcher() || undefined,
         };
 
-        const response = await axios.request(options);
-        return {
-            status: response.status,
-            json: async () => response.data,
-        };
+        return await fetch(url, options);
     }
 
     /*
