@@ -117,13 +117,20 @@ export class ApiClient {
 
         try {
 
+            const headers: HeadersInit = {
+                'accept': 'application/json',
+                'authorization': `Bearer ${accessToken}`,
+            };
+
             const options: RequestInit = {
                 method,
-                body: dataToSend,
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                },
+                headers,
             };
+
+            if (dataToSend) {
+                headers['content-type'] = 'application/json';
+                options.body = JSON.stringify(dataToSend);
+            }
 
             const response = await fetch(url, options);
             if (response.ok) {
