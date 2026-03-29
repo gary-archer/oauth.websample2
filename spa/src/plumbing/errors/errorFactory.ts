@@ -57,7 +57,7 @@ export class ErrorFactory {
             exception.stack);
 
         // Set technical details from the received exception
-        error.setDetails(ErrorFactory.getOAuthExceptionMessage(exception));
+        error.setDetails(ErrorFactory.getExceptionMessage(exception));
         return error;
     }
 
@@ -79,7 +79,7 @@ export class ErrorFactory {
             exception.stack);
 
         // Set technical details from the received exception
-        error.setDetails(ErrorFactory.getOAuthExceptionMessage(exception));
+        error.setDetails(ErrorFactory.getExceptionMessage(exception));
         return error;
     }
 
@@ -101,7 +101,7 @@ export class ErrorFactory {
             exception.stack);
 
         // Set technical details from the received exception
-        error.setDetails(ErrorFactory.getOAuthExceptionMessage(exception));
+        error.setDetails(ErrorFactory.getExceptionMessage(exception));
         return error;
     }
 
@@ -165,13 +165,13 @@ export class ErrorFactory {
             const apiError = await response.json();
             if (apiError) {
 
-                if (apiError?.code && apiError?.message) {
+                if (apiError.code && apiError.message) {
                     error.setErrorCode(apiError.code);
                     error.setDetails(apiError.message);
                 }
 
                 // Set extra details returned for 5xx errors
-                if (apiError?.area && apiError.id && apiError.utcTime) {
+                if (apiError.area && apiError.id && apiError.utcTime) {
                     error.setApiErrorDetails(apiError.area, apiError.id, apiError.utcTime);
                 }
             }
@@ -180,26 +180,6 @@ export class ErrorFactory {
         }
 
         return error;
-    }
-
-    /*
-     * Get the message from an OAuth exception
-     */
-    private static getOAuthExceptionMessage(exception: any): string {
-
-        let oauthError = '';
-        if (exception.error) {
-            oauthError = exception.error;
-            if (exception.error_description) {
-                oauthError += ` : ${exception.error_description.replace(/\+/g, ' ')}`;
-            }
-        }
-
-        if (oauthError) {
-            return oauthError;
-        } else {
-            return ErrorFactory.getExceptionMessage(exception);
-        }
     }
 
     /*
