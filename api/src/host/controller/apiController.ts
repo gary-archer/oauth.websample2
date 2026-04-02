@@ -94,7 +94,7 @@ export class ApiController {
         const service = new CompanyService(repository, claims);
 
         // Get the supplied id as a number, and return 400 if invalid input was received
-        const id = parseInt(request.params.id, 10);
+        const id = parseInt(request.params.id as string, 10);
         if (isNaN(id) || id <= 0) {
             throw new ClientError(
                 400,
