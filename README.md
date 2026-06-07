@@ -9,7 +9,7 @@
 
 An OAuth code sample to extend the [initial code sample](https://github.com/gary-archer/oauth.websample1) with the following behaviors:
 
-- The SPA uses the traditional OpenID connect flow, with a complete application lifecycle.
+- The SPA uses the code flow with a complete application lifecycle.
 - The API combines claims-based authorization with finer-grained business permissions.
 - The SPA and API both use OAuth user attributes and business user attributes.
 
@@ -73,7 +73,7 @@ You can then test all lifecycle operations, including token refresh, multi tab b
 
 * Express is used as the HTTP server for the secured API.
 * The Webpack development server is used to serve the SPA's static content.
-* The SPA uses the [oidc-client-ts](https://github.com/authts/oidc-client-ts) library to implement OpenID Connect.
+* The SPA uses the [oidc-client-ts](https://github.com/authts/oidc-client-ts) library to implement OAuth and OpenID Connect.
 * The API uses the [jose](https://github.com/panva/jose) library to validate JWT access tokens.
 * AWS Cognito is the default authorization server for the SPA and API.
 
