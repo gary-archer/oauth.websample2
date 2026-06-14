@@ -1,7 +1,6 @@
 ---
 exclude_paths: [
     '*',
-    'doc/*',
     'api/*',
     'api/data/**',
     'spa/*',    
