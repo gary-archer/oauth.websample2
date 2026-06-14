@@ -1,3 +1,4 @@
+import './app.css';
 import {App} from './app/app';
 import {IFrameApp} from './app/iframeApp';
 

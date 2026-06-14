@@ -10,26 +10,24 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "start": "NODE_OPTIONS='--import tsx' npx webpack serve --config webpack/webpack.config.dev.ts",
-    "build": "NODE_OPTIONS='--import tsx' npx webpack --config webpack/webpack.config.prod.ts"
+    "start": "rm -rf dist && tsx tools/start.ts",
+    "build": "rm -rf dist && NODE_OPTIONS='--import tsx' rollup --config build/rollup.config.ts"
   },
   "dependencies": {
     "mustache": "^4.2.0",
-    "oidc-client-ts": "^3.5.0"
+    "oidc-client-ts": "^3.5.0",
+    "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/mustache": "^4.2.5",
-    "@types/node": "^24.10.3",
-    "copy-webpack-plugin": "^14.0.0",
-    "eslint": "^10.1.0",
-    "ts-loader": "^9.5.4",
-    "tsx": "^4.21.0",
-    "typescript": "^6.0.2",
-    "typescript-eslint": "^8.58.0",
-    "webpack": "^5.107.2",
-    "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.4",
-    "webpack-merge": "^6.0.1"
-  }
+    "eslint": "^10.5.0",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.0"
+  },
+  "workspaces": [
+    "build",
+    "tools"
+  ]
 }
