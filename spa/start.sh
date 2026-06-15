@@ -27,6 +27,13 @@ if [ $? -ne 0 ]; then
 fi
 
 #
+# Ensure that live reload calls from rollup trust the Express static content server's SSL certificate
+#
+if [ "$NODE_EXTRA_CA_CERTS" == '' ]; then
+  export NODE_EXTRA_CA_CERTS='../certs/authsamples-dev.ca.crt'
+fi
+
+#
 # Start the SPA
 # On Linux ensure that you have first granted Node.js permissions to listen on port 443:
 # - sudo setcap 'cap_net_bind_service=+ep' $(which node)
