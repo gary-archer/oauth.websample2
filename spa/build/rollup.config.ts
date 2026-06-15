@@ -64,9 +64,8 @@ const options: RollupOptions = {
             jsx: 'automatic',
         }),
 
-        // React requires the NODE_ENV value and we set IS_DEBUG to true in development mode
+        // Set IS_DEBUG to true in development mode
         replace({
-            'process.env.NODE_ENV': JSON.stringify('production'),
             'IS_DEBUG': JSON.stringify(isDevelopment),
             preventAssignment: true,
         }),
