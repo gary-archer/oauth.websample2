@@ -57,17 +57,17 @@ const options: RollupOptions = {
         // Convert any commonjs libraries from the node_modules folder to ECMAScript
         commonjs(),
 
+        // Set IS_DEBUG to true in development mode
+        replace({
+            'IS_DEBUG': JSON.stringify(isDevelopment),
+            preventAssignment: true,
+        }),
+
         // Use esbuild as an up to date plugin for building typescript code
         esbuild({
             tsconfig: './tsconfig.json',
             target: 'es2020',
             jsx: 'automatic',
-        }),
-
-        // Set IS_DEBUG to true in development mode
-        replace({
-            'IS_DEBUG': JSON.stringify(isDevelopment),
-            preventAssignment: true,
         }),
 
         // Copy these static files to the output folder when a build completes
