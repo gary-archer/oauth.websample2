@@ -67,7 +67,6 @@ const options: RollupOptions = {
         esbuild({
             tsconfig: './tsconfig.json',
             target: 'es2020',
-            jsx: 'automatic',
         }),
 
         // Copy these static files to the output folder when a build completes
