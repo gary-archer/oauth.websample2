@@ -16,20 +16,20 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.2.1",
-    "jose": "^6.2.2",
+    "jose": "^6.2.3",
     "node-cache": "^5.1.2",
     "on-headers": "^1.0.2",
-    "undici": "^7.24.6",
-    "winston": "^3.17.0"
+    "undici": "^8.4.1",
+    "winston": "^3.19.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.6",
     "@types/node": "^24.10.3",
-    "eslint": "^10.1.0",
-    "tsx": "^4.21.0",
-    "typescript": "^6.0.2",
-    "typescript-eslint": "^8.58.0"
+    "eslint": "^10.5.0",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.0"
   }
 }

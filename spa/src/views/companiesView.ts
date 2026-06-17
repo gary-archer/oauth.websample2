@@ -73,34 +73,34 @@ export class CompaniesView {
     private renderDesktopView(viewModel: any): void {
 
         const htmlTemplate =
-            `<div class='card border-0'>
-                <div class='card-header row'>
-                    <div class ='col-2 fw-bold text-center'>Account</div>
-                    <div class ='col-2 fw-bold text-center'>Region</div>
-                    <div class ='col-2'></div>
-                    <div class ='col-2 fw-bold text-end'>Target USD</div>
-                    <div class ='col-2 fw-bold text-end'>Investment USD</div>
-                    <div class ='col-2 fw-bold text-end'># Investors</div>
+            `<div class='mt-3'>
+                <div class='grid grid-cols-12 bg-gray-100 p-3'>
+                    <div class='col-span-2 font-bold text-center'>Account</div>
+                    <div class='col-span-2 font-bold text-center'>Region</div>
+                    <div class='col-span-2'></div>
+                    <div class='col-span-2 font-bold text-right'>Target USD</div>
+                    <div class='col-span-2 font-bold text-right'>Investment USD</div>
+                    <div class='col-span-2 font-bold text-right'># Investors</div>
                 </div>
-                <div class='card-body'>
+                <div>
                     {{#companies}}
-                        <div class='row listRow'>
-                            <div class='col-2 my-auto text-center'>
+                        <div class='grid grid-cols-12 p-3 p-3 mt-5'>
+                            <div class='col-span-2 text-center'>
                                 {{name}}
                             </div>
-                            <div class='col-2 my-auto text-center'>
+                            <div class='col-span-2 text-center'>
                                 {{region}}
                             </div>
-                            <div class='col-2 my-auto text-center'>
-                                <a href='#company={{id}}'>View Transactions</a>
+                            <div class='col-span-2 text-center'>
+                                <a href='#company={{id}}' class='text-blue-600 underline'>View Transactions</a>
                             </div>
-                            <div class='col-2 my-auto moneycolor fw-bold text-end'>
+                            <div class='col-span-2 text-green-700 font-bold text-right'>
                                 {{formattedTargetUsd}}
                             </div>
-                            <div class='col-2 my-auto moneycolor fw-bold text-end'>
+                            <div class='col-span-2 text-green-700 font-bold text-right'>
                                 {{formattedInvestmentUsd}}
                             </div>
-                            <div class='col-2 my-auto fw-bold text-end'>
+                            <div class='col-span-2 font-bold text-right'>
                                 {{noInvestors}}
                             </div>
                         </div>
@@ -118,45 +118,46 @@ export class CompaniesView {
     private renderMobileView(viewModel: any): void {
 
         const htmlTemplate =
-            `<div class='card border-0'>
-                <div class='card-header row'>
-                    <div class='col-12 text-center mx-auto fw-bold'>
-                        Company List
-                    </div>
+            `<div class='mt-3'>
+                <div class='bg-gray-100 p-3 font-bold text-center'>
+                    Company List
                 </div>
-                <div class='card-body'>
+                <div class='mt-3'>
                     {{#companies}}
-                        <div class='row mobileHeaderRow'>
-                            <div class='col-6 h4'>
-                                <a href='#company={{id}}'>{{name}}</a>
+                        <div class='p-3'>
+                            <div class='grid grid-cols-12'>
+                                <div class='col-span-6 text-2xl font-medium'>
+                                    <a href='#company={{id}}' class='text-blue-600 underline'>{{name}}</a>
+                                </div>
+                                <div class='col-span-6 font-bold text-2xl font-medium'>
+                                    {{region}}
+                                </div>
                             </div>
-                            <div class='col-6 h4 fw-bold'>
-                                {{region}}
+                            <div class='grid grid-cols-12 mt-10'>
+                                <div class='col-span-6'>
+                                    Target USD
+                                </div>
+                                <div class='col-span-6 text-green-700 font-bold'>
+                                    {{formattedTargetUsd}}
+                                </div>
                             </div>
-                        </div>
-                        <div class='row mobileRow'>
-                            <div class='col-6'>
-                                Target USD
+                            <div class='grid grid-cols-12 mt-5'>
+                                <div class='col-span-6'>
+                                    Investment USD
+                                </div>
+                                <div class='col-span-6 text-green-700 font-bold'>
+                                    {{formattedInvestmentUsd}}
+                                </div>
                             </div>
-                            <div class='col-6 moneycolor fw-bold'>
-                                {{formattedTargetUsd}}
+                            <div class='grid grid-cols-12 mt-5'>
+                                <div class='col-span-6'>
+                                    # Investors
+                                </div>
+                                <div class='col-span-6 font-bold'>
+                                    {{noInvestors}}
+                                </div>
                             </div>
-                        </div>
-                        <div class='row mobileRow'>
-                            <div class='col-6'>
-                                Investment USD
-                            </div>
-                            <div class='col-6 moneycolor fw-bold'>
-                                {{formattedInvestmentUsd}}
-                            </div>
-                        </div>
-                        <div class='row mobileRow'>
-                            <div class='col-6'>
-                                # Investors
-                            </div>
-                            <div class='col-6 moneycolor fw-bold'>
-                                {{noInvestors}}
-                            </div>
+                            <hr class='text-gray-300 mt-5' />
                         </div>
                     {{/companies}}
                 </div>

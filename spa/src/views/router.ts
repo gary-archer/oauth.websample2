@@ -29,7 +29,7 @@ export class Router {
     public async runView(forceReload: boolean): Promise<void> {
 
         // Initialise
-        DomUtils.createDiv('#root', 'main');
+        DomUtils.createDiv('#container', 'main');
         this.errorView.clear();
 
         if (this.isInLoggedOutView()) {

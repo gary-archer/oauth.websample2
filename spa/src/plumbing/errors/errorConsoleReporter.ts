@@ -12,10 +12,10 @@ export class ErrorConsoleReporter {
     public static output(error: any): void {
 
         const uiError = ErrorFactory.getFromException(error);
-        const lines = ErrorFormatter.getErrorLines(uiError);
+        const fields = ErrorFormatter.getErrorFields(uiError);
 
-        lines.forEach((l) => {
-            console.log(`${l.label}: ${l.value}`);
+        fields.forEach((f) => {
+            console.log(`${f.label}: ${f.value}`);
         });
     }
 }
