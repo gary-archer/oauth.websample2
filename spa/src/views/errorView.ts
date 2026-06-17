@@ -22,7 +22,7 @@ export class ErrorView {
 
         DomUtils.createDiv('#container', 'errorcontainer');
         const html =
-            `<div class='bg-white rounded-lg'>
+            `<div class='bg-white rounded-lg mt-3'>
                 <div class='grid grid-cols-12'>
                     <div class='col-span-2'>
                     </div>    
@@ -96,7 +96,7 @@ export class ErrorView {
 
         const htmlTemplate =
             `{{#fields}}
-                <div class='grid grid-cols-12 p-3'>
+                <div class='grid grid-cols-12 px-3 mt-3'>
                     <div class='col-span-4'>
                         {{label}}
                     </div>
@@ -131,15 +131,7 @@ export class ErrorView {
         }
 
         const htmlTemplate =
-            `<div class='grid grid-cols-12 p-3' />
-                <div class='col-span-4'>
-                    &nbsp;
-                </div>
-                <div class='col-span-8'>
-                    &nbsp;
-                </div>
-            </div>
-            <div class='grid grid-cols-12 p-3' />
+            `<div class='grid grid-cols-12 px-3 mt-3' />
                  <div class='col-span-4'>
                      {{label}}
                  </div>
