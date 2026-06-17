@@ -16,10 +16,8 @@ export class LoginRequiredView {
         }, 250);
 
         const html =
-            `<div class='row'>
-                <div class='col-12 text-center mx-auto'>
-                    <h5>You are signed out - sign in to access the app ...</h5>
-                </div>
+            `<div class='text-lg text-center'>
+                You are signed out - sign in to access the app ...
             </div>`;
         DomUtils.html('#main', html);
     }

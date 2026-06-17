@@ -47,13 +47,11 @@ export class UserInfoView {
 
         // Form the template
         const htmlTemplate =
-            `<div class='text-end mx-auto'>
-                <div class='fw-bold basictooltip'>{{userName}}
-                    <div class='basictooltiptext'>
-                        <small>{{title}}</small>
-                        <br />
-                        <small>{{regions}}</small>
-                    </div>
+            `<div class='text-right font-bold basictooltip'>{{userName}}
+                <div class='basictooltiptext'>
+                    <small>{{title}}</small>
+                    <br />
+                    <small>{{regions}}</small>
                 </div>
             </div>`;
 

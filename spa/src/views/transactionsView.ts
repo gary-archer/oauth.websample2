@@ -81,29 +81,25 @@ export class TransactionsView {
         };
 
         const htmlTemplate =
-            `<div class='card border-0'>
-                <div class='card-header row fw-bold'>
-                    <div class='col-12 text-center mx-auto fw-bold'>
-                        {{title}}
-                    </div>
+            `<div class='mt-3'>
+                <div class='bg-gray-100 p-3 text-center font-bold'>
+                    {{title}}
                 </div>
-                <div class='row'>
+                <div class='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 p-3'>
                     {{#transactions}}
-                        <div class='col-lg-4 col-md-6 col-xs-12'>
-                            <div class='card'>
-                                <div class='card-body'>
-                                    <div class='row'>
-                                        <div class='col-6'>Transaction ID</div>
-                                        <div class='col-6 text-end valuecolor fw-bold'>{{id}}</div>
-                                    </div>
-                                    <div class='row'>
-                                        <div class='col-6'>Investor ID</div>
-                                        <div class='col-6 text-end valuecolor fw-bold'>{{investorId}}</div>
-                                    </div>
-                                    <div class='row'>
-                                        <div class='col-6'>Amount USD</div>
-                                        <div class='col-6 text-end moneycolor fw-bold'>{{formattedAmountUsd}}</div>
-                                    </div>
+                        <div class='rounded-lg border border-gray-300'>
+                            <div class='p-3'>
+                                <div class='flex mt-1'>
+                                    <div class='w-1/2'>Transaction ID</div>
+                                    <div class='w-1/2 text-right font-bold text-blue-700'>{{id}}</div>
+                                </div>
+                                <div class='flex mt-1'>
+                                    <div class='w-1/2'>Investor ID</div>
+                                    <div class='w-1/2 text-right font-bold text-blue-700'>{{investorId}}</div>
+                                </div>
+                                <div class='flex mt-1'>
+                                    <div class='w-1/2'>Amount USD</div>
+                                    <div class='w-1/2 text-right font-bold text-green-700'>{{formattedAmountUsd}}</div>
                                 </div>
                             </div>
                         </div>

@@ -8,6 +8,7 @@ import {HtmlStorageHelper} from '../plumbing/utilities/htmlStorageHelper';
 import {OidcLogger} from '../plumbing/utilities/oidcLogger';
 import {ErrorView} from '../views/errorView';
 import {HeaderButtonsView} from '../views/headerButtonsView';
+import {LayoutView} from '../views/layoutView';
 import {Router} from '../views/router';
 import {TitleView} from '../views/titleView';
 
@@ -16,14 +17,18 @@ import {TitleView} from '../views/titleView';
  */
 export class App {
 
+    // Views
+    private router!: Router;
+    private layoutView! : LayoutView;
+    private titleView!: TitleView;
+    private headerButtonsView!: HeaderButtonsView;
+    private errorView!: ErrorView;
+
+    // Object state
     private configuration!: Configuration;
     private oauthClient!: OAuthClient;
     private apiClient!: ApiClient;
     private oidcLogger: OidcLogger;
-    private router!: Router;
-    private titleView!: TitleView;
-    private headerButtonsView!: HeaderButtonsView;
-    private errorView!: ErrorView;
     private isInitialised: boolean;
 
     public constructor() {
@@ -77,6 +82,9 @@ export class App {
      * Render views in their initial state
      */
     private initialRender() {
+
+        this.layoutView = new LayoutView();
+        this.layoutView.load();
 
         this.titleView = new TitleView();
         this.titleView.load();
