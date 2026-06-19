@@ -4,7 +4,7 @@ import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
 import tailwind from '@tailwindcss/postcss';
 import cssnano from 'cssnano';
-import path from 'path';
+import path from 'node:path';
 import {defineConfig, RollupOptions} from 'rollup';
 import copy from 'rollup-plugin-copy';
 import esbuild from 'rollup-plugin-esbuild';
