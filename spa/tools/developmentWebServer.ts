@@ -1,12 +1,13 @@
-import express, {Request, Response} from 'express';
+import express, {NextFunction, Request, Response} from 'express';
 import fs from 'fs/promises';
 import https from 'https';
 import {WebSocketServer, WebSocket} from 'ws';
 
 /*
- * Create the Express host
+ * Create the Express host and set a strict content security policy
  */
 const app = express();
+app.use('/*_', setSecurityHeaders);
 
 /*
  * Load SSL certificate files from disk
@@ -55,6 +56,42 @@ const port = 443;
 server.listen(port, () => {
     console.log(`Web host is listening on HTTPS port ${port} ...`);
 });
+
+/*
+ * Use a strong content security policy for development
+ */
+function setSecurityHeaders(request: Request, response: Response, next: NextFunction): any {
+
+    const authorizationServerHost = 'https://login.authsamples.com';
+    const metadataHost = 'https://cognito-idp.eu-west-2.amazonaws.com';
+    const apiHost = 'https://api.authsamples-dev.com:446';
+
+    const trustedHosts = [
+        authorizationServerHost,
+        metadataHost,
+        apiHost,
+    ];
+
+    let policy = "default-src 'none';";
+    policy += " script-src 'self';";
+    policy += ` connect-src 'self' ${trustedHosts.join(' ')};`;
+    policy += " child-src 'self';";
+    policy += " img-src 'self';";
+    policy += " style-src 'self';";
+    policy += " object-src 'none';";
+    policy += " frame-ancestors 'self';";
+    policy += ` frame-src 'self' ${authorizationServerHost};`;
+    policy += " base-uri 'self';";
+    policy += " form-action 'self'";
+
+    response.setHeader('content-security-policy', policy);
+    response.setHeader('strict-transport-security', 'max-age=31536000; includeSubdomains; preload');
+    response.setHeader('x-frame-options', 'DENY');
+    response.setHeader('x-xss-protection', '1; mode=block');
+    response.setHeader('x-content-type-options', 'nosniff');
+    response.setHeader('referrer-policy', 'same-origin');
+    next();
+}
 
 /*
  * Handle paths that don't map to physical resources
