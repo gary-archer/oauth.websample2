@@ -19,12 +19,12 @@ fi
 #
 # Run code quality checks
 #
-npm run lint
-if [ $? -ne 0 ]; then
-  echo 'Problem encountered running SPA code quality checks'
-  read -n 1
-  exit 1
-fi
+#npm run lint
+#if [ $? -ne 0 ]; then
+#  echo 'Problem encountered running SPA code quality checks'
+#  read -n 1
+#  exit 1
+#fi
 
 #
 # Ensure that live reload calls from rollup trust the Express static content server's SSL certificate

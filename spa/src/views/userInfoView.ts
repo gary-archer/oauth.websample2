@@ -45,10 +45,11 @@ export class UserInfoView {
             regions: this.getUserRegions(apiUserInfo),
         };
 
-        // Form the template
+        // Form the template with the username and a tooltip that contains API user attributes 
         const htmlTemplate =
-            `<div class='text-right font-bold basictooltip'>{{userName}}
-                <div class='basictooltiptext'>
+            `<div class='text-right font-bold relative inline-block group'>
+                {{userName}}
+                <div class='tooltip'>
                     <small>{{title}}</small>
                     <br />
                     <small>{{regions}}</small>
