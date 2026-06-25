@@ -44,11 +44,6 @@ export class App {
 
         try {
 
-            // Support live reload during development
-            if (IS_DEBUG) {
-                await import('./livereload');
-            }
-
             // Start listening for hash changes
             window.onhashchange = this.onHashChange;
             window.onresize = this.onResize;
@@ -69,6 +64,11 @@ export class App {
             // Get user info from the API unless we are in the logged out view
             if (!this.router.isInLoggedOutView()) {
                 await this.runUserInfoView();
+            }
+
+            // One the app is initialized, support live reload during development
+            if (IS_DEBUG) {
+                await import('./livereload');
             }
 
         } catch (e: any) {
