@@ -66,7 +66,7 @@ export class App {
                 await this.runUserInfoView();
             }
 
-            // One the app is initialized, support live reload during development
+            // Once the app is initialized, support live reload during development
             if (IS_DEBUG) {
                 await import('./livereload');
             }
