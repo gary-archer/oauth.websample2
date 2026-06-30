@@ -12,6 +12,11 @@ export class IFrameApp {
 
     public async execute(): Promise<void> {
 
+        const pathname = location.pathname.toLowerCase();
+        if (!pathname.endsWith('callback') || !location.search) {
+            return;
+        }
+
         try {
 
             // If the frame loads with a state query parameter we classify it as an OAuth response
