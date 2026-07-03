@@ -55,8 +55,8 @@ export class App {
             // Do one time app initialisation
             await this.initialiseApp();
 
-            // We must be prepared for page invocation to be an OAuth response
-            await this.oauthClient.handleLoginResponse();
+            // We must be prepared for page invocation to be an OAuth callback
+            await this.oauthClient.handleOAuthCallback();
 
             // Load the main view, which may trigger a login redirect
             await this.runMainView();

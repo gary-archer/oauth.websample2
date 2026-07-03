@@ -126,50 +126,58 @@ export class OAuthClient {
     }
 
     /*
-     * Handle the response from the authorization server
+     * Handle OAuth callbacks from the authorization server
      */
-    public async handleLoginResponse(): Promise<void> {
+    public async handleOAuthCallback(): Promise<void> {
 
+        // Get the path
         const pathname = location.pathname.toLowerCase();
-        if (!pathname.endsWith('callback') || !location.search) {
+        
+        // Handle logout callbacks
+        if (pathname.endsWith('logoutcallback')) {
+            history.replaceState({}, document.title, '#loggedout');
             return;
         }
 
-        const args = new URLSearchParams(location.search);
-        const state = args.get('state');
-        if (state) {
+        // Handle login callbacks
+        if (pathname.endsWith('callback')) {
+            
+            const args = new URLSearchParams(location.search);
+            const state = args.get('state');
+            if (state) {
 
-            // Only try to process a login response if the state exists
-            const storedState = await this.userManager.settings.stateStore?.get(state);
-            if (storedState) {
+                // Only try to process a login response if the state exists
+                const storedState = await this.userManager.settings.stateStore?.get(state);
+                if (storedState) {
 
-                let redirectLocation = '#';
-                try {
+                    let redirectLocation = '#';
+                    try {
 
-                    // Handle the login response
-                    const user = await this.userManager.signinRedirectCallback();
+                        // Handle the login response
+                        const user = await this.userManager.signinRedirectCallback();
 
-                    // Ensure no refresh token, since the SPA is not meant to use them
-                    if (user.refresh_token) {
-                        user.refresh_token = '';
-                        await this.userManager.storeUser(user);
+                        // Ensure no refresh token, since the SPA is not meant to use them
+                        if (user.refresh_token) {
+                            user.refresh_token = '';
+                            await this.userManager.storeUser(user);
+                        }
+
+                        // We will return to the app location from before the login redirect
+                        redirectLocation = (user.state as any).hash;
+
+                        // Update login state
+                        HtmlStorageHelper.isLoggedIn = true;
+
+                    } catch (e: any) {
+
+                        // Handle and rethrow OAuth response errors
+                        throw ErrorFactory.getFromLoginOperation(e, ErrorCodes.loginResponseFailed);
+
+                    } finally {
+
+                        // Always replace the browser location, to remove OAuth details from back navigation
+                        history.replaceState({}, document.title, redirectLocation);
                     }
-
-                    // We will return to the app location from before the login redirect
-                    redirectLocation = (user.state as any).hash;
-
-                    // Update login state
-                    HtmlStorageHelper.isLoggedIn = true;
-
-                } catch (e: any) {
-
-                    // Handle and rethrow OAuth response errors
-                    throw ErrorFactory.getFromLoginOperation(e, ErrorCodes.loginResponseFailed);
-
-                } finally {
-
-                    // Always replace the browser location, to remove OAuth details from back navigation
-                    history.replaceState({}, document.title, redirectLocation);
                 }
             }
         }
