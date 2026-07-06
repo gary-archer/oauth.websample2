@@ -5,7 +5,7 @@
     "oauth": {
         "provider":               "cognito",
         "authority":              "https://cognito-idp.eu-west-2.amazonaws.com/eu-west-2_CuhLeqiE9",
-        "clientId":               "hje94a2jj3lgkobkh57ikenhh",
+        "clientId":               "1m4c53b8uup5qkqvdn4l0e0fb5",
         "redirectUri":            "https://www.authsamples-dev.com/spa/callback",
         "postLogoutRedirectUri":  "https://www.authsamples-dev.com/spa/logoutcallback",
         "scope":                  "openid profile https://api.authsamples.com/investments",
