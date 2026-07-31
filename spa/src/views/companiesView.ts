@@ -126,34 +126,34 @@ export class CompaniesView {
                     {{#companies}}
                         <div class='p-3'>
                             <div class='grid grid-cols-12'>
-                                <div class='col-span-6 text-2xl font-medium mx-10'>
+                                <div class='col-span-6 text-2xl font-medium mx-5'>
                                     <a href='#company={{id}}' class='text-blue-600 underline'>{{name}}</a>
                                 </div>
-                                <div class='col-span-6 font-bold text-2xl font-medium mx-10'>
+                                <div class='col-span-6 font-bold text-2xl font-medium mx-5'>
                                     {{region}}
                                 </div>
                             </div>
                             <div class='grid grid-cols-12 mt-10'>
-                                <div class='col-span-6 mx-10'>
+                                <div class='col-span-6 mx-5'>
                                     Target USD
                                 </div>
-                                <div class='col-span-6 text-green-700 font-bold mx-10'>
+                                <div class='col-span-6 text-green-700 font-bold mx-5'>
                                     {{formattedTargetUsd}}
                                 </div>
                             </div>
                             <div class='grid grid-cols-12 mt-5'>
-                                <div class='col-span-6 mx-10'>
+                                <div class='col-span-6 mx-5'>
                                     Investment USD
                                 </div>
-                                <div class='col-span-6 text-green-700 font-bold mx-10'>
+                                <div class='col-span-6 text-green-700 font-bold mx-5'>
                                     {{formattedInvestmentUsd}}
                                 </div>
                             </div>
                             <div class='grid grid-cols-12 mt-5'>
-                                <div class='col-span-6 mx-10'>
+                                <div class='col-span-6 mx-5'>
                                     # Investors
                                 </div>
-                                <div class='col-span-6 font-bold mx-10'>
+                                <div class='col-span-6 font-bold mx-5'>
                                     {{noInvestors}}
                                 </div>
                             </div>
