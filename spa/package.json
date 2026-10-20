@@ -21,7 +21,7 @@
     "@eslint/js": "^10.0.1",
     "@types/mustache": "^4.2.5",
     "eslint": "^10.10.0",
-    "tailwindcss": "^4.3.0",
+    "tailwindcss": "^4.3.3",
     "tsx": "^4.23.13",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.70.0"
@@ -29,5 +29,8 @@
   "workspaces": [
     "build",
     "tools"
-  ]
+  ],
+  "overrides": {
+    "postcss-selector-parser": "^7.1.6"
+  }
 }
