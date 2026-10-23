@@ -9,7 +9,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 #
 # Download dependencies on the first build
 #
-npm install
+npm ci
 if [ $? -ne 0 ]; then
   echo 'Problem encountered installing API dependencies'
   read -n 1
