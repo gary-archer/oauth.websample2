@@ -65,7 +65,6 @@ const options: RollupOptions = {
         // Use esbuild as an up to date plugin for building typescript code
         esbuild({
             tsconfig: './tsconfig.json',
-            target: 'es2020',
         }),
 
         // Copy these static files to the output folder when a build completes

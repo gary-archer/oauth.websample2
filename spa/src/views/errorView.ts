@@ -1,9 +1,9 @@
 import mustache from 'mustache';
-import {ErrorCodes} from '../plumbing/errors/errorCodes';
-import {ErrorFactory} from '../plumbing/errors/errorFactory';
-import {ErrorField} from '../plumbing/errors/errorField';
-import {ErrorFormatter} from '../plumbing/errors/errorFormatter';
-import {UIError} from '../plumbing/errors/uiError';
+import {ErrorCodes} from '../errors/errorCodes';
+import {ErrorFactory} from '../errors/errorFactory';
+import {ErrorField} from '../errors/errorField';
+import {ErrorFormatter} from '../errors/errorFormatter';
+import {UIError} from '../errors/uiError';
 import {DomUtils} from './domUtils';
 
 /*

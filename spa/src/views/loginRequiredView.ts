@@ -1,4 +1,4 @@
-import {HtmlStorageHelper} from '../plumbing/utilities/htmlStorageHelper';
+import {HtmlStorageHelper} from '../utilities/htmlStorageHelper';
 import {DomUtils} from './domUtils';
 
 /*

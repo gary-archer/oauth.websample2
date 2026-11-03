@@ -1,8 +1,8 @@
 import mustache from 'mustache';
 import {ApiClient} from '../api/client/apiClient';
 import {ApiUserInfo} from '../api/entities/apiUserInfo';
-import {OAuthClient} from '../plumbing/oauth/oauthClient';
-import {OAuthUserInfo} from '../plumbing/oauth/oauthUserInfo';
+import {OAuthClient} from '../oauth/oauthClient';
+import {OAuthUserInfo} from '../oauth/oauthUserInfo';
 import {DomUtils} from './domUtils';
 
 /*

@@ -132,7 +132,7 @@ export class OAuthClient {
 
         // Get the path
         const pathname = location.pathname.toLowerCase();
-        
+
         // Handle logout callbacks
         if (pathname.endsWith('logoutcallback')) {
             history.replaceState({}, document.title, '#loggedout');
@@ -141,7 +141,7 @@ export class OAuthClient {
 
         // Handle login callbacks
         if (pathname.endsWith('callback')) {
-            
+
             const args = new URLSearchParams(location.search);
             const state = args.get('state');
             if (state) {

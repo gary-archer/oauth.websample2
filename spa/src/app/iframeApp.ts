@@ -1,8 +1,8 @@
 import {UserManager} from 'oidc-client-ts';
 import {ConfigurationLoader} from '../configuration/configurationLoader';
-import {ErrorConsoleReporter} from '../plumbing/errors/errorConsoleReporter';
-import {ErrorCodes} from '../plumbing/errors/errorCodes';
-import {ErrorFactory} from '../plumbing/errors/errorFactory';
+import {ErrorConsoleReporter} from '../errors/errorConsoleReporter';
+import {ErrorCodes} from '../errors/errorCodes';
+import {ErrorFactory} from '../errors/errorFactory';
 
 /*
  * A mini application for the hidden iframe that does silent token renewal

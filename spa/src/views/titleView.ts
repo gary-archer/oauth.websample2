@@ -1,5 +1,5 @@
 import type {ApiClient} from '../api/client/apiClient';
-import {OAuthClient} from '../plumbing/oauth/oauthClient';
+import {OAuthClient} from '../oauth/oauthClient';
 import {UserInfoView} from './userInfoView';
 import {DomUtils} from './domUtils';
 

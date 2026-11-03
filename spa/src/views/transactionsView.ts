@@ -1,8 +1,8 @@
 import mustache from 'mustache';
 import {ApiClient} from '../api/client/apiClient';
 import {CompanyTransactions} from '../api/entities/companyTransactions';
-import {ErrorCodes} from '../plumbing/errors/errorCodes';
-import {CurrentLocation} from '../plumbing/utilities/currentLocation';
+import {ErrorCodes} from '../errors/errorCodes';
+import {CurrentLocation} from '../utilities/currentLocation';
 import {DomUtils} from './domUtils';
 
 /*

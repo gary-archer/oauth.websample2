@@ -1,5 +1,5 @@
 import {Configuration} from '../configuration/configuration';
-import {ErrorFactory} from '../plumbing/errors/errorFactory';
+import {ErrorFactory} from '../errors/errorFactory';
 
 /*
  * Logic related to making HTTP calls

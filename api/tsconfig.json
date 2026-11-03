@@ -14,5 +14,10 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "overrides": {
+    "@typescript-eslint/typescript-estree@8.72.1": {
+      "minimatch": "11.0.4"
+    }
+  }
 }
